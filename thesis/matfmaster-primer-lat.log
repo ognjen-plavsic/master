@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99998 (TeX Live 2017/Debian) (preloaded format=xelatex 2022.4.17)  3 MAY 2022 16:57
+This is XeTeX, Version 3.14159265-2.6-0.99998 (TeX Live 2017/Debian) (preloaded format=xelatex 2022.4.17)  7 MAY 2022 18:44
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1320,7 +1320,7 @@ LaTeX Warning: There were multiply-defined labels.
 Here is how much of TeX's memory you used:
  25460 strings out of 493007
  459063 string characters out of 6136719
- 636320 words of memory out of 5000000
+ 637320 words of memory out of 5000000
  29206 multiletter control sequences out of 15000+600000
  533680 words of font info for 71 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
