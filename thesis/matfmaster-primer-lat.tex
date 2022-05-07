@@ -333,6 +333,32 @@ Primeri pravila koje podržava Autofix alat prikazani su na slikama 2.1 i 2.2.
   \label{fig:grafikon}
 \end{figure}
 
+\chapter{LLVM (nije spremno za reivew)}
+\label{chp:llvm}
+
+LLVM projekat predstavlja kolekciju modularnih i ponovo iskoristivih kompajlerskih tehnologija i alata.
+Započet je 2000. godine kao instražički projekat Krisa Latnera (\textit{eng. Chris Lattner}) i Vikrama Advea (\textit{eng. Vikram Adve}) na Univerzitetu Ilinois.
+
+LLVM podržava kompilaciju različitih programskih programiskih jezika na mnoštvo različitih arhitektura hardvera. Jednostavnost dodavanja podrške kompilacije programskog jezika za hardversku arhitekturu omogućeno je fleksibilnim dizajnom kod kog je infrastruktura kompajlera ugrubo podeljena na 3 dela. Izvorni kod podržanih jezika prevodi se u LLVM medjukod bibliotekama koji predstavljaju prednji deo kompajlera (\textit{eng. frontend}). Zatim se nad medjukodom vrši niz optimizacija koje su nezavisne od izvornog koda ali i ciljne arhitekture. Biblioteke koje implementiraju pomenute optimizacije čine srednji deo (\textit{eng. middleend}) infrastrukture LLVM-a. Poslednji deo dizajna čini zadnji deo (\textit{eng. backend}) kompajlera prilikom kog se generiše izvršni kod za ciljnu arhitekturu od LLVM medjukoda.
+
+\section{Clang}
+
+Clang projekat predstavlja prednji deo (\textit{eng. frontend}) LLVM kompajlerske infrastrukture za C familiju jezika (C, C++, Objective C/C++, OpenCL ...).
+Pored optimizacija i efikasnog generisanja LLVM medjukoda karakterističan je po ekspresivnosti dijagnostike odnosno kvalitetu poruka upozorenja i grešaka prijavljenih za izvorni kod. Dizajn Clang-a se sastoji od mnoštva biblioteka od kojih su najznačajnije za dizajn sledeće:
+
+\begin{enumerate}
+  \item{Lekser i Predprocesor \\
+       Implementira leksičku analizu i predprocesiranje.
+       Pruža mogućnost uključivanja datoteka zaglavlja, proširenja makroa, uslovne kompilacije i kontrole linija. 
+       Kreira niz tokena od sintakse izvornog koda.}
+  \item{Parser \\
+        Kreira Apstraktno Sintaksno Stablo (AST) \textit{eng. Abstract Syntax Three} od tokena koji su dobijeni leksičkom analizom}
+        Clang-ov parser implementiran je kao parser rekurzivnog spuštanja, odnosno analizira izvorni kod od vrha prema dnu nizom rekurzivnih funkcija.
+
+  % \item{Implementaciona, prema klasifikaciji po cilju primene.}
+\end{enumerate}
+
+
 
 % ------------------------------------------------------------------------------
 
