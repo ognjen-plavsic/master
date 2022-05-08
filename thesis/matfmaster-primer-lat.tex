@@ -347,19 +347,31 @@ Clang projekat predstavlja prednji deo (\textit{eng. frontend}) LLVM kompajlersk
 Pored optimizacija i efikasnog generisanja LLVM medjukoda karakterističan je po ekspresivnosti dijagnostike odnosno kvalitetu poruka upozorenja i grešaka prijavljenih za izvorni kod. Dizajn Clang-a se sastoji od mnoštva biblioteka od kojih su najznačajnije za dizajn sledeće:
 
 \begin{enumerate}
-  \item{Lekser i Predprocesor \\
-       Implementira leksičku analizu i predprocesiranje.
+  \item{\textbf{Lekser i Predprocesor} \\
+       Implementira leksičku analizu i predprocesiranje izvornog koda.
        Pruža mogućnost uključivanja datoteka zaglavlja, proširenja makroa, uslovne kompilacije i kontrole linija. 
        Kreira niz tokena od sintakse izvornog koda.}
-  \item{Parser \\
-        Kreira Apstraktno Sintaksno Stablo (AST) \textit{eng. Abstract Syntax Three} od tokena koji su dobijeni leksičkom analizom}
-        Clang-ov parser implementiran je kao parser rekurzivnog spuštanja, odnosno analizira izvorni kod od vrha prema dnu nizom rekurzivnih funkcija.
+  \item{\textbf{Parser} \\
+        Kreira sintaksne strukture C++-a od niza tokena dobijenih leksičkom analizom.
+        Clang-ov parser implementiran je kao parser rekurzivnog spuštanja, odnosno analizira izvorni kod od vrha ka dnu nizom rekurzivnih funkcija.}
+  \item{\textbf{AST biblioteka} \\
+        Ova biblioteka implementira algoritme i strukture podataka koje parser koristi za izgradnju AST-a. Specifična je po strukturi čvorova koji podsećaju na pisani C++ kod što je čini pogodnim za kreiranje alata za refaktorisanje koda i statičku analizu.}
+  \item{\textbf{Sema} \\
+        Vrši semantičku analizu programa tokom parsiranja i od semantički validnih konstrukta kreira AST. Usko je povezana sa parserom i AST bibliotekom.}
+  \item{\textbf{Biblioteka za generisanje koda (eng. CodeGen Library)} \\
+        Dobija AST kao ulaz i od njega generiše LLVM medjukod.}
 
   % \item{Implementaciona, prema klasifikaciji po cilju primene.}
 \end{enumerate}
 
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=0.5\textwidth]{ClangBiblioteke.png}
+  \caption{Odnos osnovnih biblioteka Clang-a}
+  \label{fig:grafikon}
+\end{figure}
 
-
+\section{AST biblioteka}
 % ------------------------------------------------------------------------------
 
 % \pangrami

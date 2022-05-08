@@ -10,5 +10,6 @@
 \contentsline {section}{\numberline {2.2}Opis implementiranih pravila}{5}{section.2.2}
 \contentsline {chapter}{\chapternumberline {3}LLVM (nije spremno za reivew)}{7}{chapter.3}
 \contentsline {section}{\numberline {3.1}Clang}{7}{section.3.1}
+\contentsline {section}{\numberline {3.2}AST biblioteka}{8}{section.3.2}
 \contentsline {chapter}{\chapternumberline {4}Zaključak}{9}{chapter.4}
 \contentsline {chapter}{Literatura}{10}{section*.2}
