@@ -13,7 +13,10 @@
 \usepackage[latinica]{matfmaster} 
 
 \usepackage{listings}
-%
+% \documentclass{article}
+\usepackage{cmsrb}
+\usepackage[OT2,T1]{fontenc} %better to use T1, but OT1 will also work
+% \usepackage[serbian]{babel}%
 % Podrazumevano pismo je ćirilica.
 %   Ako koristite pdflatex, a ne xetex, sav latinički tekst na srpskom jeziku
 %   treba biti okružen sa \lat{...} ili \begin{latinica}...\end{latinica}.
@@ -355,23 +358,83 @@ Pored optimizacija i efikasnog generisanja LLVM medjukoda karakterističan je po
         Kreira sintaksne strukture C++-a od niza tokena dobijenih leksičkom analizom.
         Clang-ov parser implementiran je kao parser rekurzivnog spuštanja, odnosno analizira izvorni kod od vrha ka dnu nizom rekurzivnih funkcija.}
   \item{\textbf{AST biblioteka} \\
-        Ova biblioteka implementira algoritme i strukture podataka koje parser koristi za izgradnju AST-a. Specifična je po strukturi čvorova koji podsećaju na pisani C++ kod što je čini pogodnim za kreiranje alata za refaktorisanje koda i statičku analizu.}
+        Ova biblioteka implementira algoritme i strukture podataka koje parser koristi za izgradnju AST-a. Specifična je po strukturi čvorova koji podsećaju na izvorni C++ kod što je čini pogodnim za kreiranje alata za refaktorisanje koda i statičku analizu.}
   \item{\textbf{Sema} \\
         Vrši semantičku analizu programa tokom parsiranja i od semantički validnih konstrukta kreira AST. Usko je povezana sa parserom i AST bibliotekom.}
   \item{\textbf{Biblioteka za generisanje koda (eng. CodeGen Library)} \\
         Dobija AST kao ulaz i od njega generiše LLVM medjukod.}
 
-  % \item{Implementaciona, prema klasifikaciji po cilju primene.}
 \end{enumerate}
 
 \begin{figure}[!ht]
   \centering
-  \includegraphics[width=0.5\textwidth]{ClangBiblioteke.png}
+  \includegraphics[width=0.6\textwidth]{ClangBiblioteke.png}
   \caption{Odnos osnovnih biblioteka Clang-a}
   \label{fig:grafikon}
 \end{figure}
 
 \section{AST biblioteka}
+
+Ekspresivnost Clang-ove dijagnostike i jednostavnost kreiranja mo\'{c}nih alata za stati\v{c}ku analizu u velikoj meri oslanja se na dizajn Clang-ove AST biblioteke. Struktura AST-a mo\v{z}e  se jednostavno ispisati na standardni izlaz Clang-ovom -ast-dump opcijom. Komanda na listingu 3.1 ispisuje na standardni izlaz AST za kod iz fajla hello.cpp prikazanog na listingu 3.2. Slika 3.1 predstavlja AST ispis dobijen komandom iz listinga 3.1.
+\\
+\lstset{%
+language=C,
+frame=single,
+numbers=left,
+numberstyle=\footnotesize,
+tabsize=2,
+keepspaces=true,
+columns=fullflexible,
+basicstyle=\ttfamily\scriptsize,
+keywordstyle=\color{blue}
+}
+
+\begin{lstlisting}[caption={Komanda za ispisivanje Clang-ovog AST-a},label={lst:label},language=bash, captionpos=b]
+$ clang -Xclang -ast-dump hello.c
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Kod \v{c}iji je AST prikazan na slici 3.1},label={lst:label},language=C++, captionpos=b]
+int main(){
+  int a = 4;
+  int b = 5;
+  int result = a * b + 8;
+}
+\end{lstlisting}
+
+\v{C}vorovi od kojih je izgradjen AST predstavljaju apstrakciju sintaksnih struktura iz samog jezka.
+Svi \v{c}vorovi Clang-ovog AST-a nasledjuju jednu od tri osnovne (bazne) klase:
+\begin{itemize}
+  \item \textit{Decl}
+  \item \textit{Stmt}
+  \item \textit{Type}
+\end{itemize}
+Ove klase redom opisuju deklaracije, naredbe i tipove iz C familije jezika.
+Na primer IfStmt klasa opisuje 'if' naredbe jezika i direktno nasledjuje Stmt klasu. Sa druge strane FunctionDecl i VarDecl klase koje se koriste za opisivanje
+deklaracija i definicija funkcija i varijabli (promenljivih) ne nasledjuju dikertno klasu Decl ve\'{c} nasledjuju vi\v{s}e njenih podklasa.
+
+\begin{itemize}
+  \item \textit{\textbf{Klasa Type}} \\ Tipovi igraju va\v{z}nu ulogu u ekspresivnosti Clang-ove dijagnostike. Dizajn ove klase klju\v{c}an je za preciznost emitovanih poruka upozorenja i gre\v{s}aka u kodu. Na primer, upozorenja vezana za kod koji koristi tip std::string, ispisa\'{c}e ba\v{s} taj tip u svojim porukama umesto tipa koji $std::string$ predefini\v{s}e, a to je $std::basic\_string<char, std:.. >$ . Iza ove funkcionalnosti stoji ideja kanonskih tipova.
+  \\
+  \indent
+  Svaka instanca klase Type sadr\v{z}i pokaziva\v{c} na svoj kanonski tip. Za jednostavne tipove koji nisu definisani kori\'{c}enjem $typedef$ naredbe pokaziva\v{c} na kanonski tip \'{c}e zapravo pokazivati na sebe. Za tipove \v{c}ija struktura uklju\v{c}uje $typedef$ naredbu kanonski pokaziva\v{c} pokaziva\'{c}e na strukturno ekvivalentan tip bez $typedef$ naredbi.
+  Na primer, kanonski tip tipa $int *$ sa listinga 3.3 bi\'{c}e sam taj tip, dok \'{c}e kanonski tip za \texttt{foo *} biti \texttt{int *}.
+\begin{lstlisting}[caption={Demonstracija kanonskih tipova},label={lst:label},language=C++, captionpos=b]
+  int *a;
+  typedef int foo;
+  foo *b;
+\end{lstlisting}
+  Ovakvim dizajnom omogu\'{c}no je semanti\v{c}kim proverama da donose zaklju\v{c}ke direktno o pravom tipu ignori\v{s}u\'{c}i \texttt{typedef} naredbe kao i efikasno poredjenje strukturne identi\v{c}nosti tipova.
+  \def\code#1{\texttt{#1}}
+  \\
+  \indent
+  Klasa Type ne sadr\v{z}i informacije o kvalifikatorima tipova kao \v{s}to su \code{const}, \code{volatile}, \code{restrict} itd... Ove informacije enkapsulirane su u klasi \code{QualType} koja su\v{s}tinski predstavlja par pokaziva\v{c}a na tip (objekat klase \code{Type}) i bitova koji predstavljaju
+  kvalifikatore. \v{C}uvanje kvalifikatora u vidu bitova omogu\'{c}uje veoma efikasno dohvatanje, dodavanje i brisanje kvalifikatora za tip. Postojanje ove klase smanjuje upotrebu hip memorije time \v{s}to se ne moraju kreirati duplikati tipova sa razli\v{c}itim kvalifikatorima. Na hipu se alocira jedan tip, a zatim 
+  svi kvalifikovani tipovi pokazuju na alocirani tip na hipu sa dodatim kvalifikatorima.
+
+  \item \textit{Stmt}
+  \item \textit{Type}
+\end{itemize}
+
 % ------------------------------------------------------------------------------
 
 % \pangrami
