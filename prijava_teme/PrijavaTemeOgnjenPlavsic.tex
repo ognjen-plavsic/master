@@ -36,7 +36,7 @@ Molim da se odobri izrada master rada pod naslovom:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % U donji red upisati naziv master rada umesto teksta: "Naziv master rada"    %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\textbf{\textit{\zn Implementacija pravila iz standarda {\Lat AUTOSAR C++14} izradom alata za statichku analizu koda sa predlozima izmena koda korish{}{c1}enjem biblioteka {\Lat LLVM} infrastrukture''}}
+\textbf{\textit{\zn Implementacija alata za statichku analizu {\Lat C++14} koda sa predlozima izmena koda \newline korish{}{c1}enjem biblioteka {\Lat LLVM} infrastrukture''}}
 \end{minipage}\\
 \rule[4mm]{17.5cm}{.05mm}
 \begin{flushleft}
@@ -50,20 +50,18 @@ Molim da se odobri izrada master rada pod naslovom:
 
 % 	Umesto donjeg teksta opisati značaj teme i oblasti	%
 
-Razvojem {\Lat C++} jezika standardi za pravilno pisanje {\Lat C++} koda imaju sve vec1i znachaj za sigurnost aplikacija razvijenih ovim jezikom.
-Standard {\Lat \textit{AUTOSAR C++14}} jedan je od vodec1ih i najpoznatijih standarda za pravilno pisanje {\Lat C++} koda prilikom razvijanja aplikacija za ugradjene sisteme (\textit{eng. {\Lat embedded systems}}) i druge sigurnosno kritichne sisteme [1]. \\
-{\Lat LLVM} projekat predstavlja kolekciju modularnih i ponovo iskoristivih kompajlerskih tehnologija i alata [2].
-{\Lat LLVM} infrastruktura pruzha podrshku za jednostavno razvijanje kvalitetnih alata za statichku analizu. Ovo je omoguc1eno posebno dizajniranim bibliotekama za razvoj alata ali i prednjim delom (\textit{eng. {\Lat frontend}}) kompajlera za {\Lat C} familiju jezika, {\Lat Clang-om}, kog karakterishe ekspresivna dijagnostika koda.
+Standard {\Lat \textit{AUTOSAR C++14}} jedan je od vodec1ih standarda za pravilno pisanje {\Lat \textit{C++}} koda prilikom razvijanja aplikacija za uredjaje sa ugradjenim rachunarom (eng. \textit{{\Lat embedded systems}}) i druge sigurnosno kritichne sisteme [1]. Ovaj standard je posebno vazhan u autoindustriji odnosno za razvoj softvera za automobile.\\
+{\Lat LLVM} infrastruktura predstavlja kolekciju modularnih i ponovo iskoristivih kompajlerskih tehnologija i alata [2].
+{\Lat LLVM} infrastruktura pruzha podrshku za jednostavno razvijanje kvalitetnih alata za statichku analizu. Ovo je omoguc1eno posebno dizajniranim bibliotekama za razvoj alata ali i prednjim delom (\textit{eng. {\Lat frontend}}) kompajlera za {\Lat \textit{C}} familiju jezika, {\Lat \textit{Clang}}-om, kog karakterishe ekspresivna dijagnostika koda.
 
 \textbf{Specifichni cilj rada:}
 
 % 	Umesto donjeg teksta opisati specifični cilj master rada %
 
-Korish{}{c1}enjem biblioteka {\Lat LLVM} kompajlerske infrastruktere razviti alat za statichku analizu {\Lat C++14} koda. Alat treba proveravati
+Korish{}{c1}enjem biblioteka kompajlerske infrastruktere {\Lat LLVM} bic1e razvijen alat za statichku analizu {\Lat \textit{C++14}} koda. Alat c1e proveravati
 saglasnost sa podskupom pravila iz standarda {\Lat \textit{AUTOSAR C++14}} koja se odnose na deklaracije i deklaratore. Uz prijavljivanje upozorenja
-za konstrukte koji nisu u skladu sa ovim standardom alat treba i da predlozhi adekvatne izmene koda. Alat treba da podrzhava opcije komandne linije
-kojim se mozhe izabrati podskup pravila sa kojim c1e se izvrshiti provera izvornog koda kao i opciju za primenu predlozhenih izmena na izvorni kod.
-Analiza izvornog koda vrshic1e se obilaskom apstraktnog sintaksnog stabla (skrac1eno AST) korish{}c1enjem AST uparivacha (eng. {\Lat \textit{Matchers}}) ali i manuelnom analizom stabla.
+za konstrukte koji nisu u skladu sa ovim standardom alat c1e da predlazhe adekvatne izmene koda. Alat c1e podrzhavati opcije komandne linije
+kojim se mozhe izabrati podskup pravila sa kojim c1e se izvrshiti provera izvornog koda kao i opciju za primenu predlozhenih izmena na izvorni k\^{o}d.
 
 \textbf{Literatura:}
 
