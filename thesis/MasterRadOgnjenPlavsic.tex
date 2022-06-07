@@ -46,7 +46,7 @@
 % \usepackage[latinica]{pangrami}
 
 % Datoteka sa literaturom u BibTex tj. BibLaTeX/Biber formatu
-\bib{matfmaster-primer}
+\bib{MasterRadOgnjenPlavsic}
 
 % Ime kandidata na srpskom jeziku (u odabranom pismu)
 \autor{Ognjen Ž. Plavšić}
@@ -173,28 +173,28 @@
 \chapter{Programski jezik C++}
 \label{chp:autosar}
 
-\textbf{\textit{C++}} je programski jezik op\v{s}te namene koji pru\v{z}a direktan i efikasan model hardvera u kombinaciji sa strukturama za definisanje lakih (eng. \textit{lightweight}) apstrakcija \cite{TheC++ProgrammingLanguage}. Kreirao ga je Danski softverski in\v{z}enjer Bjarne Stroustrup kao ekstenziju programskog jezika \textit{C}. Osnovno pro\v{s}irenje u odnosu na programski jezik \textit{C} jeste mogu\'{c}nost kreiranja korisni\v{c}ki definisanih tipova, odnosno klasa. \textit{C++} pripada grupi objektno orijentisanih jezika. 
+\textbf{C++} je programski jezik op\v{s}te namene koji pru\v{z}a direktan i efikasan model hardvera u kombinaciji sa strukturama za definisanje lakih (eng. \textit{lightweight}) apstrakcija \cite{TheC++ProgrammingLanguage}. Kreirao ga je Danski softverski in\v{z}enjer Bjarne Stroustrup kao ekstenziju programskog jezika C. Osnovno pro\v{s}irenje u odnosu na programski jezik C jeste mogu\'{c}nost kreiranja korisni\v{c}ki definisanih tipova, odnosno klasa. C++ pripada grupi objektno orijentisanih jezika. 
 
 \section{Dizajn programskog jezika C++}
 
-Programski jezik \textit{C} dizajniran je sa ciljem da programer mo\v{z}e sto jednostavnije zadavati akcije koje ma\v{s}ina treba da izvr\v{s}i.
-Osnovna ideja iza dizajna programskog jezika \textit{C++} jeste da zadr\v{z}i dizajn jezika \textit{C} ali ga i pro\v{s}iri tako da jezik, odnosno njegova sintaksa, bude bliska problemu koji re\v{s}ava. Tako implementiranim programskim jezikom se koncepti re\v{s}enja problema mogu izraziti direktno i koncizno.
-U svrhu toga, \textit{C++} pru\v{z}a:
+Programski jezik C dizajniran je sa ciljem da programer mo\v{z}e sto jednostavnije zadavati akcije koje ma\v{s}ina treba da izvr\v{s}i.
+Osnovna ideja iza dizajna programskog jezika C++ jeste da zadr\v{z}i dizajn jezika C ali ga i pro\v{s}iri tako da jezik, odnosno njegova sintaksa, bude bliska problemu koji re\v{s}ava. Tako implementiranim programskim jezikom se koncepti re\v{s}enja problema mogu izraziti direktno i koncizno.
+U svrhu toga, C++ pru\v{z}a:
 \begin{itemize}
   \item {Direktna mapiranja ugrađenih operacija i tipova na hardver kako bi obezbedio efikasno kori\v{s}\'{c}enje memorije i efikasne niske (eng. \textit{low-level}) operacije.}
   \item {Priu\v{s}tive (u smislu ra\v{c}unarskih resursa) i fleksibilne mehanizme apstrakcija za podr\v{s}ku korisni\v{c}ki definisanih tipova koji se mogu koristiti sa istom sintaksom, u istom obimu i sa istim performansama kao ugrađeni tipovi.}
 \end{itemize}
 
-Dizajn \textit{C++}-a je fokusiran na tehnike programiranja koje se bave osnovnim pojmovima ra\v{c}unarstva kao \v{s}to su memorija, mutabilnost, apstrakcija, upravljanje ra\v{c}unarskim resursima, izra\v{z}avanje algoritama, upravljanje gre\v{s}kama i modularnost. Jezik je dizajniran sa ciljem da \v{s}to vi\v{s}e olak\v{s}a sistemsko programiranje, odnosno pisanje programa koji direktno koriste hardverske resurse i kod kojih su ovi resursi u velikoj meri ograni\v{c}eni \cite{TheC++ProgrammingLanguage}.
+Dizajn C++-a je fokusiran na tehnike programiranja koje se bave osnovnim pojmovima ra\v{c}unarstva kao \v{s}to su memorija, mutabilnost, apstrakcija, upravljanje ra\v{c}unarskim resursima, izra\v{z}avanje algoritama, rukovanje gre\v{s}kama i modularnost. Jezik je dizajniran sa ciljem da \v{s}to vi\v{s}e olak\v{s}a sistemsko programiranje, odnosno pisanje programa koji direktno koriste hardverske resurse i kod kojih su ovi resursi u velikoj meri ograni\v{c}eni \cite{TheC++ProgrammingLanguage}.
 
 
 \section{Standard C++14}
 
-Programski jezik \textit{C++} je standardizovan od strane ISO (\textit{International Standard Organization}) radne grupe poznate kao JTC1/SC22/WG21 \cite{ISOWebsite}. Do sada je objavljeno \v{s}est revizija \textit{C++} standarda i trenutno se radi na reviziji \textit{C++23}. 
+Programski jezik C++ je standardizovan od strane ISO (\textit{International Standard Organization}) radne grupe poznate kao JTC1/SC22/WG21 \cite{ISOWebsite}. Do sada je objavljeno \v{s}est revizija C++ standarda i trenutno se radi na reviziji \textit{C++23}. 
 \indent
 
-Standard \textit{C++14} predstavlja pro\v{s}irenje standarda \textit{C++11} uglavnom manjim pobolj\v{s}anjima i ispravljanjem gre\v{s}aka iz standarda \textit{C++11} . Standard C++11 sa druge strane uveo je velike izmene u odnosu da prethodnu reviziju standarda, \textit{C++03}. 
-Standardi \textit{C++11/14} uveli su ve\'{c}inu fundamentalnih koncepta onog \v{s}to se danas smatra modernim \textit{C++}-om. Ovde pre svega spadaju desne reference, "move" semantika i savr\v{s}eno prosleđivanje, pametni pokaziva\v{c}i, lambda funkcije, dedukcija tipova ali i mnogi drugi koncepti.
+Standard \textit{C++14} predstavlja pro\v{s}irenje standarda \textit{C++11} uglavnom manjim pobolj\v{s}anjima i ispravljanjem gre\v{s}aka iz standarda \textit{C++11} . Standard \textit{C++11} sa druge strane uveo je velike izmene u odnosu da prethodnu reviziju standarda, \textit{C++03}. 
+Standardi \textit{C++11/14} uveli su ve\'{c}inu fundamentalnih koncepta onog \v{s}to se danas smatra modernim C++-om. Ovde pre svega spadaju desne reference, "move" semantika i savr\v{s}eno prosleđivanje, pametni pokaziva\v{c}i, lambda funkcije, dedukcija tipova ali i mnogi drugi koncepti.
 
 
 \chapter{Standard kodiranja Autosar C++14}
@@ -368,7 +368,7 @@ Pravilo A15-0-6 (obvezno, verifikaciono, neautomatizovano) \\
 Analiza treba biti izvršena kako bi se detektovalo loše rukovanje izuzecima. Treba analizirati slede\'ce slučajeve lošeg rukovanja izuzecima:
 (a) Najgore vreme izvršavanja ne postoji ili se ne može utvrditi, \\
 (b) Stek nije korektno raspakovan, \\
-(c) Izuzetak nije bačen, drugačiji izuzetak je bačen, aktivirana je pogresna "catch" naredba, \\
+(c) Izuzetak nije bačen, drugačiji izuzetak je bačen, aktivirana je pogre\v{s}na "catch" naredba, \\
 (d) Memorija nije dostupna tokom rukovanja izuzecima.
 \end{tcolorbox}
 \end{center}
