@@ -481,6 +481,9 @@ Pored optimizacija i efikasnog generisanja LLVM međukoda karakterističan je po
 
 \section{AST biblioteka}
 
+U računarstvu, \textbf{apstraktno sintaksno stablo} (eng. abstract syntax tree), ili samo \textbf{sintaksno stablo}, je drvoidna reprezentacija apstraktne sintaktičke strukture izvornog koda napisanog u programskom jeziku. Svaki čvor stabla predstavlja konstrukt koji se pojavljuje u izvornom kodu.
+Sintaksa je apstraktna u smislu da ne predstavlja svaki detalj koji se pojavljuje u stvarnoj sintaksi, već samo strukturne ili detalje vezane za sadržaj.
+
 Ekspresivnost Clang-ove dijagnostike i jednostavnost kreiranja mo\'{c}nih alata za stati\v{c}ku analizu u velikoj meri oslanja se na dizajn Clang-ove AST biblioteke. Struktura AST-a mo\v{z}e  se jednostavno ispisati na standardni izlaz Clang-ovom -ast-dump opcijom. Komanda na listingu 3.1 ispisuje na standardni izlaz AST za kod iz fajla hello.cpp prikazanog na listingu 3.2. Slika 3.1 predstavlja AST ispis dobijen komandom iz listinga 3.1.
 \\
 \lstset{%
@@ -499,13 +502,21 @@ keywordstyle=\color{blue}
 $ clang -Xclang -ast-dump hello.c
 \end{lstlisting}
 
-\begin{lstlisting}[caption={Kod \v{c}iji je AST prikazan na slici 3.1},label={lst:label},language=C++, captionpos=b]
+\begin{lstlisting}[caption={Kod \v{c}iji je AST prikazan na slici 4.1},label={lst:label},language=C++, captionpos=b]
 int main(){
   int a = 4;
   int b = 5;
   int result = a * b + 8;
 }
 \end{lstlisting}
+
+% primer korišćenja slike
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=0.7\textwidth]{ASTImage.png}
+  \caption{Primer AST-a}
+  \label{fig:grafikon}
+\end{figure}
 
 \v{C}vorovi od kojih je izgrađen AST predstavljaju apstrakciju sintaksnih struktura iz samog jezka.
 Svi \v{c}vorovi Clang-ovog AST-a nasleđuju jednu od tri osnovne (bazne) klase:
@@ -536,10 +547,306 @@ deklaracija i definicija funkcija i varijabli (promenljivih) ne nasleđuju diker
   Klasa Type ne sadr\v{z}i informacije o kvalifikatorima tipova kao \v{s}to su \code{const}, \code{volatile}, \code{restrict} itd... Ove informacije enkapsulirane su u klasi \code{QualType} koja su\v{s}tinski predstavlja par pokaziva\v{c}a na tip (objekat klase \code{Type}) i bitova koji predstavljaju
   kvalifikatore. \v{C}uvanje kvalifikatora u vidu bitova omogu\'{c}uje veoma efikasno dohvatanje, dodavanje i brisanje kvalifikatora za tip. Postojanje ove klase smanjuje upotrebu hip memorije time \v{s}to se ne moraju kreirati duplikati tipova sa razli\v{c}itim kvalifikatorima. Na hipu se alocira jedan tip, a zatim 
   svi kvalifikovani tipovi pokazuju na alocirani tip na hipu sa dodatim kvalifikatorima.
-
-  \item \textit{Stmt}
-  \item \textit{Type}
 \end{itemize}
+
+\section{Tehnike stati\v{c}ke analize}
+
+Kompajlerska infrastruktura LLVM pru\v{z}a podr\v{s}ku za jednostavno kreiranje kvalitetnih alata za stati\v{c}ku analizu izvornog koda. Ovi alati
+baziraju se na kori\v{s}\'{c}enju interfejsa ka Clang-ovom AST-u ili kori\v{s}\'{c}enjem Clang-ovog stati\v{c}kog anlizatora (eng. \textit{Clang Static Analyzer}) za potrebe simboli\v{c}kog izvr\v{s}avanja programa. Alati za stati\v{c}ku analizu mogu koristiti kombinaciju tehnika obilaska AST-a i simboli\v{c}kog izvr\v{s}avanja programa u zavisnosti od kompleksnosti analize koja je potrebna. Biblioteke za obilazak AST-a su jeftinije za kori\v{s}\'{c}enje  po pitanju ra\v{c}unarskih resursa ali su ograni\v{c}ene informacijama dostupnim tokom kompilacije programa. Alati koji se implementiraju kao deo sistema za prevodjenje programa omogu\'{c}avaju dodatnu optimizaciju procesa pronala\v{z}enja nepravilnih konstrukta direktnim proverama tokom kompilacije. Ovo se mo\v{z}e posti\'{c}i nadogradnjom osnovnih delova kompajlera kao \v{s}to su Lexer, Parser ili Sema. \\Osnovne biblioteke za obilazak AST-a u okviru kompajlera Clang su AST posetioci (eng. \textit{ASTVisitors}) i  AST upariva\v{c}i (eng. \textit{ASTMatchers}).
+
+% \usepackage{listings}
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+\lstset{ 
+  backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}; should come as last argument
+  basicstyle=\scriptsize\ttfamily,        % the size of the fonts that are used for the code
+  breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
+  breaklines=true,                 % sets automatic line breaking
+  captionpos=b,                    % sets the caption-position to bottom
+  commentstyle=\color{mygreen},    % comment style
+  deletekeywords={...},            % if you want to delete keywords from the given language
+  escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+  extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+  firstnumber=1000,                % start line enumeration with line 1000
+  frame=single,                    % adds a frame around the code
+  keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+  keywordstyle=\color{blue},       % keyword style
+  language=Python,                 % the language of the code
+  morekeywords={*,...},            % if you want to add more keywords to the set
+  numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
+  numbersep=5pt,                   % how far the line-numbers are from the code
+  numberstyle=\tiny\color{mygray}, % the style that is used for the line-numbers
+  rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+  showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+  showstringspaces=false,          % underline spaces within strings only
+  showtabs=false,                  % show tabs within strings adding particular underscores
+  stepnumber=2,                    % the step between two line-numbers. If it's 1, each line will be numbered
+  stringstyle=\color{mymauve},     % string literal style
+  tabsize=2,                     % sets default tabsize to 2 spaces
+  title=\lstname                   % show the filename of files included with \lstinputlisting; also try caption instead of title
+}
+
+\newtheorem{primer}{Primer}[section]
+
+\section{AST posetioci}
+AST posetioci implementiraju mehanizam obilaska Clang-ovog AST stabla, odnosno pru\v{z}aju interfejs
+za pose\'{c}ivanje svakog \v{c}vora u AST stablu.
+Logika AST posetioca sadr\v{z}ana je u šablonskoj klasi \textbf{\textit{RecursiveASTVisitor<Derived>}}.
+Ovo je klasa koja posećuje svaki čvor Clang-ovog AST stabla obilaskom u dubinu.
+AST posetioc je svaka potklasa klase \textbf{\textit{RecursiveASTVisitor<Derived>}}.
+Klasa \\ \textbf{\textit{RecursiveASTVisitor<Derived>}} obavlja tri odvojena zadatka:
+
+\begin{enumerate}
+\item Obilazi AST tj. posećuje svaki AST čvor.
+\item Za dati čvor ide uz klasnu hijerarhiju počevši od dinamičkog tipa čvora do klase na vrhu hijerarhije (npr. Stmt, Decl ili Type).
+\item Za datu kombinaciju (čvor, klasa), gde je klasa neka od baznih klasa dinamičkog tipa čvora, zove funkcije koje korisnik može predefinisati kako bi posetio čvor.
+\end{enumerate}
+Ova tri zadatka obavljaju tri grupe metoda, redom:
+\begin{enumerate}
+\item \textbf{\textit{TraverseDecl(Decl *x)}} obavlja zadatak 1. Ovo je ulazna tačka za obilazak AST-a sa korenom u čvoru x. Ovaj metod poziva metod \\ \textbf{\textit{TraverseFoo(Foo *x)}}, gde je Foo dinamički tip od *x, koji poziva metod \\ \textbf{\textit{WalkUpFromFoo(x)}}, a zatim rekurzivno posećuje decu čvora x. \\ \textbf{\textit{TraverseStmt(Stmt *x)}} i \textbf{\textit{TraverseType(QualType x)}} rade na sličan način.
+ 
+\item \textbf{\textit{WalkUpFromFoo(Foo *x)}} izvršava zadatak 2. Ne pokušava odmah da poseti decu čvora x, umesto toga prvo zove \textbf{\textit{WalkUpFromBar(x)}} gde je Bar direktna nadklasa klase Foo (sem ukoliko Foo nema roditelja), i tek onda zove \textbf{\textit{VisitFoo(x)}}.
+\item \textbf{\textit{VisitFoo(Foo *x)}} izvršava zadatak 3.
+\end{enumerate}
+Ove tri grupe metoda slede naredni poredak: Traverse > WalkUpFrom > Visit. Metoda (npr. Traverse) može pozvati samo metode iz svoje grupe metoda ili iz grupe metoda direktno ispod nje (u smislu predstavljenog poretka). Metoda ne može pozvati metode iz grupe iznad \cite{visitors}. \begin{primer}
+Primer posetioca:
+\end{primer}
+\begin{lstlisting}[caption={Primer posetioca koji posećuje sve strukture, unije i klase i ispisuje lokaciju onih koji se zovu n::m::C },frame=single, label=simple]
+class FindNamedClassVisitor
+  : public RecursiveASTVisitor<FindNamedClassVisitor> {
+public:
+  explicit FindNamedClassVisitor(ASTContext *Context)
+    : Context(Context) {}
+
+  bool VisitCXXRecordDecl(CXXRecordDecl *Declaration) {
+    if (Declaration->getQualifiedNameAsString() == "n::m::C") {
+      FullSourceLoc FullLocation = Context->getFullLoc(Declaration->getBeginLoc());
+      if (FullLocation.isValid())
+        llvm::outs() << "Found declaration at "
+                     << FullLocation.getSpellingLineNumber() << ":"
+                     << FullLocation.getSpellingColumnNumber() << "\n";
+    }
+    return true;
+  }
+
+private:
+  ASTContext *Context;
+};
+\end{lstlisting}
+
+\par
+Da bi se izvršila neka analiza izvornog koda pomoću AST posetioca dovoljno je naslediti klasu 
+ \textbf{\textit{RecursiveASTVisitor<Derived>}} i predefinisati željene \textbf{\textit{Visit}} metode u okviru nje. Ukoliko je \textbf{\textit{Visit}} metodama pronađena konstrukcija izvornog koda koja se iz nekog razloga smatra nepravilnom, moze se prijaviti upozorenje.
+\section{AST upariva\v{c}i}
+Biblioteka AST uprariva\v{c}a (eng. \textit{LibASTMatcher}) pruža oblasno specifičan jezik (eng. domain specific language) za kreiranje predikata nad Clang-ovim AST stablom. Ovaj oblasno specifičan jezik je napisan i može se koristiti u C++-u omogućavajući korisnicima da u istom programu pristupe željenom delu stabla i da nad tim čvorovima koriste C++ interfejs za analiziranje raznih atributa, lokacija, i ostalih informacija dostupnih na AST nivou.
+\\ Na primer, za kreiranje upariva\v{c}a koji uparuje sve deklaracije klasa ili unija u AST stablu neke jedinice prevođenja, može se koristiti poziv \textbf{\textit{recordDecl()}}. Za sužavanje pretrage, na primer za nalaženje deklaracija svih klasa ili unija sa imenom \texttt{"Foo"}, treba ubaciti \textbf{\textit{hasName}} matcher: Poziv \textbf{\textit{recorDecl(hasName("Foo"))}} vraća upariva\v{c} koji uparuje klase i unije sa imenom \textbf{\textit{"Foo"}} u bilo kom prostoru imena (eng. \textit{namespace}). Podrazumevano, upariva\v{c}i koji prihvataju više drugih upariva\v{c}a koriste implicitno \texttt{allOf()} metod. Ovo omogućava dalje sužavanje pretrage. Na primer za uparivanje klasa koje nasleđuju \texttt{"Bar"}, upariva\v{c} bi izgledao ovako: \\  \textbf{\textit{recordDecl(hasName("Foo"), isDerivedFrom("Bar"))}}.
+\\
+
+Uopšteno, strategija kreiranja upariva\v{c}a se svodi da sledeće korake:
+\begin{enumerate}
+\item Na\'{c}i baznu klasu u Clang-ovom AST-u koju je potrebno upariti.
+ 
+\item Na\'{c}i u \texttt{AST Matcher Reference} dokumentu upariva\v{c} koji ili uparuje \v{z}eljeni čvor ili su\v{z}ava pretragu.
+\item Kreirati spoljašnji izraz za uparivanje i proveriti da li radi o\v{c}ekivano.
+\item Prona\'{c}i upariva\v{c}e koji bi mogli upariti neki unutrašnji čvor iz željenog dela stabla.
+\item Ponavljati postupak dok uparivanje željenog dela stabla nije završeno.
+\end{enumerate}
+
+Izrazi za uparivanje (eng. \textit{match expressions}) omogu\'{c}uju uparivanje delova AST stabla. Nakon uparivanja, nad uparenim konstruktom uglavnom se vr\v{s}i odredjena analiza, na primer ispitivanje saglasnosti konstrukta sa pravilom standarda za pravilno pisanje C++ koda.
+\par
+Zbog toga, upariva\v{c}i koji uparuju specifi\v{c}ne čvorove AST stabla se mogu "vezati" (eng. \textit{binding}). Na primer, \textbf{\textit{recordDecl(hasName("MyClass")).bind("id")}} će vezati upareni \textbf{\textit{recordDecl}} čvor za string \texttt{"id"} kako bi se kasnije mogao koristiti u povratnom pozivu upariva\v{c}a (eng. match callback) \cite{matchers}.
+
+\begin{primer}
+Primer matcher-a 
+\end{primer}
+\begin{lstlisting}[caption={Primer matcher-a (koji pronalazi sve klase koje nisu obeležene atributom \texttt{final} i čiji destruktor nije virtuelan), CallBack klase i poziva matchera},frame=single, label=simple]
+DeclarationMatcher NonFinalClassWithNonVirtualDestructor::makeMatcher() {
+  return cxxRecordDecl(isClass(), unless(isFinal()),
+                    anyOf(hasMethod(cxxDestructorDecl(isPublic(),
+                    unless(isVirtual()))),
+                    unless(hasMethod(cxxDestructorDecl()))))
+                .bind("nonFinalClassWithNonVirtualDestructor");
+}
+void NonFinalClassWithNonVirtualDestructor::
+    NonFinalClassWithNonVirtualDestructorCallBack::run(
+        const MatchFinder::MatchResult &Result) {
+  const BoundNodes &BN = Result.Nodes;
+  
+  if (const clang::CXXRecordDecl *CRD = BN.getNodeAs<clang::CXXRecordDecl>(
+          "nonFinalClassWithNonVirtualDestructor"))
+    reportWarning(
+        SM.getDiagnostics(), CRD->getBeginLoc(),
+        diag::warn_non_final_class_with_non_virtual_destructor);
+}
+
+void NonFinalClassWithNonVirtualDestructor::runMatcher(
+    clang::ASTContext &AC) {
+  MatchFinder NonFinalClassWithNonVirtualDestructor;
+  NonFinalClassWithNonVirtualDestructor.addMatcher(makeMatcher(), &CB);
+  NonFinalClassWithNonVirtualDestructor.matchAST(AC);
+}
+\end{lstlisting}
+
+
+% \section{Clang-ov Statički Analizator}
+% Clang-ov Statički Analizator je alat za traženje grešaka u programu. Analizirajući izvorni kod, ovaj alat pokušava da simulira izvršavanje delova programa bez njihovog prevođenja i prijavljuje greške koje bi se zapravo desile u toku izvršavanja (eng. run-time errors). Kako ponašanje izvršnih programa zavisi od spoljašnjih faktora kao što su ulazne vrednosti, slučajni brojevi i ostale stvari, mehanizam analizatora (eng. analyzer engine) dodeljuje vrednosti sa algebarskim simbolima, i izvršava simbolička izračunavanja koristeći ove simbole. Takođe otkriva uslove nad simboličkim vrednostima i postavlja ograničenja nad njima.
+% \par Kao rezultat, Clang-ov Statički Analizator može da nađe greške koje se pojavljuju na retkim putanjama tokom izvršavanja programa. Ipak, analizator može naći samo greške koje je specifično programiran da nađe. Inače, kad naiđe na neki problem, analiza nastavlja dalje i ne prijavljuje nikakvu grešku. Za svaku grešku koju analizator nađe, kao što je na primer dereferenciranje null pokazivača, postoji poseban modul, \textbf{checker}, koji reaguje na te greške tokom analize.
+% \par
+% Dakle, jezgro analizatora je odgovorno za simboličko izvršavanje programa, a checker-i se prijavljuju za događaje za koje su zainteresovani, proveravaju razne pretpostavke nad simboličkim vrednostima, i prijavljuju upozorenja ukoliko se ove pretpostavke ne mogu postaviti na određenom putu.
+% \subsection{Vrste analize koje pruža Clang-ov Statički Analizator}
+% Prva odluka koju obično morate doneti kad pravite checker je da li vam je potrebna analiza puteva (eng. path-sensitive analysis) tj. simboličko izvršavanje programa. Analiza puteva je mnogo sporija od kompilacije. Većinu zahtevnih izračunavanja izvršava jezgro analizatora, dok su checker-i uglavnom prilično brzi.
+% \par 
+% O sintaksnoj analizi u okviru Clang-ovog Statičkog Analizatora ovde neće biti reči jer su AST checkeri zapravo jako slični AST vizitorima i po implementaciji i po mogućnostima koje pružaju.
+% \par
+% Druga vrsta analize je analiza zasnovana na analiziranju grafa kontrole toka (eng. control flow graph).
+% \subsection{Analiza grafa kontrole toka}
+%  Graf kontrole toka je grafovska reprezentacija svih puteva kojima se moze proći kroz program tokom njegovog izvršavanja. Ovaj graf se pravi odvojeno za svaku funkciju. Svaki čvor grafa kontrole toka predstavlja osnovni blok naredbi koje ne zadrže nikakvo grananje, pa se stoga izvršavaju sekvencijano. Svaki osnovni blok se završava završnom naredbom (eng. terminator statement), koja je granajuća naredba ili naredba \texttt{return}.
+% \par 
+% Pogledajmo naredni kod:
+% \begin{lstlisting}[caption={},frame=single, label=simple]
+% function() {
+%   int a = 1;
+%   int b = 2;
+
+%   if (b == 2) {
+%     ++b;
+%   }
+%   int c = 3;
+%   int d = 4;
+
+%   while (a < 5) {
+%     ++a;
+%   }
+%   int e = 5;
+%   int f = 6;
+% }
+% \end{lstlisting}
+%  Graf kontrole toka koji odgovara prikazanom kodu prikazan je na slici \ref{fig:cfg}:
+% \begin{figure}[h!]
+% \begin{center}
+% \includegraphics[scale=0.3]{GrafKontroleToka.png}
+% \end{center}
+% \caption{Grafička reprezentacija grafa kontrole toka}
+% \label{fig:cfg}
+% \end{figure}
+% \par
+% Analiza grafa kontrole toka je korisna za pravljenje sigurnih provera, za koje je nepotrebno proći kroz sve moguće puteve programa. Na primer, ukoliko želimo da osiguramo da je neki uslov uvek false, pa je onda odgovarajući kod "mrtav", morali bismo da dosegnemo sve definicije svih promenljivih koje se koriste u izrazu pomenutog uslova, tako da bi ovde najkorisnija bila analiza grafa kontrole toka.
+
+% Međutim, pogledajmo naredni kod:
+% \begin{lstlisting}[caption={},frame=single, label=simple]
+%  void function(){
+%   int y, z;
+%   if (x == 0) y = 5;
+%   if (!x) z = 6;
+% }
+% \end{lstlisting}
+% Na osnovu analize grafa kontrole toka ne bismo mogli da utvrdimo da ukoliko se izvrši put koji dolazi do bloka tela prvog if-a, sigurno se neće izvršiti put koji dolazi do tela drugog if-a. Analizom grafa kontrole toka bismo morali da ispitamo sve četiri putanje, a zapravo nas interesuju samo dve. Ovo čini analizu dosta manje korisnom.
+% \subsection{Analiza eksplodirajućeg grafa}
+% Eksplodirajući graf Clang-ovog Statičkog Analizatora je osnovna struktura podataka za analizu puteva koje izvršava jezgro statičkog analizatora. Jezgro pokušava da interpretira kod i pravi različite putanje čak i ako te putanje uključuju iste osnovne blokove grafa kontrole toka. Eksplodirajući graf se sadrži od svih puteva kroz graf kontrole toka koji se istražuju od strane jezgra analizatora, i nosi informacije o stanju programa na svakom putu i u svakoj naredbi. Čvorovi grafa, eksplodirajući čvorovi, su parovi koji se sastoje od stanja programa i lokacije u programu koji se trenutno analizira.
+% \par
+% Eksplodirajući graf za prethodni kod prikazan je na slici \ref{fig:exploded}:
+% \begin{figure}[h!]
+% \begin{center}
+% \includegraphics[scale=0.2]{exploded_graph.png}
+% \end{center}
+% \caption{Grafička reprezentacija eksplodirajućeg grafa}
+% \label{fig:exploded}
+% \end{figure}
+% \par
+% Pogledajmo kako analiza puteva radi na ovom primeru. Analizator počinje da simulira prvu operaciju, poređenje vrednosti promenljive x sa nulom. Pošto je \texttt{x} nepoznata u ovom trenutku u analizi, ova vrednost će biti reprezentovana simbolom \texttt{reg<x>}.
+% \\ kada je ovo poređenje simulirano, dostižemo završnu naredbu u grafu kontrole toka, if- naredbu. U zavisnosti od uslova, analizator razvija dva nova puta, jedan u kom je vrednost promenljive x jednaka nuli, i drugi u kom je različita od nule. Na osnovu toga prave se ograničenja nad simbolom \texttt{reg<x>}, u prvom slučaju će ograničenje biti 0, dok će u drugom ograničenje biti unija intervala \texttt{[-21417483648, -1]} i \texttt{ [1, 21417483647]}. U sličnom maniru se dalje nastavlja analiza \cite{static_analyzer}.
+
+
+\section{Biblioteke za kreiranje alata}
+
+ Kompajler Clang pru\v{z}a infrastrukturu za pisanje razli\v{c}itih softverskih alata koji koriste sintaksne i semanti\v{c}ke informacije o programu. U nastavku \'{c}e biti opisano nekoliko bibloteka koje se mogu koristiti u ovu svrhu zajedno sa njihovim prednostima i manama.
+
+
+\begin{itemize}
+\item \textit{\textbf{LibClang}} je stabilni C interfejs ka Clang-u visokog nivoa (eng. \textit{high level}).
+Treba ga koristiti u slu\v{c}ajevima kada:
+\begin{itemize}
+  \item je potreban interfejs ka Clang-u iz jezika koji nije C++.
+  \item je potreban stabilni inferfejs koji je kompatibilan sa starijim verzijama verzijama Clang-a.
+  \item su potrebne apstrakcije visokog nivoa kao \v{s}to je iteriranje kroz AST sa kursorima i drugi detaljni vezani za Clang-ov AST.
+\end{itemize}
+LibClang ne treba koristiti kada je potrebna puna kontrola nas AST-om.
+
+\item \textit{\textbf{Clang Plugins}} biblioteka omogu\'{c}ava izvr\v{s}avanje dodatnih akcija nad AST-om tokom kompilacije programa. Ovo su dinami\v{c}ke biblioteke koje kompajler u\v{c}itava tokom izvr\v{s}avanja i lako ih je integrisati u okru\v{z}enje za prevodjenje programa (eng. \textit{build enviroment}).
+
+Treba ih koristiti kada:
+
+\begin{itemize}
+\item je potrebno ponovno izvr\v{s}avanje alata uvek kada se zavisnosti potrebne za prevodjenje programa izmene.
+\item je potrebno da alat omogu\'{c}i ili neomogu\'{c}i prevodjenje programa.
+\item je potrebna potpuna kontrola nad Clang-ovim AST-om.
+\end{itemize}
+Ne treba ih koristiti kada:
+\begin{itemize}
+\item je potrebno kreirati alaz koji se ne koristi u okviru sistema za prevodjenje programa.
+\item su alatu potrebne informacije o tome kako je Clang pode\v{s}en uklju\v{c}uju\'{c}i mapiranje virtuelnih fajlova u memoriji.
+\item je potrebno koristiti alat nad podskupom fajlova u projektu koji nisu povezani sa izmenama koje bi zahtevale ponovno prevodjenje programa.
+\end{itemize}
+
+\item \textit{\textbf{LibTooling}} je C++ interfejs koji slu\v{z}i za pisanje samostalnih alata.
+Treba ga koristiti kada:
+\begin{itemize}
+  \item je potrebno pokretati alat nad jednim fajlom ili specifi\v{c}nim podskupom fajlova nezavisnim od sistema za prevodjenje.
+  \item je potrebno imati punu kontrolu nad Clang-ovim AST-om.
+  \item je potrebno deliti k\v{o}d sa Clang-ovim Plugin-ovima.
+\end{itemize}
+LibTooling ne treba koristiti kada:
+\begin{itemize}
+  \item je potrebno pokretati alat nakon promena u zavisnostima u sistemu za prevodjenje.
+  \item je potreban stabilan interfejs tako da se k\v{o}d alata ne mora menjati kada se AST API (eng. \textit{Application Programming Interface}) promeni.
+  \item su potrebne apstrakcije visokog nivoa kao \v{s}to su kursori.
+  \item alat ne\'{c}e biti napisan u C++-u
+\end{itemize}
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+% \end{itemize}
+
 
 % ------------------------------------------------------------------------------
 
