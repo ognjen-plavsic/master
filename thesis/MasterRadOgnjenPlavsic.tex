@@ -450,6 +450,15 @@ Započet je 2000. godine kao instražički projekat Krisa Latnera (\textit{eng. 
 
 LLVM podržava kompilaciju različitih programskih programiskih jezika na mnoštvo različitih arhitektura hardvera. Jednostavnost dodavanja podrške kompilacije programskog jezika za hardversku arhitekturu omogućeno je fleksibilnim dizajnom kod kog je infrastruktura kompajlera ugrubo podeljena na 3 dela. Izvorni k\^{o}d podržanih jezika prevodi se u LLVM međukod bibliotekama koji predstavljaju prednji deo kompajlera (\textit{eng. frontend}). Zatim se nad međukodom vrši niz optimizacija koje su nezavisne od izvornog koda ali i ciljne arhitekture. Biblioteke koje implementiraju pomenute optimizacije čine srednji deo (\textit{eng. middleend}) infrastrukture LLVM-a. Poslednji deo dizajna čini zadnji deo (\textit{eng. backend}) kompajlera prilikom kog se generiše izvršni k\^{o}d za ciljnu arhitekturu od LLVM međukoda.
 
+% \usepackage{float}
+\begin{figure}[!h]
+\begin{center}
+\includegraphics[scale=0.4]{llvmDesign.jpg}
+\end{center}
+\caption{Dizajn kompajlerske infrastrukture LLVM}
+\label{fig:exploded}
+\end{figure}
+
 \section{Clang}
 
 Clang projekat predstavlja prednji deo (\textit{eng. frontend}) LLVM kompajlerske infrastrukture za C familiju jezika (C, C++, Objective C/C++, OpenCL ...).
@@ -569,7 +578,7 @@ baziraju se na kori\v{s}\'{c}enju interfejsa ka Clang-ovom AST-u ili kori\v{s}\'
   deletekeywords={...},            % if you want to delete keywords from the given language
   escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
   extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
-  firstnumber=1000,                % start line enumeration with line 1000
+  firstnumber=1,                % start line enumeration with line 1000
   frame=single,                    % adds a frame around the code
   keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
   keywordstyle=\color{blue},       % keyword style
@@ -582,10 +591,11 @@ baziraju se na kori\v{s}\'{c}enju interfejsa ka Clang-ovom AST-u ili kori\v{s}\'
   showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
   showstringspaces=false,          % underline spaces within strings only
   showtabs=false,                  % show tabs within strings adding particular underscores
-  stepnumber=2,                    % the step between two line-numbers. If it's 1, each line will be numbered
+  stepnumber=1,                    % the step between two line-numbers. If it's 1, each line will be numbered
   stringstyle=\color{mymauve},     % string literal style
   tabsize=2,                     % sets default tabsize to 2 spaces
-  title=\lstname                   % show the filename of files included with \lstinputlisting; also try caption instead of title
+  title=\lstname,                   % show the filename of files included with \lstinputlisting; also try caption instead of title
+  float=H
 }
 
 \newtheorem{primer}{Primer}[section]
@@ -806,15 +816,44 @@ LibTooling ne treba koristiti kada:
 \end{itemize}
 \end{itemize}
 
+\section{ASTConsumer interfejs}
 
+\textit{\textbf{ASTConsumer}} je apstraktni interfejs koji omogu\'{c}ava izvr\v{s}avanje razli\v{c}itih akcija nad AST-om nezavisno od toga kako je AST kreiran.
+Akcije se mogu izvr\v{s}avati u razli{v}citim fazama tokom kreiranja AST-a. Na primer, metod \textit{\textbf{virtual void  HandleInlineFunctionDefinition (FunctionDecl *D)}} bi\'{c}e pozvan svaki put kada se zavr\v{s}i kreiranje umetnutih (eng. \textit{inline}) funkcija prilikom kreiranja AST-a. \textit{\textbf{ASTConsumer}} defini\v{s}e niz sli\v{c}nih virtuelnih metoda koje mogu biti predefinisane od strane klasa koje nasledjuju ovaj interfejs. Jedna on najzna\v{c}ajnijih upotreba ovog interfejsa jeste generisanje LLVM medjukoda implementacijom koju pru\v{z}a klasa \textit{\textbf{CodeGenerator}}. 
 
+% \usepackage{float}
+\begin{figure}[!h]
+\begin{center}
+\includegraphics[scale=0.3]{ASTConsumer2.png}
+\end{center}
+\caption{Klase koje implementiraju \textit{\textbf{ASTConsumer}} interfejs}
+\label{fig:exploded}
+\end{figure}
 
+Ovaj interfejs koristan je i za kreiranje samostalnih alata za stati\v{c}ku analizu koji se baziraju na analizi AST-a. U ovu svrhu mo\v{z}e se koristiti kombinacija
+ovog interfejsa sa interfejsima za obilazak AST-a kao \v{s}to su AST posetioci i AST upariva\v{c}i. Klasa koja implementira neku analizu nad AST-om treba sadr\v{z}ati jedan ili vi\v{s}e objekata klasa za obilazak AST-a i zatim izvr\v{s}iti taj obilazak predefinisanjem metoda \textit{\textbf{virtual void  HandleTranslationUnit(ASTContext \&Ctx)}} koji se poziva nakon \v{s}to je kreiran AST za jedinicu prevodjenja. Logika same analize AST-a tokom obilaska treba biti implementirana u okviru klase koja implementira obilazak, odnosno u AST upariva\v{c}ima ili posetiocima.
 
+\begin{lstlisting}[caption={Primer upotrebe klase \textit{\textbf{ASTConsumer}} u svrhu stati\v{c}ke analize}, label=simple]
+class FindNamedClassVisitor
+  : public RecursiveASTVisitor<FindNamedClassVisitor> {
+public:
+  bool VisitCXXRecordDecl(CXXRecordDecl *Declaration) {
+    Declaration->dump();
+    return true;
+  }
+};
 
+class FindNamedClassConsumer : public clang::ASTConsumer {
+public:
+  virtual void HandleTranslationUnit(clang::ASTContext &Context) {
+    Visitor.TraverseDecl(Context.getTranslationUnitDecl());
+  }
+private:
+  FindNamedClassVisitor Visitor;
+};
+\end{lstlisting}
 
-
-
-
+% UBACI SLIKU KODA KOMBINACIJE AST KONZUMERA I AST VIZITORA/MATCHERA
 
 
 
