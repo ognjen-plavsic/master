@@ -13,8 +13,74 @@
 \usepackage[latinica]{matfmaster} 
 \usepackage{xcolor}
 \usepackage{listings}
+\usepackage{xparse}
 % \documentclass{article}
 \usepackage{cmsrb}
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+\NewDocumentCommand{\codeword}{v}{%
+\texttt{\textcolor{blue}{#1}}%
+}
+
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+
+% \lstdefinestyle{customc}{
+%   belowcaptionskip=1\baselineskip,
+%   breaklines=true,
+%   frame=XL,
+%   xleftmargin=\parindent,
+%   language=C++,
+%   showstringspaces=false,
+%   basicstyle=\footnotesize\ttfamily,
+%   keywordstyle=\bfseries\color{blue!80!black},
+%   commentstyle=\itshape\color{green!80!black},
+%   identifierstyle=\color{black},
+%   stringstyle=\color{orange},
+%   belowskip=1em,
+%   aboveskip=2em
+% }
+
+% \lstdefinestyle{customasm}{
+%   belowcaptionskip=1\baselineskip,
+%   frame=L,
+%   xleftmargin=\parindent,
+%   language=[x86masm]Assembler,
+%   basicstyle=\footnotesize\ttfamily,
+%   commentstyle=\itshape\color{purple!40!black},
+% }
+
+% \lstset{escapechar=@,style=customc}
+
+\lstset{%
+language=C++,
+frame=XL,
+numbers=left,
+numberstyle=\footnotesize,
+tabsize=2,
+keepspaces=true,
+columns=fullflexible,
+stringstyle=\color{red}\ttfamily,
+basicstyle=\fontsize{11}{10}\ttfamily,
+keywordstyle=\color{blue},
+  belowskip=1em,
+  aboveskip=1em
+}
+
+% \lstset{language=C++,
+%                 basicstyle=\ttfamily,
+%                 keywordstyle=\color{blue}\ttfamily,
+%                 stringstyle=\color{red}\ttfamily,
+%                 commentstyle=\color{green}\ttfamily,
+%                 morecomment=[l][\color{magenta}]{\#}
+% }
+
 \usepackage[OT2,T1]{fontenc} %better to use T1, but OT1 will also work
 % \usepackage[serbian]{babel}%
 % Podrazumevano pismo je ćirilica.
@@ -258,23 +324,22 @@ od bitske širine tipa levog operanda.
   % \textit{Pravilo M5-8-1 (obvezno, implementaciono, parcijalno automatizovano)
   %         Desni operand šift operacije treba biti manji između nula i jedan od bitske širine tipa levog operanda.} \\ \\
   Pravilo nije moguće u potpunosti automatizovati jer je očigledno potrebno poznavati vrednost desnog operanda, što u opštem slučaju nije
-  moguće precizno zaključiti. Primer ovakvog koda prikazan je na listingu 2.1. 
-\begin{english}
-\lstset{%
-language=C,
-frame=single,
-numbers=left,
-numberstyle=\footnotesize,
-tabsize=2,
-keepspaces=true,
-columns=fullflexible,
-basicstyle=\ttfamily\scriptsize,
-keywordstyle=\color{blue}
-}
+  moguće precizno zaključiti. Primer ovakvog koda prikazan je na listingu 2.1. \\
+% \lstset{%
+% language=C,
+% frame=single,
+% numbers=left,
+% numberstyle=\footnotesize,
+% tabsize=2,
+% keepspaces=true,
+% columns=fullflexible,
+% basicstyle=\ttfamily\scriptsize,
+% keywordstyle=\color{blue}
+% }
 
 
 
-\begin{lstlisting}[caption={K\^{o}d koji ilustruje nemogućnost primene statičke analize},label={lst:label},language=C++, captionpos=b]
+\begin{lstlisting}[caption={K\^{o}d koji ilustruje nemogućnost primene statičke analize},label={lst:label1},language=C++, captionpos=b]
 #include <iostream>
 #include <cstdint>
 #include <cstdlib>
@@ -284,26 +349,24 @@ int8_t u8a = rand() % 100;
 u8a = (uint8_t) ( u8a << rand() % 10);
 }
 \end{lstlisting}
-\end{english}
 Međitim, ukoliko je desni operand konstanta ili promenljiva konstantnog izraza (klju\v{c}na re\v{c} \textit{constexpr}), vrlo je verovatno da će alat za statičku analizu biti u stanju
   da zaključi vrednost ove promenljive (s obzirom da su ove vrednosti poznate tokom kompilacije), a samim tim i ispitati saglasnost koda sa ovim pravilom.
-  Primer ovakvog koda prikazan je na Listingu 2.2.
-\begin{english}
-\lstset{%
-language=C,
-frame=single,
-numbers=left,
-numberstyle=\footnotesize,
-tabsize=2,
-keepspaces=true,
-columns=fullflexible,
-basicstyle=\ttfamily\scriptsize,
-keywordstyle=\color{blue}
-}
+  Primer ovakvog koda prikazan je na Listingu 2.2. \\
+% \lstset{%
+% language=C++,
+% frame=single,
+% numbers=left,
+% numberstyle=\footnotesize,
+% tabsize=2,
+% keepspaces=true,
+% columns=fullflexible,
+% basicstyle=\ttfamily\scriptsize,
+% keywordstyle=\color{blue}
+% }
 
 
 
-\begin{lstlisting}[caption={K\^{o}d čija se ispravnost jednostavno može utvrditi statičkom analizom},label={lst:label},language=C++, captionpos=b]
+\begin{lstlisting}[caption={K\^{o}d čija se ispravnost jednostavno može utvrditi statičkom analizom},label={lst:label2},language=C++, captionpos=b]
 #include <iostream>
 #include <cstdint>
 #include <cstdlib>
@@ -313,7 +376,6 @@ int8_t u8a = rand() % 100;
 u8a = (uint8_t) ( u8a << 7);
 }
 \end{lstlisting}
-\end{english}
 
   Napredniji alati za statičku analizu koji podržavaju simboličko izvršavanje programa (npr. Clang Static Analyzer \cite{CSAWebsite}) mogu pokriti i znatno kompleksnije 
   slučajeve od slučaja prikazanog u Listingu 2.2.
@@ -442,13 +504,20 @@ inicijalizacijom viti\v{c}astih zagrada tipa \{\} ili =\{\}.
 %   \label{fig:grafikon}
 % \end{figure}
 
-\chapter{LLVM (nije spremno za reivew)}
+\chapter{LLVM (nije spremno za review)}
 \label{chp:llvm}
 
 LLVM projekat predstavlja kolekciju modularnih i ponovo iskoristivih kompajlerskih tehnologija i alata.
-Započet je 2000. godine kao instražički projekat Krisa Latnera (\textit{eng. Chris Lattner}) i Vikrama Advea (\textit{eng. Vikram Adve}) na Univerzitetu Ilinois.
+Započet je 2000. godine kao instraživački projekat Krisa Latnera (\textit{eng. Chris Lattner}) i Vikrama Advea (\textit{eng. Vikram Adve}) na Univerzitetu Ilinois.
 
-LLVM podržava kompilaciju različitih programskih programiskih jezika na mnoštvo različitih arhitektura hardvera. Jednostavnost dodavanja podrške kompilacije programskog jezika za hardversku arhitekturu omogućeno je fleksibilnim dizajnom kod kog je infrastruktura kompajlera ugrubo podeljena na 3 dela. Izvorni k\^{o}d podržanih jezika prevodi se u LLVM međukod bibliotekama koji predstavljaju prednji deo kompajlera (\textit{eng. frontend}). Zatim se nad međukodom vrši niz optimizacija koje su nezavisne od izvornog koda ali i ciljne arhitekture. Biblioteke koje implementiraju pomenute optimizacije čine srednji deo (\textit{eng. middleend}) infrastrukture LLVM-a. Poslednji deo dizajna čini zadnji deo (\textit{eng. backend}) kompajlera prilikom kog se generiše izvršni k\^{o}d za ciljnu arhitekturu od LLVM međukoda.
+LLVM podržava kompilaciju različitih programskih programiskih jezika na mnoštvo različitih arhitektura hardvera. Jednostavnost dodavanja podrške kompilacije programskog jezika za hardversku arhitekturu omogućeno je fleksibilnim dizajnom kod kog je infrastruktura kompajlera ugrubo podeljena na 3 dela: prednji (eng. \textit{frontend}), srednji (eng. \textit{middle-end}) i zadnji (eng. \textit{backend}). 
+
+\begin{enumerate}
+  \item Prednji deo LLVM-a prevodi izvordni k\^od podr\v{z}anih jezika u LLVM medjukod. U ovu fazu spadaju leksi\v{c}ka, sintaksna i semanti\v{c}ka analiza
+  izvornog koda, kreiranje apstraktnog sintaksnog stabla (eng. \textit{abstract syntax tree} (AST)) i generisanje LLVM medjukoda koriste\'{c}i informacije iz AST-a
+  \item{Srednji deo kompajlera vr\v{s}i niz optimizacija nad instrukcijama LLVM medjukoda (eng. \textit{intermediate representation (IR))}. LLVM medjukod predstavlja apstrakciju asemblera koja je nezavnisna od arhitekture hardvera. LLVM medjukod zasnovan je na stati\v{c}nom pojedina\v{c}nom dodeljivanju (eng \textit{Static Single Assignment} (SSA)), strogo je tipiziran, fleksibilan i omogu\'{c}ava jednostavnu reprezentaciju svih jezika visokog nivoa (eng. \textit{high-level languages}).}
+  \item{Zadnji deo kompajlera vr\v{s}i ma\v{s}inski zavisne optimizacije koda i generi\v{s}e mi\v{s}inski kod za ciljnu arhitekturu.}
+\end{enumerate}
 
 % \usepackage{float}
 \begin{figure}[!h]
@@ -465,13 +534,13 @@ Clang projekat predstavlja prednji deo (\textit{eng. frontend}) LLVM kompajlersk
 Pored optimizacija i efikasnog generisanja LLVM međukoda karakterističan je po ekspresivnosti dijagnostike odnosno kvalitetu poruka upozorenja i grešaka prijavljenih za izvorni kod. Dizajn Clang-a se sastoji od mnoštva biblioteka od kojih su najznačajnije za dizajn sledeće:
 
 \begin{enumerate}
-  \item{\textbf{Lekser i Predprocesor} \\
-       Implementira leksičku analizu i predprocesiranje izvornog koda.
-       Pruža mogućnost uključivanja datoteka zaglavlja, proširenja makroa, uslovne kompilacije i kontrole linija. 
-       Kreira niz tokena od sintakse izvornog koda.}
+  \item{\textbf{Lekser i Pretprocesor} \\
+       Implementiraju leksičku analizu i pretprocesiranje izvornog koda.
+       Pretprocesor pru\v{z}a mogućnost uslovne kompilacije, uključivanja datoteka zaglavlja i proširenja makroa.
+       Lekser kreira niz tokena od sintakse izvornog koda.}
   \item{\textbf{Parser} \\
         Kreira sintaksne strukture C++-a od niza tokena dobijenih leksičkom analizom.
-        Clang-ov parser implementiran je kao parser rekurzivnog spuštanja, odnosno analizira izvorni kod od vrha ka dnu nizom rekurzivnih funkcija.}
+        Clang-ov parser je implementiran kao parser rekurzivnog spuštanja (eng. \textit{recursive-descent parser}), odnosno analizira izvorni kod od vrha ka dnu nizom rekurzivnih funkcija.}
   \item{\textbf{AST biblioteka} \\
         Ova biblioteka implementira algoritme i strukture podataka koje parser koristi za izgradnju AST-a. Specifična je po strukturi čvorova koji podsećaju na izvorni C++ kod što je čini pogodnim za kreiranje alata za refaktorisanje koda i statičku analizu.}
   \item{\textbf{Sema} \\
@@ -483,35 +552,25 @@ Pored optimizacija i efikasnog generisanja LLVM međukoda karakterističan je po
 
 \begin{figure}[!ht]
   \centering
-  \includegraphics[width=0.6\textwidth]{ClangBiblioteke.png}
-  \caption{Odnos osnovnih biblioteka Clang-a}
+  \includegraphics[width=1\textwidth]{ClangBiblioteke.png}
+  \caption{Odnos osnovnih biblioteka Clang-a.}
   \label{fig:grafikon}
 \end{figure}
 
 \section{AST biblioteka}
 
-U računarstvu, \textbf{apstraktno sintaksno stablo} (eng. abstract syntax tree), ili samo \textbf{sintaksno stablo}, je drvoidna reprezentacija apstraktne sintaktičke strukture izvornog koda napisanog u programskom jeziku. Svaki čvor stabla predstavlja konstrukt koji se pojavljuje u izvornom kodu.
-Sintaksa je apstraktna u smislu da ne predstavlja svaki detalj koji se pojavljuje u stvarnoj sintaksi, već samo strukturne ili detalje vezane za sadržaj.
+U računarstvu, \textbf{apstraktno sintaksno stablo} (eng. abstract syntax tree (AST)), ili samo \textbf{sintaksno stablo}, je drvoidna reprezentacija apstraktne sintaktičke strukture izvornog koda napisanog u programskom jeziku. Svaki čvor stabla predstavlja konstrukt koji se pojavljuje u izvornom kodu.
+Sintaksa je apstraktna u smislu da ne sadr\v{z}i svaki detalj koji se pojavljuje u sintaksi, ali sadr\v{z}i sve detalje neophodne za nedvosmislen prikaz izvornog koda.
 
-Ekspresivnost Clang-ove dijagnostike i jednostavnost kreiranja mo\'{c}nih alata za stati\v{c}ku analizu u velikoj meri oslanja se na dizajn Clang-ove AST biblioteke. Struktura AST-a mo\v{z}e  se jednostavno ispisati na standardni izlaz Clang-ovom -ast-dump opcijom. Komanda na listingu 3.1 ispisuje na standardni izlaz AST za kod iz fajla hello.cpp prikazanog na listingu 3.2. Slika 3.1 predstavlja AST ispis dobijen komandom iz listinga 3.1.
+Ekspresivnost Clang-ove dijagnostike i jednostavnost kreiranja mo\'{c}nih alata za stati\v{c}ku analizu u velikoj meri oslanja se na dizajn Clang-ove AST biblioteke. Struktura AST-a mo\v{z}e se jednostavno ispisati na standardni izlaz Clang-ovom \\ \lstinline{-ast-dump} opcijom. Komanda na listingu \ref{lst:label3} ispisuje na standardni izlaz AST za kod iz fajla \lstinline{hello.cpp} prikazanog na listingu \ref{lst:label4}. Slika \ref{fig:grafikon} predstavlja tekstualnu reprezentaciju AST-a ispisanu komandom iz listinga \ref{lst:label3}.
 \\
-\lstset{%
-language=C,
-frame=single,
-numbers=left,
-numberstyle=\footnotesize,
-tabsize=2,
-keepspaces=true,
-columns=fullflexible,
-basicstyle=\ttfamily\scriptsize,
-keywordstyle=\color{blue}
-}
 
-\begin{lstlisting}[caption={Komanda za ispisivanje Clang-ovog AST-a},label={lst:label},language=bash, captionpos=b]
+
+\begin{lstlisting}[caption={Komanda za ispisivanje Clang-ovog AST-a},label=lst:label3,language=bash, captionpos=b]
 $ clang -Xclang -ast-dump hello.c
 \end{lstlisting}
 
-\begin{lstlisting}[caption={Kod \v{c}iji je AST prikazan na slici 4.1},label={lst:label},language=C++, captionpos=b]
+\begin{lstlisting}[caption={Kod \v{c}iji je AST prikazan na slici 4.1},label=lst:label4,language=C++, captionpos=b]
 int main(){
   int a = 4;
   int b = 5;
@@ -522,7 +581,7 @@ int main(){
 % primer korišćenja slike
 \begin{figure}[!ht]
   \centering
-  \includegraphics[width=0.7\textwidth]{ASTImage.png}
+  \includegraphics[width=1.0\textwidth]{ASTImage.png}
   \caption{Primer AST-a}
   \label{fig:grafikon}
 \end{figure}
@@ -530,114 +589,83 @@ int main(){
 \v{C}vorovi od kojih je izgrađen AST predstavljaju apstrakciju sintaksnih struktura iz samog jezka.
 Svi \v{c}vorovi Clang-ovog AST-a nasleđuju jednu od tri osnovne (bazne) klase:
 \begin{itemize}
-  \item \textit{Decl}
-  \item \textit{Stmt}
-  \item \textit{Type}
+  \item \textit{\textbf{Decl}}
+  \item \textit{\textbf{Stmt}}
+  \item \textit{\textbf{Type}}
 \end{itemize}
 Ove klase redom opisuju deklaracije, naredbe i tipove iz C familije jezika.
-Na primer IfStmt klasa opisuje 'if' naredbe jezika i direktno nasleđuje Stmt klasu. Sa druge strane FunctionDecl i VarDecl klase koje se koriste za opisivanje
-deklaracija i definicija funkcija i varijabli (promenljivih) ne nasleđuju dikertno klasu Decl ve\'{c} nasleđuju vi\v{s}e njenih podklasa.
+Na primer \lstinline{IfStmt} klasa opisuje \lstinline{if} naredbe jezika i direktno nasleđuje \lstinline{Stmt} klasu. Sa druge strane \lstinline{FunctionDecl} i \lstinline{VarDecl} klase, koje se koriste za opisivanje deklaracija i definicija funkcija i varijabli, ne nasleđuju dikertno klasu \lstinline{Decl} ve\'{c} nasleđuju vi\v{s}e njenih podklasa.
 
 \begin{itemize}
-  \item \textit{\textbf{Klasa Type}} \\ Tipovi igraju va\v{z}nu ulogu u ekspresivnosti Clang-ove dijagnostike. Dizajn ove klase klju\v{c}an je za preciznost emitovanih poruka upozorenja i gre\v{s}aka u kodu. Na primer, upozorenja vezana za kod koji koristi tip std::string, ispisa\'{c}e ba\v{s} taj tip u svojim porukama umesto tipa koji $std::string$ predefini\v{s}e, a to je $std::basic\_string<char, std:.. >$ . Iza ove funkcionalnosti stoji ideja kanonskih tipova.
-  \\
-  \indent
-  Svaka instanca klase Type sadr\v{z}i pokaziva\v{c} na svoj kanonski tip. Za jednostavne tipove koji nisu definisani kori\'{c}enjem $typedef$ naredbe pokaziva\v{c} na kanonski tip \'{c}e zapravo pokazivati na sebe. Za tipove \v{c}ija struktura uklju\v{c}uje $typedef$ naredbu kanonski pokaziva\v{c} pokaziva\'{c}e na strukturno ekvivalentan tip bez $typedef$ naredbi.
-  Na primer, kanonski tip tipa $int *$ sa listinga 3.3 bi\'{c}e sam taj tip, dok \'{c}e kanonski tip za \texttt{foo *} biti \texttt{int *}.
-\begin{lstlisting}[caption={Demonstracija kanonskih tipova},label={lst:label},language=C++, captionpos=b]
+  \item \textit{\textbf{Klasa Type}} \\ Klasa \lstinline{Type} bi\'{c}e posebno opisana s obizrom da igra va\v{z}nu ulogu u ekspresivnosti Clang-ove dijagnostike a samim tim i u kvalitetu alata za stati\v{c}ku analizu. Dizajn ove klase klju\v{c}an je za preciznost emitovanih poruka upozorenja i gre\v{s}aka u kodu. Na primer, upozorenja vezana za kod koji koristi tip \lstinline{std::string}, ispisa\'{c}e ba\v{s} taj tip u svojim porukama umesto tipa koji \lstinline{std::string} predefini\v{s}e, a to je \lstinline{std::basic_string<char, std:.. >}. Iza ove funkcionalnosti stoji ideja kanonskih tipova.
+  
+  \par
+  Svaka instanca klase \lstinline{Type} sadr\v{z}i pokaziva\v{c} na svoj kanonski tip. Za jednostavne tipove koji nisu definisani kori\v{s}\'{c}enjem \lstinline{typedef} naredbe pokaziva\v{c} na kanonski tip \'{c}e zapravo pokazivati na sebe. Za tipove \v{c}ija struktura uklju\v{c}uje \lstinline{typedef} naredbu kanonski pokaziva\v{c} pokaziva\'{c}e na strukturno ekvivalentan tip bez \lstinline{typedef} naredbi.
+  Na primer, kanonski tip tipa \lstinline{int *} sa listinga \ref{lst:label5}  bi\'{c}e sam taj tip, dok \'{c}e kanonski tip za \lstinline{foo *} biti \lstinline{int *}.
+
+\begin{lstlisting}[caption={Demonstracija kanonskih tipova},label=lst:label5,language=C++, captionpos=b]
   int *a;
   typedef int foo;
   foo *b;
 \end{lstlisting}
-  Ovakvim dizajnom omogu\'{c}no je semanti\v{c}kim proverama da donose zaklju\v{c}ke direktno o pravom tipu ignori\v{s}u\'{c}i \texttt{typedef} naredbe kao i efikasno poređenje strukturne identi\v{c}nosti tipova.
-  \def\code#1{\texttt{#1}}
-  \\
-  \indent
-  Klasa Type ne sadr\v{z}i informacije o kvalifikatorima tipova kao \v{s}to su \code{const}, \code{volatile}, \code{restrict} itd... Ove informacije enkapsulirane su u klasi \code{QualType} koja su\v{s}tinski predstavlja par pokaziva\v{c}a na tip (objekat klase \code{Type}) i bitova koji predstavljaju
+  Ovakvim dizajnom omogu\'{c}no je semanti\v{c}kim proverama da donose zaklju\v{c}ke direktno o pravom tipu ignori\v{s}u\'{c}i \lstinline{typedef} naredbe kao i efikasno poređenje strukturne identi\v{c}nosti tipova.
+
+  \par
+  Klasa \lstinline{Type} ne sadr\v{z}i informacije o kvalifikatorima tipova kao \v{s}to su \lstinline{const}, \lstinline{volatile}, \lstinline{restrict} itd... Ove informacije enkapsulirane su u klasi \lstinline{QualType} koja su\v{s}tinski predstavlja par pokaziva\v{c}a na tip (objekat klase \lstinline{Type}) i bitova koji predstavljaju
   kvalifikatore. \v{C}uvanje kvalifikatora u vidu bitova omogu\'{c}uje veoma efikasno dohvatanje, dodavanje i brisanje kvalifikatora za tip. Postojanje ove klase smanjuje upotrebu hip memorije time \v{s}to se ne moraju kreirati duplikati tipova sa razli\v{c}itim kvalifikatorima. Na hipu se alocira jedan tip, a zatim 
   svi kvalifikovani tipovi pokazuju na alocirani tip na hipu sa dodatim kvalifikatorima.
 \end{itemize}
 
-\section{Tehnike stati\v{c}ke analize}
+\section{Biblioteke za obilazak AST-a}
 
 Kompajlerska infrastruktura LLVM pru\v{z}a podr\v{s}ku za jednostavno kreiranje kvalitetnih alata za stati\v{c}ku analizu izvornog koda. Ovi alati
-baziraju se na kori\v{s}\'{c}enju interfejsa ka Clang-ovom AST-u ili kori\v{s}\'{c}enjem Clang-ovog stati\v{c}kog anlizatora (eng. \textit{Clang Static Analyzer}) za potrebe simboli\v{c}kog izvr\v{s}avanja programa. Alati za stati\v{c}ku analizu mogu koristiti kombinaciju tehnika obilaska AST-a i simboli\v{c}kog izvr\v{s}avanja programa u zavisnosti od kompleksnosti analize koja je potrebna. Biblioteke za obilazak AST-a su jeftinije za kori\v{s}\'{c}enje  po pitanju ra\v{c}unarskih resursa ali su ograni\v{c}ene informacijama dostupnim tokom kompilacije programa. Alati koji se implementiraju kao deo sistema za prevodjenje programa omogu\'{c}avaju dodatnu optimizaciju procesa pronala\v{z}enja nepravilnih konstrukta direktnim proverama tokom kompilacije. Ovo se mo\v{z}e posti\'{c}i nadogradnjom osnovnih delova kompajlera kao \v{s}to su Lexer, Parser ili Sema. \\Osnovne biblioteke za obilazak AST-a u okviru kompajlera Clang su AST posetioci (eng. \textit{ASTVisitors}) i  AST upariva\v{c}i (eng. \textit{ASTMatchers}).
+baziraju se na kori\v{s}\'{c}enju interfejsa ka Clang-ovom AST-u ili kori\v{s}\'{c}enjem Clang-ovog stati\v{c}kog anlizatora (eng. \textit{Clang Static Analyzer}) za potrebe simboli\v{c}kog izvr\v{s}avanja programa. Alati za stati\v{c}ku analizu mogu koristiti kombinaciju tehnika obilaska AST-a i simboli\v{c}kog izvr\v{s}avanja programa u zavisnosti od kompleksnosti analize koja je potrebna. Biblioteke za obilazak AST-a su jeftinije za kori\v{s}\'{c}enje po pitanju ra\v{c}unarskih resursa ali su ograni\v{c}ene informacijama dostupnim tokom kompilacije programa. Alati koji se implementiraju kao deo sistema za prevodjenje programa omogu\'{c}avaju dodatnu optimizaciju procesa pronala\v{z}enja nepravilnih konstrukta direktnim proverama tokom kompilacije. Ovo se mo\v{z}e posti\'{c}i nadogradnjom osnovnih delova kompajlera kao \v{s}to su Lexer, Parser ili Sema. \\Osnovne biblioteke za obilazak AST-a u okviru kompajlera Clang su AST posetioci (eng. \textit{ASTVisitors}) i  AST upariva\v{c}i (eng. \textit{ASTMatchers}).
 
 % \usepackage{listings}
-\definecolor{mygreen}{rgb}{0,0.6,0}
-\definecolor{mygray}{rgb}{0.5,0.5,0.5}
-\definecolor{mymauve}{rgb}{0.58,0,0.82}
 
-\lstset{ 
-  backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}; should come as last argument
-  basicstyle=\scriptsize\ttfamily,        % the size of the fonts that are used for the code
-  breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
-  breaklines=true,                 % sets automatic line breaking
-  captionpos=b,                    % sets the caption-position to bottom
-  commentstyle=\color{mygreen},    % comment style
-  deletekeywords={...},            % if you want to delete keywords from the given language
-  escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
-  extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
-  firstnumber=1,                % start line enumeration with line 1000
-  frame=single,                    % adds a frame around the code
-  keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
-  keywordstyle=\color{blue},       % keyword style
-  language=Python,                 % the language of the code
-  morekeywords={*,...},            % if you want to add more keywords to the set
-  numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
-  numbersep=5pt,                   % how far the line-numbers are from the code
-  numberstyle=\tiny\color{mygray}, % the style that is used for the line-numbers
-  rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
-  showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
-  showstringspaces=false,          % underline spaces within strings only
-  showtabs=false,                  % show tabs within strings adding particular underscores
-  stepnumber=1,                    % the step between two line-numbers. If it's 1, each line will be numbered
-  stringstyle=\color{mymauve},     % string literal style
-  tabsize=2,                     % sets default tabsize to 2 spaces
-  title=\lstname,                   % show the filename of files included with \lstinputlisting; also try caption instead of title
-  float=H
-}
 
 \newtheorem{primer}{Primer}[section]
 
-\section{AST posetioci}
+\subsection{AST posetioci}
 AST posetioci implementiraju mehanizam obilaska Clang-ovog AST stabla, odnosno pru\v{z}aju interfejs
 za pose\'{c}ivanje svakog \v{c}vora u AST stablu.
-Logika AST posetioca sadr\v{z}ana je u šablonskoj klasi \textbf{\textit{RecursiveASTVisitor<Derived>}}.
+Logika AST posetioca sadr\v{z}ana je u šablonskoj klasi \lstinline{RecursiveASTVisitor<Derived>}.
 Ovo je klasa koja posećuje svaki čvor Clang-ovog AST stabla obilaskom u dubinu.
-AST posetioc je svaka potklasa klase \textbf{\textit{RecursiveASTVisitor<Derived>}}.
-Klasa \\ \textbf{\textit{RecursiveASTVisitor<Derived>}} obavlja tri odvojena zadatka:
+AST posetioc je svaka potklasa klase \lstinline{RecursiveASTVisitor<Derived>}.
+Klasa \lstinline{RecursiveASTVisitor<Derived>} obavlja tri odvojena zadatka:
 
 \begin{enumerate}
 \item Obilazi AST tj. posećuje svaki AST čvor.
-\item Za dati čvor ide uz klasnu hijerarhiju počevši od dinamičkog tipa čvora do klase na vrhu hijerarhije (npr. Stmt, Decl ili Type).
+\item Za dati čvor ide uz klasnu hijerarhiju počevši od dinamičkog tipa čvora do klase na vrhu hijerarhije (npr. \lstinline{Stmt}, \lstinline{Decl} ili \lstinline{Type}).
 \item Za datu kombinaciju (čvor, klasa), gde je klasa neka od baznih klasa dinamičkog tipa čvora, zove funkcije koje korisnik može predefinisati kako bi posetio čvor.
 \end{enumerate}
 Ova tri zadatka obavljaju tri grupe metoda, redom:
 \begin{enumerate}
-\item \textbf{\textit{TraverseDecl(Decl *x)}} obavlja zadatak 1. Ovo je ulazna tačka za obilazak AST-a sa korenom u čvoru x. Ovaj metod poziva metod \\ \textbf{\textit{TraverseFoo(Foo *x)}}, gde je Foo dinamički tip od *x, koji poziva metod \\ \textbf{\textit{WalkUpFromFoo(x)}}, a zatim rekurzivno posećuje decu čvora x. \\ \textbf{\textit{TraverseStmt(Stmt *x)}} i \textbf{\textit{TraverseType(QualType x)}} rade na sličan način.
+  \item \lstinline{TraverseDecl(Decl *x)} obavlja zadatak 1. Ovo je ulazna tačka za obilazak AST-a sa korenom u čvoru x. Ovaj metod poziva metod \\ \lstinline{TraverseFoo(Foo *x)}, gde je \lstinline{Foo} dinamički tip od \lstinline{*x}, koji poziva metod \lstinline{WalkUpFromFoo(x)}, a zatim rekurzivno posećuje decu čvora \lstinline{x}. \\ \lstinline{TraverseStmt(Stmt *x)} i \lstinline{TraverseType(QualType x)} rade na sličan način.
  
-\item \textbf{\textit{WalkUpFromFoo(Foo *x)}} izvršava zadatak 2. Ne pokušava odmah da poseti decu čvora x, umesto toga prvo zove \textbf{\textit{WalkUpFromBar(x)}} gde je Bar direktna nadklasa klase Foo (sem ukoliko Foo nema roditelja), i tek onda zove \textbf{\textit{VisitFoo(x)}}.
-\item \textbf{\textit{VisitFoo(Foo *x)}} izvršava zadatak 3.
+\item \lstinline{WalkUpFromFoo(Foo *x)} izvršava zadatak 2. Ne pokušava odmah da poseti decu čvora \lstinline{x}, umesto toga prvo zove \lstinline{WalkUpFromBar(x)}, gde je \lstinline{Bar} direktna nadklasa klase \lstinline{Foo}, i tek onda zove \lstinline{VisitFoo(x)}.
+\item \lstinline{VisitFoo(Foo *x)} izvršava zadatak 3.
 \end{enumerate}
-Ove tri grupe metoda slede naredni poredak: Traverse > WalkUpFrom > Visit. Metoda (npr. Traverse) može pozvati samo metode iz svoje grupe metoda ili iz grupe metoda direktno ispod nje (u smislu predstavljenog poretka). Metoda ne može pozvati metode iz grupe iznad \cite{visitors}. \begin{primer}
-Primer posetioca:
-\end{primer}
-\begin{lstlisting}[caption={Primer posetioca koji posećuje sve strukture, unije i klase i ispisuje lokaciju onih koji se zovu n::m::C },frame=single, label=simple]
-class FindNamedClassVisitor
-  : public RecursiveASTVisitor<FindNamedClassVisitor> {
+Ove tri grupe metoda slede naredni poredak: \lstinline{Traverse > WalkUpFrom > Visit}. Metoda (npr. \lstinline{Traverse}) može pozvati samo metode iz svoje grupe metoda ili iz grupe metoda direktno ispod nje (u smislu predstavljenog poretka). Metoda ne može pozvati metode iz grupe iznad \cite{visitors}.
+Primer posetioca prikazan je na listingu \ref{lst:label6}:
+\begin{lstlisting}[caption={Primer posetioaca koji pose\'{c}uje sve strukture, unije i klase i ispisuje lokaciju onih koji se zovu n::m::C},label=lst:label6,language=C++, captionpos=b]
+class FindNamedClassVisitor : public RecursiveASTVisitor<FindNamedClassVisitor> {
 public:
   explicit FindNamedClassVisitor(ASTContext *Context)
     : Context(Context) {}
 
   bool VisitCXXRecordDecl(CXXRecordDecl *Declaration) {
+
     if (Declaration->getQualifiedNameAsString() == "n::m::C") {
+
       FullSourceLoc FullLocation = Context->getFullLoc(Declaration->getBeginLoc());
+
       if (FullLocation.isValid())
         llvm::outs() << "Found declaration at "
                      << FullLocation.getSpellingLineNumber() << ":"
                      << FullLocation.getSpellingColumnNumber() << "\n";
     }
+
     return true;
   }
 
@@ -648,11 +676,13 @@ private:
 
 \par
 Da bi se izvršila neka analiza izvornog koda pomoću AST posetioca dovoljno je naslediti klasu 
- \textbf{\textit{RecursiveASTVisitor<Derived>}} i predefinisati željene \textbf{\textit{Visit}} metode u okviru nje. Ukoliko je \textbf{\textit{Visit}} metodama pronađena konstrukcija izvornog koda koja se iz nekog razloga smatra nepravilnom, moze se prijaviti upozorenje.
-\section{AST upariva\v{c}i}
+ \lstinline{RecursiveASTVisitor<Derived>} i predefinisati željene \lstinline{Visit} metode u okviru nje. Ukoliko je \lstinline{Visit} metodama pronađena konstrukcija izvornog koda koja se iz nekog razloga smatra nepravilnom, moze se prijaviti upozorenje.
+
+\subsection{AST upariva\v{c}i}
+
 Biblioteka AST uprariva\v{c}a (eng. \textit{LibASTMatcher}) pruža oblasno specifičan jezik (eng. domain specific language) za kreiranje predikata nad Clang-ovim AST stablom. Ovaj oblasno specifičan jezik je napisan i može se koristiti u C++-u omogućavajući korisnicima da u istom programu pristupe željenom delu stabla i da nad tim čvorovima koriste C++ interfejs za analiziranje raznih atributa, lokacija, i ostalih informacija dostupnih na AST nivou.
-\\ Na primer, za kreiranje upariva\v{c}a koji uparuje sve deklaracije klasa ili unija u AST stablu neke jedinice prevođenja, može se koristiti poziv \textbf{\textit{recordDecl()}}. Za sužavanje pretrage, na primer za nalaženje deklaracija svih klasa ili unija sa imenom \texttt{"Foo"}, treba ubaciti \textbf{\textit{hasName}} matcher: Poziv \textbf{\textit{recorDecl(hasName("Foo"))}} vraća upariva\v{c} koji uparuje klase i unije sa imenom \textbf{\textit{"Foo"}} u bilo kom prostoru imena (eng. \textit{namespace}). Podrazumevano, upariva\v{c}i koji prihvataju više drugih upariva\v{c}a koriste implicitno \texttt{allOf()} metod. Ovo omogućava dalje sužavanje pretrage. Na primer za uparivanje klasa koje nasleđuju \texttt{"Bar"}, upariva\v{c} bi izgledao ovako: \\  \textbf{\textit{recordDecl(hasName("Foo"), isDerivedFrom("Bar"))}}.
-\\
+\\ Na primer, za kreiranje upariva\v{c}a koji uparuje sve deklaracije klasa ili unija u AST stablu neke jedinice prevođenja, može se koristiti poziv \lstinline{recordDecl()}. Za sužavanje pretrage, na primer za nalaženje deklaracija svih klasa ili unija sa imenom \lstinline{Foo}, treba iskoristiti \lstinline{hasName} matcher: Poziv \lstinline{recordDecl(hasName("Foo"))} vraća upariva\v{c} koji uparuje klase i unije sa imenom \lstinline{"Foo"} u bilo kom prostoru imena (eng. \lstinline{namespace}). Podrazumevano, upariva\v{c}i koji prihvataju više drugih upariva\v{c}a koriste implicitno \lstinline{allOf()} metod koji \'{c}e upariti sve delove stabla na koje referi\v{s}u njegovi argumenti koji su takodje upariva\v{c}i. Ovo omogućava dalje sužavanje pretrage. Na primer za uparivanje klasa koje nasleđuju \lstinline{"Bar"}, upariva\v{c} bi izgledao ovako: \lstinline{recordDecl(hasName("Foo"), isDerivedFrom("Bar"))}.
+\par
 
 Uopšteno, strategija kreiranja upariva\v{c}a se svodi da sledeće korake:
 \begin{enumerate}
@@ -666,12 +696,9 @@ Uopšteno, strategija kreiranja upariva\v{c}a se svodi da sledeće korake:
 
 Izrazi za uparivanje (eng. \textit{match expressions}) omogu\'{c}uju uparivanje delova AST stabla. Nakon uparivanja, nad uparenim konstruktom uglavnom se vr\v{s}i odredjena analiza, na primer ispitivanje saglasnosti konstrukta sa pravilom standarda za pravilno pisanje C++ koda.
 \par
-Zbog toga, upariva\v{c}i koji uparuju specifi\v{c}ne čvorove AST stabla se mogu "vezati" (eng. \textit{binding}). Na primer, \textbf{\textit{recordDecl(hasName("MyClass")).bind("id")}} će vezati upareni \textbf{\textit{recordDecl}} čvor za string \texttt{"id"} kako bi se kasnije mogao koristiti u povratnom pozivu upariva\v{c}a (eng. match callback) \cite{matchers}.
+Zbog toga, upariva\v{c}i koji uparuju specifi\v{c}ne čvorove AST stabla se mogu "vezati" (eng. \textit{binding}). Na primer, \lstinline{recordDecl(hasName("MyClass")).bind("id")} će vezati upareni \lstinline{recordDecl} čvor za string \lstinline{id} kako bi se kasnije mogao koristiti u povratnom pozivu upariva\v{c}a (eng. match callback) \cite{matchers}. Na listingu \ref{lst:label7} prikazan je primer AST upariva\v{c}a.
 
-\begin{primer}
-Primer matcher-a 
-\end{primer}
-\begin{lstlisting}[caption={Primer matcher-a (koji pronalazi sve klase koje nisu obeležene atributom \texttt{final} i čiji destruktor nije virtuelan), CallBack klase i poziva matchera},frame=single, label=simple]
+\begin{lstlisting}[caption={Primer upariv\v{c}a koji pronalazi sve klase koje nisu obeležene atributom \lstinline{final} i čiji destruktor nije virtuelan, CallBack klase i poziva upariva\v{c}a}, label=lst:label7,language=C++, captionpos=b]
 DeclarationMatcher NonFinalClassWithNonVirtualDestructor::makeMatcher() {
   return cxxRecordDecl(isClass(), unless(isFinal()),
                     anyOf(hasMethod(cxxDestructorDecl(isPublic(),
@@ -679,9 +706,11 @@ DeclarationMatcher NonFinalClassWithNonVirtualDestructor::makeMatcher() {
                     unless(hasMethod(cxxDestructorDecl()))))
                 .bind("nonFinalClassWithNonVirtualDestructor");
 }
+
 void NonFinalClassWithNonVirtualDestructor::
     NonFinalClassWithNonVirtualDestructorCallBack::run(
         const MatchFinder::MatchResult &Result) {
+
   const BoundNodes &BN = Result.Nodes;
   
   if (const clang::CXXRecordDecl *CRD = BN.getNodeAs<clang::CXXRecordDecl>(
@@ -698,7 +727,6 @@ void NonFinalClassWithNonVirtualDestructor::runMatcher(
   NonFinalClassWithNonVirtualDestructor.matchAST(AC);
 }
 \end{lstlisting}
-
 
 % \section{Clang-ov Statički Analizator}
 % Clang-ov Statički Analizator je alat za traženje grešaka u programu. Analizirajući izvorni kod, ovaj alat pokušava da simulira izvršavanje delova programa bez njihovog prevođenja i prijavljuje greške koje bi se zapravo desile u toku izvršavanja (eng. run-time errors). Kako ponašanje izvršnih programa zavisi od spoljašnjih faktora kao što su ulazne vrednosti, slučajni brojevi i ostale stvari, mehanizam analizatora (eng. analyzer engine) dodeljuje vrednosti sa algebarskim simbolima, i izvršava simbolička izračunavanja koristeći ove simbole. Takođe otkriva uslove nad simboličkim vrednostima i postavlja ograničenja nad njima.
@@ -768,72 +796,28 @@ void NonFinalClassWithNonVirtualDestructor::runMatcher(
 % Pogledajmo kako analiza puteva radi na ovom primeru. Analizator počinje da simulira prvu operaciju, poređenje vrednosti promenljive x sa nulom. Pošto je \texttt{x} nepoznata u ovom trenutku u analizi, ova vrednost će biti reprezentovana simbolom \texttt{reg<x>}.
 % \\ kada je ovo poređenje simulirano, dostižemo završnu naredbu u grafu kontrole toka, if- naredbu. U zavisnosti od uslova, analizator razvija dva nova puta, jedan u kom je vrednost promenljive x jednaka nuli, i drugi u kom je različita od nule. Na osnovu toga prave se ograničenja nad simbolom \texttt{reg<x>}, u prvom slučaju će ograničenje biti 0, dok će u drugom ograničenje biti unija intervala \texttt{[-21417483648, -1]} i \texttt{ [1, 21417483647]}. U sličnom maniru se dalje nastavlja analiza \cite{static_analyzer}.
 
+\section{Interfejsi za akcije nad prednjim delom kompajlera}
 
-\section{Biblioteke za kreiranje alata}
+Akcije nad prednjim delom kompajlera predstavljaju analizu i upotrebu rezultata i informacija koje pru\v{z}a prednji deo kompajlera. Ove informacije mogu biti korisne za kreiranje alata za refaktorisanje koda, stati\v{c}ku analizu, prikupljanje statistike, grafi\v{c}ko prezentovanje rezultata kompajlera ali igraju i klju\v{c}nu ulogu u samoj kompilaciji koda i deo su osnovnog sistema (eng. \textit{pipeline}) u infrastrukturi LLVM-a.
+Ova funkcionalnost je efikasno i sistemati\v{c}no implementirana u okviru klasa \lstinline{ASTConsumer}, \lstinline{FrontendAction} i njihovih potklasa.
 
- Kompajler Clang pru\v{z}a infrastrukturu za pisanje razli\v{c}itih softverskih alata koji koriste sintaksne i semanti\v{c}ke informacije o programu. U nastavku \'{c}e biti opisano nekoliko bibloteka koje se mogu koristiti u ovu svrhu zajedno sa njihovim prednostima i manama.
-
-
-\begin{itemize}
-\item \textit{\textbf{LibClang}} je stabilni C interfejs ka Clang-u visokog nivoa (eng. \textit{high level}).
-Treba ga koristiti u slu\v{c}ajevima kada:
-\begin{itemize}
-  \item je potreban interfejs ka Clang-u iz jezika koji nije C++.
-  \item je potreban stabilni inferfejs koji je kompatibilan sa starijim verzijama verzijama Clang-a.
-  \item su potrebne apstrakcije visokog nivoa kao \v{s}to je iteriranje kroz AST sa kursorima i drugi detaljni vezani za Clang-ov AST.
-\end{itemize}
-LibClang ne treba koristiti kada je potrebna puna kontrola nas AST-om.
-
-\item \textit{\textbf{Clang Plugins}} biblioteka omogu\'{c}ava izvr\v{s}avanje dodatnih akcija nad AST-om tokom kompilacije programa. Ovo su dinami\v{c}ke biblioteke koje kompajler u\v{c}itava tokom izvr\v{s}avanja i lako ih je integrisati u okru\v{z}enje za prevodjenje programa (eng. \textit{build enviroment}).
-
-Treba ih koristiti kada:
-
-\begin{itemize}
-\item je potrebno ponovno izvr\v{s}avanje alata uvek kada se zavisnosti potrebne za prevodjenje programa izmene.
-\item je potrebno da alat omogu\'{c}i ili neomogu\'{c}i prevodjenje programa.
-\item je potrebna potpuna kontrola nad Clang-ovim AST-om.
-\end{itemize}
-Ne treba ih koristiti kada:
-\begin{itemize}
-\item je potrebno kreirati alaz koji se ne koristi u okviru sistema za prevodjenje programa.
-\item su alatu potrebne informacije o tome kako je Clang pode\v{s}en uklju\v{c}uju\'{c}i mapiranje virtuelnih fajlova u memoriji.
-\item je potrebno koristiti alat nad podskupom fajlova u projektu koji nisu povezani sa izmenama koje bi zahtevale ponovno prevodjenje programa.
-\end{itemize}
-
-\item \textit{\textbf{LibTooling}} je C++ interfejs koji slu\v{z}i za pisanje samostalnih alata.
-Treba ga koristiti kada:
-\begin{itemize}
-  \item je potrebno pokretati alat nad jednim fajlom ili specifi\v{c}nim podskupom fajlova nezavisnim od sistema za prevodjenje.
-  \item je potrebno imati punu kontrolu nad Clang-ovim AST-om.
-  \item je potrebno deliti k\v{o}d sa Clang-ovim Plugin-ovima.
-\end{itemize}
-LibTooling ne treba koristiti kada:
-\begin{itemize}
-  \item je potrebno pokretati alat nakon promena u zavisnostima u sistemu za prevodjenje.
-  \item je potreban stabilan interfejs tako da se k\v{o}d alata ne mora menjati kada se AST API (eng. \textit{Application Programming Interface}) promeni.
-  \item su potrebne apstrakcije visokog nivoa kao \v{s}to su kursori.
-  \item alat ne\'{c}e biti napisan u C++-u
-\end{itemize}
-\end{itemize}
-
-\section{ASTConsumer interfejs}
-
-\textit{\textbf{ASTConsumer}} je apstraktni interfejs koji omogu\'{c}ava izvr\v{s}avanje razli\v{c}itih akcija nad AST-om nezavisno od toga kako je AST kreiran.
-Akcije se mogu izvr\v{s}avati u razli{v}citim fazama tokom kreiranja AST-a. Na primer, metod \textit{\textbf{virtual void  HandleInlineFunctionDefinition (FunctionDecl *D)}} bi\'{c}e pozvan svaki put kada se zavr\v{s}i kreiranje umetnutih (eng. \textit{inline}) funkcija prilikom kreiranja AST-a. \textit{\textbf{ASTConsumer}} defini\v{s}e niz sli\v{c}nih virtuelnih metoda koje mogu biti predefinisane od strane klasa koje nasledjuju ovaj interfejs. Jedna on najzna\v{c}ajnijih upotreba ovog interfejsa jeste generisanje LLVM medjukoda implementacijom koju pru\v{z}a klasa \textit{\textbf{CodeGenerator}}. 
+\subsection{Interfejs ASTConsumer}
+\lstinline{ASTConsumer} je apstraktni interfejs koji omogu\'{c}ava izvr\v{s}avanje razli\v{c}itih akcija nad AST-om nezavisno od toga kako je AST kreiran.
+Akcije se mogu izvr\v{s}avati u razli\v{c}itim fazama tokom kreiranja AST-a. Na primer, metod \\ \lstinline{virtual void  HandleInlineFunctionDefinition (FunctionDecl *D)} bi\'{c}e pozvan svaki put kada se zavr\v{s}i kreiranje umetnutih (eng. \textit{inline}) funkcija prilikom kreiranja AST-a. \lstinline{ASTConsumer} defini\v{s}e niz sli\v{c}nih virtuelnih metoda koje mogu biti predefinisane od strane klasa koje nasledjuju ovaj interfejs. Jedna on najzna\v{c}ajnijih upotreba ovog interfejsa jeste generisanje LLVM medjukoda implementacijom koju pru\v{z}a klasa \lstinline{CodeGenerator}. 
 
 % \usepackage{float}
 \begin{figure}[!h]
 \begin{center}
 \includegraphics[scale=0.3]{ASTConsumer2.png}
 \end{center}
-\caption{Klase koje implementiraju \textit{\textbf{ASTConsumer}} interfejs}
+\caption{Klase koje implementiraju \textit{ASTConsumer} interfejs}
 \label{fig:exploded}
 \end{figure}
 
 Ovaj interfejs koristan je i za kreiranje samostalnih alata za stati\v{c}ku analizu koji se baziraju na analizi AST-a. U ovu svrhu mo\v{z}e se koristiti kombinacija
-ovog interfejsa sa interfejsima za obilazak AST-a kao \v{s}to su AST posetioci i AST upariva\v{c}i. Klasa koja implementira neku analizu nad AST-om treba sadr\v{z}ati jedan ili vi\v{s}e objekata klasa za obilazak AST-a i zatim izvr\v{s}iti taj obilazak predefinisanjem metoda \textit{\textbf{virtual void  HandleTranslationUnit(ASTContext \&Ctx)}} koji se poziva nakon \v{s}to je kreiran AST za jedinicu prevodjenja. Logika same analize AST-a tokom obilaska treba biti implementirana u okviru klase koja implementira obilazak, odnosno u AST upariva\v{c}ima ili posetiocima.
+ovog interfejsa sa interfejsima za obilazak AST-a kao \v{s}to su AST posetioci i AST upariva\v{c}i. Klasa koja implementira neku analizu nad AST-om treba sadr\v{z}ati jedan ili vi\v{s}e objekata klasa za obilazak AST-a i zatim izvr\v{s}iti taj obilazak predefinisanjem metoda \lstinline{virtual void  HandleTranslationUnit(ASTContext &Ctx)} koji se poziva nakon \v{s}to je kreiran AST za jedinicu prevodjenja. Logika same analize AST-a tokom obilaska treba biti implementirana u okviru klase koja implementira obilazak, odnosno u AST upariva\v{c}ima ili posetiocima.
 
-\begin{lstlisting}[caption={Primer upotrebe klase \textit{\textbf{ASTConsumer}} u svrhu stati\v{c}ke analize}, label=simple]
+\begin{lstlisting}[caption={Primer upotrebe klase \textit{ASTConsumer} u svrhu stati\v{c}ke analize}, label=lst:label7, captionpos=b]
 class FindNamedClassVisitor
   : public RecursiveASTVisitor<FindNamedClassVisitor> {
 public:
@@ -853,24 +837,161 @@ private:
 };
 \end{lstlisting}
 
-% UBACI SLIKU KODA KOMBINACIJE AST KONZUMERA I AST VIZITORA/MATCHERA
+\subsection{Intefejs FrontendAction}
+
+\lstinline{FrontendAction} je apstraktna klasa za akcije koje mogu biti izvr\v{s}ene od strane prednjeg dela kompajlera (eng. \textit{frontend}).
+Ovu klasu karakteri\v{s}e jednostavan javni interfejs koji se sastoji od slede\'{c}ih metoda:
+
+\begin{itemize}
+  \item \lstinline{bool PrepareToExecute (CompilerInstance &CI)} \\
+  Ova metoda slu\v{z}i za pripremanje primarne akcije koja \'{c}e biti izvr\v{s}ena nad objektom klase \lstinline{CompilerInstance}.
+  Priprema uklju\v{c}uje izmene po\v{c}etne konfiguracije kompajlera kako bi olak\v{s}ala izvr\v{s}avanje akcije.
+  \item \lstinline{bool BeginSourceFile (CompilerInstance &CI, const FrontendInputFile &Input)} \\
+  Prirprema akciju za procesiranje ulaznog fajla. Ukoliko ova metoda vrati vrednost \textit{false}, kompilacija fajla \textit{Input} \'{c}e biti prekinuta
+  i primarna akcija se ne\'{c}e izvr\v{s}iti.
+  \item \lstinline{llvm::Error Execute ()} \\
+  Metoda odgovorna za izvr\v{s}avanje akcije. Ova metoda interno poziva \v{c}istu virtuelnu metodu \lstinline{virtual void ExecuteAction()=0}
+  koju svaka podklasa klase \lstinline{FrontendAction} predefini\v{s}e implementiraju\'{c}i u okviru nje akciju koja \'ce biti izvr\v{s}ena.
+  \item \lstinline{virtual void EndSourceFile()} \\ 
+  Izvr\v{s}ava post-procesiranje nakon svakog fajla, dealocira objekte, obradjuje statistiku i sredjuje kod u izlaznom fajlu.
+\end{itemize}
+
+Klasa \lstinline{FrontendAction} ima raznolike upotrebe, odnosno specijalizacije. Primer specijalizacija ove klase su \lstinline{DumpCompilerOptionsAction}
+koja omogu\'{c}ava ispisivanje opcija koje se mogu zadati kompajleru i \lstinline{PreprocessorFrontendAction} koja omogu\'{c}ava izvr\v{s}avanje akcija vezanih za pretprocesiranje izvornog koda. Medjutim, naj\v{c}es\'{c}a upotreba ovog interfejsa vezana je za akcije koje se izvr\v{s}avaju nad AST-om. U ovu svrhu koristi se apstarktna klasa \lstinline{ASTFrontendAction} koja je direktna potklasa klase \lstinline{FrontendAction}. \par
+Ova klasa zasniva se na kori\v{s}\'{c}enju interfejsa \lstinline{ASTConsumer} opisanog u prethodnom poglavlju. U ovu svrhu dovoljno je inicijalizovati klasu \lstinline{ASTFrontendAction} objektom implementiranog \lstinline{ASTConsumer}-a, a zatim u metodi \lstinline{ExecuteAction()} kreirati parserom AST,
+tokom \v{c}ega \'{c}e se izvr\v{s}avati akcije opisane u \lstinline{ASTConsumer}-u. Neke od bitnih implementacija ovog interfejsa predstavljaju klase \lstinline{CodeGenAction}, \lstinline{ASTDumpAction}, \lstinline{FixitAction}...  Na listingu \ref{lst:label8} prikazan je primer upotrebe ovog interfejsa. 
+\\
+\begin{lstlisting}[caption={Primer upotrebe klase \lstinline{ASTFrontendAction} interfejsa}, label=lst:label8, captionpos=b]
+class FindNamedClassAction : public clang::ASTFrontendAction {
+public:
+  virtual std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(
+    clang::CompilerInstance &Compiler, llvm::StringRef InFile) {
+    return std::make_unique<FindNamedClassConsumer>(&Compiler.getASTContext());
+  }
+};
+
+\end{lstlisting}
+
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.4]{ASTFrontendAction.png}
+\end{center}
+\caption{Klase koje implementiraju \textit{ASTFrontendAction} interfejs}
+\label{fig:exploded}
+\end{figure}
 
 
 
+\section{Biblioteke za kreiranje alata}
+
+ Kompajler Clang pru\v{z}a infrastrukturu za pisanje razli\v{c}itih softverskih alata koji koriste sintaksne i semanti\v{c}ke informacije o programu. U nastavku \'{c}e biti opisano nekoliko bibloteka koje se mogu koristiti u ovu svrhu zajedno sa njihovim prednostima i manama.
 
 
+\begin{itemize}
+\item \lstinline{LibClang} je stabilni C interfejs ka Clang-u visokog nivoa (eng. \textit{high level}). Ovaj interfejs pru\v{z}a parsiranje izvordnog koda
+i izagradnju AST-a, u\v{c}itavanje ve\'{c} kreiranog AST-a, obilazak AST-a i dohvatanje nekih informacija o izgradjenom AST-u kao \v{s}to su lokacije iz izvornog koda elemenata iz AST-a. Ovaj interfejs ne pru\v{z}asve informacije i detalje iz izgradjenog AST-a. Ovo ga \v{c}ini nepogodnim za implementaciju alata za stati\v{c}ku analizu ali omogu\'{c}ava stabilnost pri promeni verzija Clang-a.
+Treba ga koristiti u slu\v{c}ajevima kada:
+\begin{itemize}
+  \item je potreban interfejs ka Clang-u iz jezika koji nije C++.
+  \item je potreban stabilni inferfejs koji je kompatibilan sa starijim verzijama Clang-a.
+  \item su potrebne apstrakcije visokog nivoa kao \v{s}to je iteriranje kroz AST sa kursorima i drugi detaljni vezani za Clang-ov AST.
+\end{itemize}
+LibClang ne treba koristiti kada je potrebna puna kontrola nas AST-om.
 
+\item \lstinline{Clang Plugins} biblioteka omogu\'{c}ava izvr\v{s}avanje dodatnih akcija nad AST-om tokom kompilacije programa. Ovo su dinami\v{c}ke biblioteke koje kompajler u\v{c}itava tokom izvr\v{s}avanja i lako ih je integrisati u okru\v{z}enje za prevodjenje programa (eng. \textit{build enviroment}).
 
+Treba ih koristiti kada:
 
+\begin{itemize}
+\item je potrebno ponovno izvr\v{s}avanje alata uvek kada se zavisnosti potrebne za prevodjenje programa izmene.
+\item je potrebno da alat omogu\'{c}i ili neomogu\'{c}i prevodjenje programa.
+\item je potrebna potpuna kontrola nad Clang-ovim AST-om.
+\end{itemize}
+Ne treba ih koristiti kada:
+\begin{itemize}
+\item je potrebno kreirati alat koji se ne koristi u okviru sistema za prevodjenje programa.
+\item su alatu potrebne informacije o tome kako je Clang pode\v{s}en uklju\v{c}uju\'{c}i mapiranje virtuelnih fajlova u memoriji.
+\item je potrebno koristiti alat nad podskupom fajlova u projektu koji nisu povezani sa izmenama koje bi zahtevale ponovno prevodjenje programa.
+\end{itemize}
 
+\item \lstinline{LibTooling} je C++ interfejs koji slu\v{z}i za pisanje samostalnih alata. Ova biblioteka omogu\'{c}ava jednostavnu
+upotrebu opisanih akcija prednjeg dela kompajlera (eng. frontend actions), ali i jednostavno dodavanje opcija komandne linije i pokretanje nad fajlovima 
+nezavisnim od sistema za prevodjenje. Ova svojstva \v{c}ine \lstinline{LibTooling} biblioteku najkorisnijom od prethodno opisanih bibloteka u svrhu kreiranja alata za stati\v{c}ku analizu.
+Uopsteno, \lstinline{LibTooling} treba koristiti kada:
+\begin{itemize}
+  \item je potrebno pokretati alat nad jednim fajlom ili specifi\v{c}nim podskupom fajlova nezavisnim od sistema za prevodjenje.
+  \item je potrebno imati punu kontrolu nad Clang-ovim AST-om.
+  \item je potrebno deliti k\v{o}d sa Clang-ovim Plugin-ovima.
+\end{itemize}
+\lstinline{LibTooling} nije najbolji izbor u slu\v{c}ajevima kada:
+\begin{itemize}
+  \item je potrebno pokretati alat nakon promena u zavisnostima u sistemu za prevodjenje.
+  \item je potreban stabilan interfejs tako da se k\v{o}d alata ne mora menjati kada se AST API (eng. \textit{Application Programming Interface}) promeni.
+  \item su potrebne apstrakcije visokog nivoa kao \v{s}to su kursori.
+  \item alat ne\'{c}e biti napisan u C++-u
+\end{itemize}
+\end{itemize}
 
+Na listingu \ref{lst:label9} prikazana je implementacija jednostavnog alata kori\v{s}\'{c}enjem opisanih interfejsa \lstinline{ASTVisitor}, \lstinline{ASTConsumer} i \lstinline{FrontendAction}. Ovaj alat koristi \lstinline{libtooling} biblioteku za pokretanje definisane \lstinline{FrontendAction} akcije nad izvornim kodom koji je prosledjen kao argument komandne linije. Alat ispisuje lokacije svih struktura, unija i klasa sa imenom \lstinline{n::m::C}. 
+\\
+\begin{lstlisting}[caption={Primer implementacije jednostavnog alata upotrebom interfejsa \lstinline{ASTVisitor}, \lstinline{ASTConsumer}, \lstinline{FrontendAction} i bibliotekom \lstinline{libtooling}}, label=lst:label9, captionpos=b]
+#include "clang/AST/ASTConsumer.h"
+#include "clang/AST/RecursiveASTVisitor.h"
+#include "clang/Frontend/CompilerInstance.h"
+#include "clang/Frontend/FrontendAction.h"
+#include "clang/Tooling/Tooling.h"
 
+using namespace clang;
 
+class FindNamedClassVisitor
+  : public RecursiveASTVisitor<FindNamedClassVisitor> {
+public:
+  explicit FindNamedClassVisitor(ASTContext *Context)
+    : Context(Context) {}
 
+  bool VisitCXXRecordDecl(CXXRecordDecl *Declaration) {
+    if (Declaration->getQualifiedNameAsString() == "n::m::C") {
+      FullSourceLoc FullLocation = Context->getFullLoc(Declaration->getBeginLoc());
+      if (FullLocation.isValid())
+        llvm::outs() << "Found declaration at "
+                     << FullLocation.getSpellingLineNumber() << ":"
+                     << FullLocation.getSpellingColumnNumber() << "\n";
+    }
+    return true;
+  }
 
+private:
+  ASTContext *Context;
+};
 
+class FindNamedClassConsumer : public clang::ASTConsumer {
+public:
+  explicit FindNamedClassConsumer(ASTContext *Context)
+    : Visitor(Context) {}
 
+  virtual void HandleTranslationUnit(clang::ASTContext &Context) {
+    Visitor.TraverseDecl(Context.getTranslationUnitDecl());
+  }
+private:
+  FindNamedClassVisitor Visitor;
+};
 
+class FindNamedClassAction : public clang::ASTFrontendAction {
+public:
+  virtual std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(
+    clang::CompilerInstance &Compiler, llvm::StringRef InFile) {
+    return std::make_unique<FindNamedClassConsumer>(&Compiler.getASTContext());
+  }
+};
+
+int main(int argc, char **argv) {
+  if (argc > 1) {
+    clang::tooling::runToolOnCode(std::make_unique<FindNamedClassAction>(), argv[1]);
+  }
+}
+
+\end{lstlisting}
 
 
 
