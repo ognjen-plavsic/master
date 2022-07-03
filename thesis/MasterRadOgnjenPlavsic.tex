@@ -139,7 +139,7 @@ keywordstyle=\color{blue},
 }
 \usepackage{tcolorbox}
 % Ključne reči na srpskom jeziku (u odabranom pismu)
-\kljucnereci{računarstvo, autosar, clang, llvm, c++}
+\kljucnereci{računarstvo, \textsc{autosar}, clang, llvm, c++}
 
 \begin{document}
 % ==============================================================================
@@ -236,25 +236,34 @@ keywordstyle=\color{blue},
 
 % ------------------------------------------------------------------------------
 
-\chapter{Programski jezik C++}
+
+
+
+\chapter{Standard kodiranja \textsc{autosar} C++14}
 \label{chp:autosar}
 
-\textbf{C++} je programski jezik op\v{s}te namene koji pru\v{z}a direktan i efikasan model hardvera u kombinaciji sa strukturama za definisanje lakih (eng. \textit{lightweight}) apstrakcija \cite{TheC++ProgrammingLanguage}. Kreirao ga je Danski softverski in\v{z}enjer Bjarne Stroustrup kao ekstenziju programskog jezika C. Osnovno pro\v{s}irenje u odnosu na programski jezik C jeste mogu\'{c}nost kreiranja korisni\v{c}ki definisanih tipova, odnosno klasa. C++ pripada grupi objektno orijentisanih jezika. 
+\textit{AUTomotive Open System ARchitecture (\textsc{autosar})} je međunarodna organizacija proizvođača vozila, dobavljača, pružaoca usluga i kompanija iz automobilske industrije i industrija elektronike, poluprovodnika i softvera \cite{\textsc{autosar}Website}. 
+Cilj \textsc{autosar}a je da stvori i uspostavi otvorenu i standardizovanu softversku arhitekturu za automobilske elektronske upravljačke jedinice (\textit{eng. Electronic Control Units (ЕCU)}.
+Radi ostvarenja pomenutih ciljeva \textsc{autosar} definiše, između ostalog, pravila kodiranja u programskom jeziku C++14 za sigurnosno kriti\v{c}ne sisteme. Glavni sektor primene standarda kodiranja \textsc{autosar} C++14 je automobilska industrija, međutim ovaj standard može biti primenjen
+i na druge aplikacije za uređaje sa ugrađenim računarom (\textit{eng. embedded systems}). Ovaj standard predstavlja nadogradnju MISRA C++:2008 standarda \cite{AutosarGuidelines}.
 
-\section{Dizajn programskog jezika C++}
+\section{Programski jezik C++}
 
-Programski jezik C dizajniran je sa ciljem da programer mo\v{z}e sto jednostavnije zadavati akcije koje ma\v{s}ina treba da izvr\v{s}i.
+\textbf{C++} je programski jezik op\v{s}te namene koji pru\v{z}a direktan i efikasan model hardvera u kombinaciji sa strukturama za definisanje lakih (eng. \textit{lightweight}) apstrakcija \cite{TheC++ProgrammingLanguage}. Kreirao ga je Danski softverski in\v{z}enjer Bjarne Stroustrup kao ekstenziju programskog jezika C. U trenutku kreiranja, Osnovno pro\v{s}irenje u odnosu na programski jezik C bilo je mogu\'{c}nost kreiranja korisni\v{c}ki definisanih tipova, odnosno klasa. C++ pripada grupi objektno orijentisanih jezika. 
+
+\subsection{Dizajn programskog jezika C++}
+
 Osnovna ideja iza dizajna programskog jezika C++ jeste da zadr\v{z}i dizajn jezika C ali ga i pro\v{s}iri tako da jezik, odnosno njegova sintaksa, bude bliska problemu koji re\v{s}ava. Tako implementiranim programskim jezikom se koncepti re\v{s}enja problema mogu izraziti direktno i koncizno.
 U svrhu toga, C++ pru\v{z}a:
 \begin{itemize}
-  \item {Direktna mapiranja ugrađenih operacija i tipova na hardver kako bi obezbedio efikasno kori\v{s}\'{c}enje memorije i efikasne niske (eng. \textit{low-level}) operacije.}
+  \item {Direktna preslikavanja ugrađenih operacija i tipova na hardver kako bi obezbedio efikasno kori\v{s}\'{c}enje memorije i efikasne niske (eng. \textit{low-level}) operacije.}
   \item {Priu\v{s}tive (u smislu ra\v{c}unarskih resursa) i fleksibilne mehanizme apstrakcija za podr\v{s}ku korisni\v{c}ki definisanih tipova koji se mogu koristiti sa istom sintaksom, u istom obimu i sa istim performansama kao ugrađeni tipovi.}
 \end{itemize}
 
 Dizajn C++-a je fokusiran na tehnike programiranja koje se bave osnovnim pojmovima ra\v{c}unarstva kao \v{s}to su memorija, mutabilnost, apstrakcija, upravljanje ra\v{c}unarskim resursima, izra\v{z}avanje algoritama, rukovanje gre\v{s}kama i modularnost. Jezik je dizajniran sa ciljem da \v{s}to vi\v{s}e olak\v{s}a sistemsko programiranje, odnosno pisanje programa koji direktno koriste hardverske resurse i kod kojih su ovi resursi u velikoj meri ograni\v{c}eni \cite{TheC++ProgrammingLanguage}.
 
 
-\section{Standard C++14}
+\subsection{Standard C++14}
 
 Programski jezik C++ je standardizovan od strane ISO (\textit{International Standard Organization}) radne grupe poznate kao JTC1/SC22/WG21 \cite{ISOWebsite}. Do sada je objavljeno \v{s}est revizija C++ standarda i trenutno se radi na reviziji \textit{C++23}. 
 \indent
@@ -262,18 +271,8 @@ Programski jezik C++ je standardizovan od strane ISO (\textit{International Stan
 Standard \textit{C++14} predstavlja pro\v{s}irenje standarda \textit{C++11} uglavnom manjim pobolj\v{s}anjima i ispravljanjem gre\v{s}aka iz standarda \textit{C++11} . Standard \textit{C++11} sa druge strane uveo je velike izmene u odnosu da prethodnu reviziju standarda, \textit{C++03}. 
 Standardi \textit{C++11/14} uveli su ve\'{c}inu fundamentalnih koncepta onog \v{s}to se danas smatra modernim C++-om. Ovde pre svega spadaju desne reference, "move" semantika i savr\v{s}eno prosleđivanje, pametni pokaziva\v{c}i, lambda funkcije, dedukcija tipova ali i mnogi drugi koncepti.
 
-
-\chapter{Standard kodiranja Autosar C++14}
-\label{chp:autosar}
-
-
-\textit{AUTomotive Open System ARchitecture (AUTOSAR)} je međunarodna organizacija proizvođača vozila, dobavljača, pružaoca usluga i kompanija iz automobilske industrije i industrija elektronike, poluprovodnika i softvera \cite{AutosarWebsite}. 
-Cilj Autosara je da stvori i uspostavi otvorenu i standardizovanu softversku arhitekturu za automobilske elektronske upravljačke jedinice (\textit{eng. Electronic Control Units (ЕCU)}.
-Radi ostvarenja pomenutih ciljeva AUTOSAR definiše, između ostalog, pravila kodiranja u programskom jeziku C++14 za sigurnosno kriti\v{c}ne sisteme. Glavni sektor primene standarda kodiranja AUTOSAR C++14 je automobilska industrija, međutim ovaj standard može biti primenjen
-i na druge aplikacije za uređaje sa ugrađenim računarom (\textit{eng. embedded systems}). Ovaj standard predstavlja nadogradnju MISRA C++:2008 standarda \cite{AutosarGuidelines}.
-
 \section{Klasifikacija pravila}
-Standard AUTOSAR C++14 definiše 342 pravila od kojih je:
+Standard \textsc{autosar} C++14 definiše 342 pravila od kojih je:
 \begin{itemize}
   \item {154 prisvojeno bez modifikacija iz MISRA C++:2008 standarda.}
   \item {131 prisvojeno iz drugih C++ standarda}
@@ -282,15 +281,14 @@ Standard AUTOSAR C++14 definiše 342 pravila od kojih je:
 Pravila su klasifikovana po nivou obaveze, mogućnosti ispitivanja saglasnosti koda sa pravilom korišćenjem algoritama
 statičke analize i cilju korišćenja:
 
-\begin{itemize}
-  \item{
+\subsection{Klasifikacija po nivou obaveze}
 Klasifikacija po nivou obaveze deli pravila na obavezna i preporučena.
 Obavezna pravila predstavljaju neophodne zahteve koje C++ k\^{o}d mora ispuniti kako bi bio u saglasnosti sa standardom. U slučaju kada ovo nije moguće,
 formalna odstupanja moraju biti prijavljena.
 Preporučena pravila predstavljaju zahteve koje C++ k\^{o}d treba da ispuni kad god je to mogu\'{c}e. Međutim, ovi zahtevi nisu obavezni. Pravila
-sa ovim nivoom obaveze ne treba smatrati savetom ili sugestijom koja može biti ignorisana ve\'{c} ih treba pratiti uvek kada je to prakti\v{c}no izvodljivo. Za ova pravila ne moraju biti prijavljena formalna odstupanja.}
+sa ovim nivoom obaveze ne treba smatrati savetom ili sugestijom koja može biti ignorisana ve\'{c} ih treba pratiti uvek kada je to prakti\v{c}no izvodljivo. Za ova pravila ne moraju biti prijavljena formalna odstupanja.
 
-  \item{
+\subsection{Klasifikacija po primenjivosti statičke analize}
 Klasifikacija po primenjivosti statičke analize deli pravila na: 
 \begin{enumerate}
   \item{automatizovana}
@@ -302,7 +300,7 @@ Kod delimično automatizovanih pravila se ispitivanje saglasnosti koda može sam
 Za neautomatizovana pravila statička analiza ne pruža razumnu podršku. Za ispitivanje saglasnosti koda sa neautomatizovanim pravilima koriste se druga sredstva, kao što je recimo pregled koda.
 
 \indent
-Većina pravila iz standarda Autosar C++14 spadaju u automatizovana pravila. Alati za statičku analizu koda koji tvrde da podržavaju standard Autosar C++14 moraju u potpunosti obezbediti podršku za sva automatizovana pravila i delimičnu podršku, u meri u kojoj je to moguće, za pravila koja se ne mogu u potpunosti ispitati algoritmima statičke analize \cite{AutosarGuidelines}.
+Većina pravila iz standarda \textsc{autosar} C++14 spadaju u automatizovana pravila. Alati za statičku analizu koda koji tvrde da podržavaju standard \textsc{autosar} C++14 moraju u potpunosti obezbediti podršku za sva automatizovana pravila i delimičnu podršku, u meri u kojoj je to moguće, za pravila koja se ne mogu u potpunosti ispitati algoritmima statičke analize \cite{AutosarGuidelines}.
 
 \indent
 Primenjivost statičke analize na proveru saglasnosti koda sa određenim pravilom u velikoj meri zasniva se na teorijskoj klasifikaciji problema
@@ -345,8 +343,8 @@ od bitske širine tipa levog operanda.
 #include <cstdlib>
 
 int main(){
-int8_t u8a = rand() % 100;
-u8a = (uint8_t) ( u8a << rand() % 10);
+  int8_t u8a = rand() % 100;
+  u8a = (uint8_t) ( u8a << rand() % 10);
 }
 \end{lstlisting}
 Međitim, ukoliko je desni operand konstanta ili promenljiva konstantnog izraza (klju\v{c}na re\v{c} \textit{constexpr}), vrlo je verovatno da će alat za statičku analizu biti u stanju
@@ -372,12 +370,12 @@ Međitim, ukoliko je desni operand konstanta ili promenljiva konstantnog izraza 
 #include <cstdlib>
 
 int main(){
-int8_t u8a = rand() % 100;
-u8a = (uint8_t) ( u8a << 7);
+  int8_t u8a = rand() % 100;
+  u8a = (uint8_t) ( u8a << 7);
 }
 \end{lstlisting}
 
-  Napredniji alati za statičku analizu koji podržavaju simboličko izvršavanje programa (npr. Clang Static Analyzer \cite{CSAWebsite}) mogu pokriti i znatno kompleksnije 
+  Napredniji alati za statičku analizu koji podržavaju simboličko izvršavanje programa (npr. \textit{Clang Static Analyzer} \cite{CSAWebsite}) mogu pokriti i znatno kompleksnije 
   slučajeve od slučaja prikazanog u Listingu 2.2.
   \\
   \indent 
@@ -399,8 +397,8 @@ Kod treba da poštuje zadate granice metrika koda.
   Kako bi se odredilo da li je k\^{o}d napisan u skladu sa ovim pravilom potrebno je poznavati koje metrike koda se koriste u okviru projekta i
   granice definisane za te metrike. S obzirom da je ovo specifično za sam projekat, mogu se koristiti interni alati za statičku analizu koda u kombinaciji
   sa manuelnim pregledom koda. 
-}
-  \item{
+
+\subsection{Klasifikacija pravila prema cilju primene}
 Klasifikacija pravila prema cilju primene (slučaju upotrebe) deli pravila na:
 
 \begin{enumerate}
@@ -427,7 +425,7 @@ Primer verifikacionog pravila:
 \begin{center}
 \begin{tcolorbox}
 Pravilo A15-0-6 (obvezno, verifikaciono, neautomatizovano) \\
-Analiza treba biti izvršena kako bi se detektovalo loše rukovanje izuzecima. Treba analizirati slede\'ce slučajeve lošeg rukovanja izuzecima:
+Analiza treba biti izvršena kako bi se detektovalo loše rukovanje izuzecima. Treba analizirati slede\'ce slučajeve lošeg rukovanja izuzecima: \\
 (a) Najgore vreme izvršavanja ne postoji ili se ne može utvrditi, \\
 (b) Stek nije korektno raspakovan, \\
 (c) Izuzetak nije bačen, drugačiji izuzetak je bačen, aktivirana je pogre\v{s}na "catch" naredba, \\
@@ -436,7 +434,7 @@ Analiza treba biti izvršena kako bi se detektovalo loše rukovanje izuzecima. T
 \end{center}
 
 Pravila za alate odnose se na softverske alate kao što su pretprocesor, kompajler, linker i biblioteke kompajlera.
-Infrastrukturna pravila odnose se na operativni sistem i hardver \cite{AutosarGuidelines}.
+Infrastrukturna pravila odnose se na operativni sistem i hardver \cite{\textsc{autosar}Guidelines}.
 Primer pravila za alate koje je ujedno i infrastrukturno pravilo:
 
 \begin{center}
@@ -446,19 +444,18 @@ Implementacija brojeva u pokretnom zarezu treba da bude u skladu sa standardom I
 \end{tcolorbox}
 \end{center}
 
-}
-\end{itemize}
+
 
 \section{Opis implementiranih pravila}
 
-Pored formalne klasifikacije opisane u prethodnom poglavlju, pravila u okviru samog dokumenta standarda AUTOSAR C++14  kodiranja struktuirana su po poglavljima.
+Pored formalne klasifikacije opisane u prethodnom poglavlju, pravila u okviru samog dokumenta standarda \textsc{autosar} C++14  kodiranja struktuirana su po poglavljima.
 Struktura poglavlja ovog dokumenta slična je strukturi iz samog C++ standarda ISO/IEC 14882:2014. Svako poglavlje odgovara jednoj komponenti (svojstvu) C++14 jezika, to jest, sadrži pravila koja se odnose na tu komponentu.
 \\
 \indent
 Pravila razmatrana u ovom radu predstavljaju podskup pravila koja se odnose na deklaracije. Razlog za ovo je dvojak. Deklaracije predstavljaju jedan
 od osnovnih i najvažnijih koncepta u C++-u i programiranju generalno. U C++-u deklaracije čine samu srž ekspresivne moći jezika i u direktnoj su vezi
 sa naprednijim konceptima jezika i računarastva, kao što je, na primer, šablonsko metaprogramiranje (\textit{eng. template metaprogramming}).
-Sa druge strane jednostavnost sintakse deklaracija u C++-u čini pogodno tlo za korišćenje kompajlerskih tehnika i struktura u okviru Clang kompajlera kojim se mogu analizirati konstrukti jezika koji nisu u skladu sa pravilima i predlagati prikladne alternative.
+Sa druge strane jednostavnost sintakse deklaracija u C++-u čini pogodno tlo za korišćenje kompajlerskih tehnika i struktura u okviru kompajlera Clang kojim se mogu analizirati konstrukti jezika koji nisu u skladu sa pravilima i predlagati prikladne alternative.
 \\
 \indent
 Sva implementirana pravila u okviru projekta spadaju, prema klasifikaciji iz prethodnog poglavlja, u sledeće kategorije:
@@ -468,10 +465,10 @@ Sva implementirana pravila u okviru projekta spadaju, prema klasifikaciji iz pre
   \item{Implementaciona, prema klasifikaciji po cilju primene.}
 \end{enumerate}
 
-Razmatrana pravila nisu nužno implementirana u potpunosti u okviru Autofix alata, iako činjenica da pravila spadaju u kategorije obaveznih i automatizovanih
+Razmatrana pravila nisu nužno implementirana u potpunosti u okviru alata Autofix, iako činjenica da pravila spadaju u kategorije obaveznih i automatizovanih
 implicira da je to teorijski moguće uraditi. Pravila koje Autofix podržava birana su tako da se ograničenja koja potiču iz same prirode projekta minimalno manifestuju. Ograničenja potiču od primarnih tehnologija i biblioteka kojima je alat implementiran ali i činjenice da se alat zasniva na predlogu izmena koda. 
-Clang Statički analizator (\textit{eng. Clang Static Analyzer} \cite{CSAWebsite}) nije korišćen u okviru ovog alata, tako da su pravila izabrana tako da što manji broj slučajeva upotrebe zahteva simboličko izvršavanje programa. Drugo ograničenje potiče iz činjenice da u nekim slučajevima nije moguće ili je znatno komplikovanije kreirati predlog ispravke koda (\textit{eng. fixit hint}). Pravila razmatrana u okviru ovog rada birana su tako da se većina konstrukta koji nisu u saglasnosti sa pravilom mogu detektovati analizom Clang-ovog AST-a i da se za njih mogu kreirati razumne alternative koje su u skladu sa standardom Autosar C++14.
-Primeri pravila koje podržava Autofix alat:
+stati\v{c}ki analizator kompajlera Clang \cite{CSAWebsite} (eng. \textit{Clang Static Analyzer}) nije korišćen u okviru ovog alata, tako da su pravila izabrana tako da što manji broj slučajeva upotrebe zahteva simboličko izvršavanje programa. Drugo ograničenje potiče iz činjenice da u nekim slučajevima nije moguće ili je znatno komplikovanije kreirati predlog ispravke koda (\textit{eng. fixit hint}). Pravila razmatrana u okviru ovog rada birana su detektovati analizom Clang-ovog  tako da se većina konstrukta koji nisu u saglasnosti sa pravilom moguAST-a i da se za njih mogu kreirati razumne alternative koje su u skladu sa standardom \textsc{autosar} C++14.
+Primeri pravila koje podržava alat Autofix:
 
 \begin{center}
 \begin{tcolorbox}
@@ -619,7 +616,7 @@ Na primer \lstinline{IfStmt} klasa opisuje \lstinline{if} naredbe jezika i direk
 \section{Biblioteke za obilazak AST-a}
 
 Kompajlerska infrastruktura LLVM pru\v{z}a podr\v{s}ku za jednostavno kreiranje kvalitetnih alata za stati\v{c}ku analizu izvornog koda. Ovi alati
-baziraju se na kori\v{s}\'{c}enju interfejsa ka Clang-ovom AST-u ili kori\v{s}\'{c}enjem Clang-ovog stati\v{c}kog anlizatora (eng. \textit{Clang Static Analyzer}) za potrebe simboli\v{c}kog izvr\v{s}avanja programa. Alati za stati\v{c}ku analizu mogu koristiti kombinaciju tehnika obilaska AST-a i simboli\v{c}kog izvr\v{s}avanja programa u zavisnosti od kompleksnosti analize koja je potrebna. Biblioteke za obilazak AST-a su jeftinije za kori\v{s}\'{c}enje po pitanju ra\v{c}unarskih resursa ali su ograni\v{c}ene informacijama dostupnim tokom kompilacije programa. Alati koji se implementiraju kao deo sistema za prevođenje programa omogu\'{c}avaju dodatnu optimizaciju procesa pronala\v{z}enja nepravilnih konstrukta direktnim proverama tokom kompilacije. Ovo se mo\v{z}e posti\'{c}i nadogradnjom osnovnih delova kompajlera kao \v{s}to su Lexer, Parser ili Sema. \\Osnovne biblioteke za obilazak AST-a u okviru kompajlera Clang su AST posetioci (eng. \textit{ASTVisitors}) i  AST upariva\v{c}i (eng. \textit{ASTMatchers}).
+baziraju se na kori\v{s}\'{c}enju interfejsa ka Clang-ovom AST-u ili kori\v{s}\'{c}enjem stati\v{c}kog analizatora kompajlera Clang (eng. \textit{Clang Static Analyzer}) za potrebe simboli\v{c}kog izvr\v{s}avanja programa. Alati za stati\v{c}ku analizu mogu koristiti kombinaciju tehnika obilaska AST-a i simboli\v{c}kog izvr\v{s}avanja programa u zavisnosti od kompleksnosti analize koja je potrebna. Biblioteke za obilazak AST-a su jeftinije za kori\v{s}\'{c}enje po pitanju ra\v{c}unarskih resursa ali su ograni\v{c}ene informacijama dostupnim tokom kompilacije programa. Alati koji se implementiraju kao deo sistema za prevođenje programa omogu\'{c}avaju dodatnu optimizaciju procesa pronala\v{z}enja nepravilnih konstrukta direktnim proverama tokom kompilacije. Ovo se mo\v{z}e posti\'{c}i nadogradnjom osnovnih delova kompajlera kao \v{s}to su Lexer, Parser ili Sema. \\Osnovne biblioteke za obilazak AST-a u okviru kompajlera Clang su AST posetioci (eng. \textit{ASTVisitors}) i  AST upariva\v{c}i (eng. \textit{ASTMatchers}).
 
 % \usepackage{listings}
 
