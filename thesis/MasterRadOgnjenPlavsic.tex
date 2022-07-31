@@ -1140,6 +1140,22 @@ enum E1 : std::int32_t { E10, E11, E12 };
 \caption{Ispis alata za pravilo A7-2-3}
 \label{fig:A7-2-3}
 \end{figure}
+
+\section{Opis implementacije}
+
+\textit{Autofix} implementiran je u okviru \texttt{clang-tools-extra} projekta koji sadr\v{z}i alate implementirane interfejsima za alate kompajlera \textit{Clang} (eng.~\textit{Clang’s tooling APIs}).
+Alat je podeljen na \v{c}etiri jedinice prevodjenja: \texttt{AutoFix.cpp}, \texttt{AutoFixMatchers.cpp}, \texttt{AutofixDiagnosticConsumer.cpp} i \texttt{AutofixHelper.cpp}.
+
+\begin{description}
+\item{\textbf{AutoFixMatchers.cpp}} \\
+Alat \textit{Autofix} koristi biblioteku \texttt{LibAstMatchers} za analizu i obradu AST-a kompajlera \textit{Clang}. Svakom pravilu koje podr\v{z}ava alat \textit{Autofix} odgovara jedan upariva\v{c} (instanca klase \texttt{Matcher}). \textit{Autofix} koristi ovu biblioteku na slede\'{c}i na\v{c}in. U prvom delu defini\v{s}u se jednostavni upariva\v{c}i koji uparuju osnovne strukture iz AST-a na koje se pravilo odnosi. Na primer, ukoliko je pravilo vezano za enumeratore, ovaj upariva\v{c} \'{c}e upariti sve deklaracije enumeratora iz AST-a. Drugi deo implementiran je upotrebom klase \texttt{MatchCallback}. Svaka potklasa ove klase implementirana u okviru alata \textit{Autofix} odgovara jednom upariva\v{c}u, a samim tim i jednom pravilu. U okviru \texttt{run} metode ove klase vr\v{s}e se
+dodatne analize nad konstruktima AST-a koji su dobijeni rezultatom rada upariva\v{c}a i prijavljuje odgovaraju\'{c}a dijagnostika za izvorni kod. Zajedno sa dodatnom analizom u okviru \texttt{run} metode vr\v{s}i se i kreiranje stringova koji predstavljaju predloge izmena izvornog koda (eng. \textit{fixit hints}) kako bi k\^{o}d bio u skladu sa pravilom.
+\item{\textbf{AutoFix.cpp}} \\
+Ova jedica prevodjenja predstavlja ulaznu ta\v{c}ku samog alata. U okviru nje, implementirane su klase \texttt{AutoFixConsumer} i \texttt{AutoFixAction} koje nasledjuju redom klase \texttt{ASTConsumer} i \texttt{ASTFrontendAction}. Uloga pomenutih baznih klasa pri kreiranju alata opisana je u sekciji ***. Osnovna uloga klase \texttt{AutoFixConsumer} jeste da obezbedi da se nad jedinicom prevodjenja pokrenu odgovaraju\'{c}i upariva\v{c}i. To su upariva\v{c}i koji odgovaraju pravilima za koje korisnik \v{z}eli da proveri da li je izvorni kod napisan u skladu sa njima. Korisnik mo\v{z}e da zada podskup ovih pravila u okviru argumenta komadne linije \texttt{-rules}. Parsiranje ove opcije i samo pokretanje upariva\v{c}a nad AST-om implementirano je u okviru metode \texttt{HandleTranslationUnit} klase \texttt{AutoFixConsumer}. Ova metoda bi\'{c}e pozvana od strane parsera na kraju izgradnje AST-a za svaku jedinicu prevodjenja nad kojom je pokrenut alat.
+\par 
+U okviru jedinice prevodjenja \texttt{Autofix.cpp} takodje je implementirana \texttt{main} funkcija alata \textit{Autofix}. U okviru nje vr\v{s}i se parsiranje opcija komandne linije, kreira se instanca alata, inicijalizuje se kreiranim objektom klase \texttt{AutoFixDiagnosticConsumer} i pokre\'{c}e se nad zadatom jedinicom prevodjenja.
+\end{description}
+
 % ------------------------------------------------------------------------------
 
 % \pangrami
