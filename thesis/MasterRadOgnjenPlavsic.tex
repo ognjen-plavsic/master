@@ -14,6 +14,8 @@
 
 \usepackage{listings}
 
+\newtheorem{primer}{Primer}[section]
+
 
 \lstdefinestyle{customc}{
   belowcaptionskip=1\baselineskip,
@@ -372,7 +374,7 @@ K\^{o}d treba da poštuje zadate granice metrika koda.
 
   %  \\ \\
   % \textit{Pravilo A1-4-2 (obvezno, implementaciono, neautomatizovano)
-  %         Sav k\^{o}d treba poštovati definisane granice metrika koda.} \\
+  %         Sav k\^{o}d  treba poštovati definisane granice metrika koda.} \\
 
   Kako bi se odredilo da li je k\^{o}d napisan u skladu sa ovim pravilom potrebno je poznavati koje metrike koda se koriste u okviru projekta i
   granice definisane za te metrike. S obzirom da je ovo specifično za sam projekat, mogu se koristiti interni alati za statičku analizu koda u kombinaciji
@@ -451,7 +453,7 @@ ugrubo je podeljena na tri dela: prednji (eng.~\textit{frontend}), srednji (eng.
   \item Prednji deo LLVM-a prevodi izvorni k\^od podr\v{z}anih jezika u LLVM međukod. U ovu fazu spadaju leksi\v{c}ka, sintaksna i semanti\v{c}ka analiza
   izvornog koda, kreiranje apstraktnog sintaksnog stabla (eng.~\textit{abstract syntax tree} (AST)) i generisanje LLVM međukoda (eng.~\textit{intermediate representation (IR))} koriste\'{c}i informacije iz apstraktnog sintaksnog stabla.
   \item{Srednji deo kompajlera vr\v{s}i niz optimizacija nad instrukcijama LLVM međukoda. LLVM međukod predstavlja apstrakciju asemblera koja je nezavnisna od arhitekture hardvera. LLVM međukod zasnovan je na svojstvu jedinstvenog stati\v{c}kog dodeljivanja vrednosti (eng.~\textit{static single assignment}, skra\'{c}eno \textit{ssa}), strogo je tipiziran, fleksibilan i omogu\'{c}ava jednostavnu reprezentaciju svih jezika visokog nivoa (eng.~\textit{high-level languages}).}
-  \item{Zadnji deo kompajlera vr\v{s}i ma\v{s}inski zavisne optimizacije koda i generi\v{s}e ma\v{s}inski k\^{o}d  za ciljnu arhitekturu.}
+  \item{Zadnji deo kompajlera vr\v{s}i ma\v{s}inski zavisne optimizacije koda i generi\v{s}e ma\v{s}inski k\^{o}d za ciljnu arhitekturu.}
 \end{enumerate}
 
 % \usepackage{float}
@@ -474,9 +476,9 @@ ugrubo je podeljena na tri dela: prednji (eng.~\textit{frontend}), srednji (eng.
   \item[Biblioteka \texttt{clangParse}]
         obrađuje niz tokena dobijenih leksi\v{c}kom analizom i od njih kreira \v{c}vorove apstraktnog sintaksnog stabla. Ova biblioteka koristi funkcionalnosti 
         biblioteke \texttt{clangSema} kako bi ispitala semanti\v{c}ku validnost sintaksnih konstrukta (niza tokena) od kojih kreira \v{c}vorove apstraktnog sintaksnog stabla.
-        Parser kompajlera \textit{Clang} je implementiran kao parser rekurzivnog spuštanja (eng.~\textit{recursive-descent parser}), odnosno analizira izvorni k\^{o}d  od vrha ka dnu nizom rekurzivnih funkcija \cite{LLVMCoreLibraries}.
+        Parser kompajlera \textit{Clang} je implementiran kao parser rekurzivnog spuštanja (eng.~\textit{recursive-descent parser}), odnosno analizira izvorni k\^{o}d od vrha ka dnu nizom rekurzivnih funkcija \cite{LLVMCoreLibraries}.
   \item[Biblioteka \texttt{clangAST}]
-        implementira algoritme i strukture podataka koje parser koristi za izgradnju AST-a. Specifična je po strukturi čvorova koji podsećaju na izvorni C++ k\^{o}d  što je čini pogodnom za kreiranje alata za refaktorisanje koda i statičku analizu. S obzirom da se ova biblioteka koristi u okviru alata \textit{Autofix}, opisana je detaljnije u poglavlju 3.2.
+        implementira algoritme i strukture podataka koje parser koristi za izgradnju AST-a. Specifična je po strukturi čvorova koji podsećaju na izvorni C++ k\^{o}d što je čini pogodnom za kreiranje alata za refaktorisanje koda i statičku analizu. S obzirom da se ova biblioteka koristi u okviru alata \textit{Autofix}, opisana je detaljnije u poglavlju 3.2.
   \item[Biblioteka \texttt{clangSema}]
         vrši semantičku analizu programa tokom parsiranja. Usko je povezana sa bibliotekama \texttt{clangParse} i \texttt{clangAST}.
   \item[Biblioteka \texttt{clangCodeGen}]
@@ -495,7 +497,7 @@ ugrubo je podeljena na tri dela: prednji (eng.~\textit{frontend}), srednji (eng.
 U računarstvu, \textbf{apstraktno sintaksno stablo}, ili samo \textbf{sintaksno stablo}, je drvoidna reprezentacija apstraktne sintaktičke strukture izvornog koda napisanog u programskom jeziku. Svaki čvor stabla predstavlja konstrukt koji se pojavljuje u izvornom kodu.
 Sintaksa je apstraktna u smislu da ne sadr\v{z}i svaki detalj koji se pojavljuje u sintaksi, ali sadr\v{z}i sve detalje neophodne za nedvosmislen prikaz izvornog koda.
 
-Ekspresivnost dijagnostike kompajlera \textit{Clang} i jednostavnost kreiranja mo\'{c}nih alata za stati\v{c}ku analizu u velikoj meri oslanja se na dizajn biblioteke \texttt{clangAST}. Struktura AST-a mo\v{z}e se jednostavno ispisati na standardni izlaz opcijom komandne linije \texttt{-ast-dump}. Komanda na listingu \ref{lst:label3} ispisuje na standardni izlaz AST za k\^{o}d  iz fajla \texttt{hello.cpp} prikazanog na listingu \ref{lst:label4}. Slika \ref{fig:grafikon} predstavlja tekstualnu reprezentaciju AST-a ispisanu komandom iz listinga \ref{lst:label3}.
+Ekspresivnost dijagnostike kompajlera \textit{Clang} i jednostavnost kreiranja mo\'{c}nih alata za stati\v{c}ku analizu u velikoj meri oslanja se na dizajn biblioteke \texttt{clangAST}. Struktura AST-a mo\v{z}e se jednostavno ispisati na standardni izlaz opcijom komandne linije \texttt{-ast-dump}. Komanda na listingu \ref{lst:label3} ispisuje na standardni izlaz AST za k\^{o}d iz fajla \texttt{hello.cpp} prikazanog na listingu \ref{lst:label4}. Slika \ref{fig:grafikon} predstavlja tekstualnu reprezentaciju AST-a ispisanu komandom iz listinga \ref{lst:label3}.
 \\
 
 
@@ -515,7 +517,7 @@ int main(){
 \begin{figure}[!ht]
   \centering
   \includegraphics[width=1.0\textwidth]{ASTImage.png}
-  \caption{Primer reprezentacije AST-a generisanog opcijom \texttt{-ast-dump}. AST prikazan na slici prezentuje kod iz listinga \ref{lst:label3}.}
+  \caption{Primer reprezentacije AST-a generisanog opcijom \texttt{-ast-dump}. AST prikazan na slici prezentuje k\^{o}d iz listinga \ref{lst:label3}.}
   \label{fig:grafikon}
 \end{figure}
 
@@ -530,7 +532,7 @@ Ove klase redom opisuju deklaracije, naredbe i tipove iz familije jezika u \v{c}
 Na primer, \texttt{IfStmt} klasa opisuje \texttt{if} naredbe jezika i direktno nasleđuje \texttt{Stmt} klasu. Sa druge strane, \texttt{FunctionDecl} i \texttt{VarDecl} klase, koje se koriste za opisivanje deklaracija i definicija funkcija i varijabli, ne nasleđuju dikertno klasu \texttt{Decl} ve\'{c} nasleđuju vi\v{s}e njenih podklasa.
 
 \subsection{Klasa \texttt{Type}}
-  Klasa \texttt{Type} igra va\v{z}nu ulogu u ekspresivnosti dijagnostike kompajlera \textit{Clang}, a samim tim i u kvalitetu alata za stati\v{c}ku analizu. Ova klasa omgu\'{c}ava da poruke upozorenja sadr\v{z}e precizne informacije o tipovima. Na primer, upozorenja vezana za k\^{o}d  koji koristi tip \texttt{std::string}, ispisa\'{c}e ba\v{s} taj tip u svojim porukama umesto tipa koji \texttt{std::string} predefini\v{s}e, a to je \texttt{std::basic\_string<char, std:.. >}. Iza ove funkcionalnosti stoji ideja kanonskih tipova.
+  Klasa \texttt{Type} igra va\v{z}nu ulogu u ekspresivnosti dijagnostike kompajlera \textit{Clang}, a samim tim i u kvalitetu alata za stati\v{c}ku analizu. Ova klasa omgu\'{c}ava da poruke upozorenja sadr\v{z}e precizne informacije o tipovima. Na primer, upozorenja vezana za k\^{o}d koji koristi tip \texttt{std::string}, ispisa\'{c}e ba\v{s} taj tip u svojim porukama umesto tipa koji \texttt{std::string} predefini\v{s}e, a to je \texttt{std::basic\_string<char, std:.. >}. Iza ove funkcionalnosti stoji ideja kanonskih tipova.
   
   \par
   Svaka instanca klase \texttt{Type} sadr\v{z}i pokaziva\v{c} na svoj kanonski tip. Za jednostavne tipove koji nisu definisani kori\v{s}\'{c}enjem \texttt{typedef} naredbe pokaziva\v{c} na kanonski tip \'{c}e zapravo pokazivati na sebe. Za tipove \v{c}ija struktura uklju\v{c}uje \texttt{typedef} naredbu kanonski pokaziva\v{c} pokaziva\'{c}e na strukturno ekvivalentan tip bez \texttt{typedef} naredbi.
@@ -604,127 +606,67 @@ Da bi se izvršila analiza izvornog koda pomoću AST posetioca dovoljno je nasle
 
 \section{AST upariva\v{c}i}
 
-Kompajlerska infrastruktura LLVM pru\v{z}a podr\v{s}ku za jednostavno kreiranje kvalitetnih alata za stati\v{c}ku analizu izvornog koda. Ovi alati
-baziraju se na upotrebi interfejsa ka AST-u kompajlera \textit{Clang} ili kori\v{s}\'{c}enjem stati\v{c}kog analizatora kompajlera \textit{Clang} (eng.~\textit{Clang Static Analyzer}) za potrebe simboli\v{c}kog izvr\v{s}avanja programa. Alati za stati\v{c}ku analizu mogu koristiti kombinaciju tehnika obrade AST-a i simboli\v{c}kog izvr\v{s}avanja programa u zavisnosti od kompleksnosti analize koja je potrebna. Implementacija stati\v{c}ke analize obradom AST-a je jeftinija po pitanju ra\v{c}unarskih resursa ali je ograni\v{c}ena informacijama dostupnim tokom kompilacije programa. Alati koji se implementiraju kao deo sistema za prevođenje programa omogu\'{c}avaju dodatnu optimizaciju procesa pronala\v{z}enja nepravilnih konstrukta direktnim proverama tokom kompilacije. Ovo se mo\v{z}e posti\'{c}i nadogradnjom osnovnih delova kompajlera kao \v{s}to su Lexer, Parser ili Sema. AST upariva\v{c}i, implementirani u okviru biblioteke \texttt{libASTMatchers} prestavljaju osnovni mehanizam za uparivanje i obrađivanje specifi\v{c}nih sintaksnih konstrukta iz AST-a.
-
-
-\newtheorem{primer}{Primer}[section]
-
-Biblioteka AST uprariva\v{c}a (eng.~\textit{LibASTMatcher}) pruža oblasno specifičan jezik za kreiranje predikata nad AST-om kompajlera \textit{Clang}. Ovaj oblasno specifičan jezik je napisan i može se koristiti u jeziku C++ omogućavajući korisnicima da u istom programu pristupe željenom delu stabla i da nad tim čvorovima koriste C++ interfejs za analiziranje raznih atributa, lokacija, i ostalih informacija dostupnih na AST nivou. Izrazi za uparivanje (eng.~\textit{match expressions}) omogu\'{c}uju uparivanje delova AST stabla tako \v{s}to kreiraju i vra\'{c}aju upariva\v{c}e.
-\\ Na primer, za kreiranje upariva\v{c}a koji uparuje sve deklaracije klasa ili unija u AST stablu neke jedinice prevođenja, može se koristiti poziv \texttt{recordDecl()}. Za sužavanje pretrage, na primer za nalaženje deklaracija svih klasa ili unija sa imenom \texttt{Foo}, treba iskoristiti \texttt{hasName()} izraz za uparivanje. Poziv \texttt{recordDecl(hasName("Foo"))} vraća upariva\v{c} koji uparuje klase i unije sa imenom \texttt{"Foo"} u bilo kom prostoru imena (eng.~\texttt{namespace}). Podrazumevano, upariva\v{c}i koji prihvataju više drugih upariva\v{c}a koriste implicitno \texttt{allOf()} metod koji \'{c}e upariti sve delove stabla na koje referi\v{s}u njegovi argumenti koji su takođe upariva\v{c}i. Ovo omogućava dalje sužavanje pretrage. Na primer za uparivanje klasa koje nasleđuju \texttt{"Bar"}, upariva\v{c} bi izgledao ovako: \texttt{recordDecl(hasName("Foo"), isDerivedFrom("Bar"))}.
-\par
+Biblioteka AST uprariva\v{c}a (eng.~\textit{LibASTMatcher}) implementira jezik specijalne namene za kreiranje predikata nad AST-om kompajlera \textit{Clang}. Ovaj jezik specijalne namene napisan je i može se koristiti u jeziku C++. Ovo omogućava korisnicima da u istom programu pristupe željenom delu stabla i da nad tim čvorovima koriste C++ interfejs za analiziranje raznih atributa, lokacija, i ostalih informacija dostupnih na AST nivou. Izrazi za uparivanje (eng.~\textit{match expressions}) omogu\'{c}uju uparivanje delova AST stabla tako \v{s}to kreiraju i vra\'{c}aju upariva\v{c}e.
 
 Uopšteno, strategija kreiranja upariva\v{c}a se svodi da sledeće korake:
 \begin{enumerate}
-\item Na\'{c}i baznu klasu u AST \v{c}vora koju je potrebno upariti.
+\item Na\'{c}i baznu klasu AST \v{c}vora kog je potrebno upariti.
  
-\item Na\'{c}i u \texttt{AST Matcher Reference} dokumentu upariva\v{c} koji ili uparuje \v{z}eljeni čvor ili su\v{z}ava pretragu.
+\item Na\'{c}i u \texttt{AST Matcher Reference}\cite{ASTMatcherReference} dokumentu upariva\v{c} koji ili uparuje \v{z}eljeni čvor ili su\v{z}ava pretragu.
 \item Kreirati spoljašnji izraz za uparivanje i proveriti da li radi o\v{c}ekivano.
 \item Prona\'{c}i upariva\v{c}e koji bi mogli upariti neki unutrašnji čvor iz željenog dela stabla.
 \item Ponavljati postupak dok uparivanje željenog dela stabla nije završeno.
 \end{enumerate}
 
- Nakon uparivanja, nad uparenim konstruktom uglavnom se vr\v{s}i određena analiza, na primer ispitivanje saglasnosti konstrukta sa pravilom standarda za pravilno pisanje C++ koda.
 \par
-Zbog toga, upariva\v{c}i koji uparuju specifi\v{c}ne čvorove AST stabla se mogu "vezati" (eng.~\textit{binding}). Na primer, \texttt{recordDecl(hasName("MyClass")).bind("id")} će vezati upareni \texttt{recordDecl} čvor za string \texttt{id} kako bi se kasnije mogao koristiti u povratnom pozivu upariva\v{c}a (eng.~match callback) \cite{matchers}. Na listingu \ref{lst:label7} prikazan je primer AST upariva\v{c}a.
+Na primer, za kreiranje upariva\v{c}a koji uparuje sve deklaracije enumeratora iz AST-a neke jedinice prevođenja mo\v{z}e se koristiti izraz za uparivanje \texttt{enumDecl()}. Ukoliko ne treba analizirati deklaracije iz fajlova zaglavlja (eng.~\textit{header files}), izraz za uparivanje mo\v{z}e se pro\v{s}iriti izrazom \texttt{isExpansionInMainFile()}. Izraz \texttt{enumDecl(isExpansionInMainFile())} kreira\'{c}e upariva\v{c} koji \'{c}e upariti samo deklaracije enumeratora iz glavnog (\texttt{.cpp}) fajla.
 
-\begin{lstlisting}[style=customc, caption={Primer upariva\v{c}a koji pronalazi sve klase koje nisu obeležene atributom \texttt{final} i čiji destruktor nije virtuelan. Ovaj primer demonstrira i upotrebu CallBack klase i pozivanje upariva\v{c}a.}, label=lst:label7]
-DeclarationMatcher NonFinalClassWithNonVirtualDestructor::makeMatcher() {
-  return cxxRecordDecl(isClass(), unless(isFinal()),
-                    anyOf(hasMethod(cxxDestructorDecl(isPublic(),
-                    unless(isVirtual()))),
-                    unless(hasMethod(cxxDestructorDecl()))))
-                .bind("nonFinalClassWithNonVirtualDestructor");
+Nakon uparivanja, nad uparenim konstruktom uglavnom se vr\v{s}i dodatna analiza, na primer ispitivanje saglasnosti konstrukta sa pravilom standarda za pravilno pisanje C++ koda.
+S obzirom da upariva\v{c}i \v{c}esto predstavljaju kompoziciju vi\v{s}e upariva\v{c}a, zgodno je imati mogu\'{c}nost adresiranja svakog podrezultata (rezultata svakog od upariva\v{c}a u kompoziciji) zasebno.
+Zbog toga, upariva\v{c}i se mogu "vezati" (eng.~\textit{binding}) za odredjeni string. Na primer, \\
+\texttt{enumDecl(isExpansionInMainFile()).bind("A7\_2\_3\_Matcher")} će vezati uparene deklaracije enumeratora za string \texttt{"A7\_2\_3\_Matcher"}. Rezultati uparivanja predstavljeni su kao objekti klase \texttt{MatchResult}. Konkretan \v{c}vor koji predstavlja rezultat uparivanja za upariva\v{c} vezan za string \texttt{"A7\_2\_3\_Matcher"},
+mo\v{z}e se dobiti izrazom \texttt{auto ED = Result.Nodes.getNodeAs<clang::EnumDecl>("A7\_2\_3\_Matcher")}.
+
+\par
+Nakon formulisanja izraza za uparivanje kreirani upariva\v{c} se treba pokrenuti nad AST-om. Ovo se posti\v{z}e pozivanjem metoda \texttt{matchAST()} klase \texttt{MatchFinder}. 
+Za obilazak koji \'{c}e izvr\v{s}iti objekat klase \texttt{MatchFinder} upariva\v{c}i se registruju zajedno sa objektima koji implementiraju povratni poziv upariva\v{c}a (eng.~\textit{match callback}). 
+Ovo su objekti klase \texttt{MatchCallback} \v{c}iji metod \texttt{run(const MatchResult \&)} se poziva nakon svakog uspe\v{s}nog uparivanja 
+upariva\v{c}a sa kojim je ovaj povratni poziv registrovan. U okviru metode \texttt{run} mo\v{z}e se vr\v{s}iti dodatna analiza uparenih \v{c}vorova i po potrebi
+prijavljivati dijagnostika vezana za k\^{o}d koji taj rezultat predstavlja.
+
+\begin{lstlisting}[style=customc, caption={Primer upariva\v{c}a koji pronalazi sve deklaracije \texttt{enum class} enumeratora, odnosno enumeratora koji su deklarisani koriste\'{c}i specifikator \texttt{class}. Ovaj primer demonstrira i upotrebu klasa \texttt{MatchFinder}, \texttt{MatchCallback} i \texttt{MatchResult}.}, label=lst:label7]
+class A7_2_3 : public MatchFinder::MatchCallback {
+public:
+  A7_2_3(ASTContext &ASTCtx, SourceManager &SM) : ASTCtx(ASTCtx), SM(SM) {}
+  virtual void run(const MatchFinder::MatchResult &Result);
+
+private:
+  ASTContext &ASTCtx;
+  SourceManager &SM;
+};
+
+void A7_2_3::run(const MatchFinder::MatchResult &Result) {
+  if (auto ED = Result.Nodes.getNodeAs<clang::EnumDecl>("A7_2_3_Matcher")) {
+    if (!ED->isScopedUsingClassTag()) {
+      std::string msg =
+          "Enumerations shall be declared as scoped enum classes.";
+      std::string insStr = "class ";
+      emitWarningWithHintInsertion(
+          ASTCtx.getDiagnostics(), msg, insStr,
+          ED->getSourceRange().getBegin().getLocWithOffset(5),
+          ED->getLocation());
+    }
+  }
 }
 
-void NonFinalClassWithNonVirtualDestructor::
-    NonFinalClassWithNonVirtualDestructorCallBack::run(
-        const MatchFinder::MatchResult &Result) {
-
-  const BoundNodes &BN = Result.Nodes;
-  
-  if (const clang::CXXRecordDecl *CRD = BN.getNodeAs<clang::CXXRecordDecl>(
-          "nonFinalClassWithNonVirtualDestructor"))
-    reportWarning(
-        SM.getDiagnostics(), CRD->getBeginLoc(),
-        diag::warn_non_final_class_with_non_virtual_destructor);
-}
-
-void NonFinalClassWithNonVirtualDestructor::runMatcher(
-    clang::ASTContext &AC) {
-  MatchFinder NonFinalClassWithNonVirtualDestructor;
-  NonFinalClassWithNonVirtualDestructor.addMatcher(makeMatcher(), &CB);
-  NonFinalClassWithNonVirtualDestructor.matchAST(AC);
+void matchASTExammple(ASTContext *Context, SourceManager &SM){
+  MatchFinder Finder;
+  Matcher<Decl> Matcher = enumDecl(isExpansionInMainFile()).bind("A7_2_3_Matcher");
+  MatchCallback *Callback = new A7_2_3(Context, SM);
+  Finder.addMatcher(Matcher, Callback)
 }
 \end{lstlisting}
 
-% \section{Clang-ov Statički Analizator}
-% Clang-ov Statički Analizator je alat za traženje grešaka u programu. Analizirajući izvorni kod, ovaj alat pokušava da simulira izvršavanje delova programa bez njihovog prevođenja i prijavljuje greške koje bi se zapravo desile u toku izvršavanja (eng.~run-time errors). Kako ponašanje izvršnih programa zavisi od spoljašnjih faktora kao što su ulazne vrednosti, slučajni brojevi i ostale stvari, mehanizam analizatora (eng.~analyzer engine) dodeljuje vrednosti sa algebarskim simbolima, i izvršava simbolička izračunavanja koristeći ove simbole. Takođe otkriva uslove nad simboličkim vrednostima i postavlja ograničenja nad njima.
-% \par Kao rezultat, Clang-ov Statički Analizator može da nađe greške koje se pojavljuju na retkim putanjama tokom izvršavanja programa. Ipak, analizator može naći samo greške koje je specifično programiran da nađe. Inače, kad naiđe na neki problem, analiza nastavlja dalje i ne prijavljuje nikakvu grešku. Za svaku grešku koju analizator nađe, kao što je na primer dereferenciranje null pokazivača, postoji poseban modul, \textbf{checker}, koji reaguje na te greške tokom analize.
-% \par
-% Dakle, jezgro analizatora je odgovorno za simboličko izvršavanje programa, a checker-i se prijavljuju za događaje za koje su zainteresovani, proveravaju razne pretpostavke nad simboličkim vrednostima, i prijavljuju upozorenja ukoliko se ove pretpostavke ne mogu postaviti na određenom putu.
-% \subsection{Vrste analize koje pruža Clang-ov Statički Analizator}
-% Prva odluka koju obično morate doneti kad pravite checker je da li vam je potrebna analiza puteva (eng.~path-sensitive analysis) tj. simboličko izvršavanje programa. Analiza puteva je mnogo sporija od kompilacije. Većinu zahtevnih izračunavanja izvršava jezgro analizatora, dok su checker-i uglavnom prilično brzi.
-% \par 
-% O sintaksnoj analizi u okviru Clang-ovog Statičkog Analizatora ovde neće biti reči jer su AST checkeri zapravo jako slični AST vizitorima i po implementaciji i po mogućnostima koje pružaju.
-% \par
-% Druga vrsta analize je analiza zasnovana na analiziranju grafa kontrole toka (eng.~control flow graph).
-% \subsection{Analiza grafa kontrole toka}
-%  Graf kontrole toka je grafovska reprezentacija svih puteva kojima se moze proći kroz program tokom njegovog izvršavanja. Ovaj graf se pravi odvojeno za svaku funkciju. Svaki čvor grafa kontrole toka predstavlja osnovni blok naredbi koje ne zadrže nikakvo grananje, pa se stoga izvršavaju sekvencijano. Svaki osnovni blok se završava završnom naredbom (eng.~terminator statement), koja je granajuća naredba ili naredba \texttt{return}.
-% \par 
-% Pogledajmo naredni kod:
-% \begin{lstlisting}[caption={},frame=single, label=simple]
-% function() {
-%   int a = 1;
-%   int b = 2;
-
-%   if (b == 2) {
-%     ++b;
-%   }
-%   int c = 3;
-%   int d = 4;
-
-%   while (a < 5) {
-%     ++a;
-%   }
-%   int e = 5;
-%   int f = 6;
-% }
-% \end{lstlisting}
-%  Graf kontrole toka koji odgovara prikazanom kodu prikazan je na slici \ref{fig:cfg}:
-% \begin{figure}[h!]
-% \begin{center}
-% \includegraphics[scale=0.3]{GrafKontroleToka.png}
-% \end{center}
-% \caption{Grafička reprezentacija grafa kontrole toka}
-% \label{fig:cfg}
-% \end{figure}
-% \par
-% Analiza grafa kontrole toka je korisna za pravljenje sigurnih provera, za koje je nepotrebno proći kroz sve moguće puteve programa. Na primer, ukoliko želimo da osiguramo da je neki uslov uvek false, pa je onda odgovarajući k\^{o}d  "mrtav", morali bismo da dosegnemo sve definicije svih promenljivih koje se koriste u izrazu pomenutog uslova, tako da bi ovde najkorisnija bila analiza grafa kontrole toka.
-
-% Međutim, pogledajmo naredni kod:
-% \begin{lstlisting}[caption={},frame=single, label=simple]
-%  void function(){
-%   int y, z;
-%   if (x == 0) y = 5;
-%   if (!x) z = 6;
-% }
-% \end{lstlisting}
-% Na osnovu analize grafa kontrole toka ne bismo mogli da utvrdimo da ukoliko se izvrši put koji dolazi do bloka tela prvog if-a, sigurno se neće izvršiti put koji dolazi do tela drugog if-a. Analizom grafa kontrole toka bismo morali da ispitamo sve četiri putanje, a zapravo nas interesuju samo dve. Ovo čini analizu dosta manje korisnom.
-% \subsection{Analiza eksplodirajućeg grafa}
-% Eksplodirajući graf Clang-ovog Statičkog Analizatora je osnovna struktura podataka za analizu puteva koje izvršava jezgro statičkog analizatora. Jezgro pokušava da interpretira k\^{o}d  i pravi različite putanje čak i ako te putanje uključuju iste osnovne blokove grafa kontrole toka. Eksplodirajući graf se sadrži od svih puteva kroz graf kontrole toka koji se istražuju od strane jezgra analizatora, i nosi informacije o stanju programa na svakom putu i u svakoj naredbi. Čvorovi grafa, eksplodirajući čvorovi, su parovi koji se sastoje od stanja programa i lokacije u programu koji se trenutno analizira.
-% \par
-% Eksplodirajući graf za prethodni k\^{o}d  prikazan je na slici \ref{fig:exploded}:
-% \begin{figure}[h!]
-% \begin{center}
-% \includegraphics[scale=0.2]{exploded_graph.png}
-% \end{center}
-% \caption{Grafička reprezentacija eksplodirajućeg grafa}
-% \label{fig:exploded}
-% \end{figure}
-% \par
-% Pogledajmo kako analiza puteva radi na ovom primeru. Analizator počinje da simulira prvu operaciju, poređenje vrednosti promenljive x sa nulom. Pošto je \texttt{x} nepoznata u ovom trenutku u analizi, ova vrednost će biti reprezentovana simbolom \texttt{reg<x>}.
-% \\ kada je ovo poređenje simulirano, dostižemo završnu naredbu u grafu kontrole toka, if- naredbu. U zavisnosti od uslova, analizator razvija dva nova puta, jedan u kom je vrednost promenljive x jednaka nuli, i drugi u kom je različita od nule. Na osnovu toga prave se ograničenja nad simbolom \texttt{reg<x>}, u prvom slučaju će ograničenje biti 0, dok će u drugom ograničenje biti unija intervala \texttt{[-21417483648, -1]} i \texttt{ [1, 21417483647]}. U sličnom maniru se dalje nastavlja analiza \cite{static_analyzer}.
 
 \section{Interfejsi za akcije nad prednjim delom kompajlera}
 
@@ -783,7 +725,7 @@ Ovu klasu karakteri\v{s}e jednostavan javni interfejs koji se sastoji od slede\'
   Metoda odgovorna za izvr\v{s}avanje akcije. Ova metoda interno poziva \v{c}istu virtuelnu metodu \texttt{virtual void ExecuteAction()=0}
   koju svaka podklasa klase \texttt{FrontendAction} predefini\v{s}e implementiraju\'{c}i u okviru nje akciju koja \'ce biti izvr\v{s}ena.
   \item \texttt{virtual void EndSourceFile()} \\ 
-  Izvr\v{s}ava post-procesiranje nakon svakog fajla, dealocira objekte, obrađuje statistiku i sređuje k\^{o}d  u izlaznom fajlu.
+  Izvr\v{s}ava post-procesiranje nakon svakog fajla, dealocira objekte, obrađuje statistiku i sređuje k\^{o}d u izlaznom fajlu.
 \end{itemize}
 
 Klasa \texttt{FrontendAction} ima raznolike upotrebe, odnosno specijalizacije. Primer specijalizacija ove klase su \texttt{DumpCompilerOptionsAction}
@@ -814,6 +756,9 @@ public:
 
 
 \section{Biblioteke za kreiranje alata}
+
+Kompajlerska infrastruktura LLVM pru\v{z}a podr\v{s}ku za jednostavno kreiranje kvalitetnih alata za stati\v{c}ku analizu izvornog koda. Ovi alati
+zasnivaju se na upotrebi interfejsa ka AST-u kompajlera \textit{Clang} ili kori\v{s}\'{c}enjem stati\v{c}kog analizatora kompajlera \textit{Clang} (eng.~\textit{Clang Static Analyzer}) za potrebe simboli\v{c}kog izvr\v{s}avanja programa. \par Alati za stati\v{c}ku analizu mogu koristiti kombinaciju tehnika obrade AST-a i simboli\v{c}kog izvr\v{s}avanja programa u zavisnosti od kompleksnosti analize koja je potrebna. Implementacija stati\v{c}ke analize obradom AST-a je jeftinija po pitanju ra\v{c}unarskih resursa ali je ograni\v{c}ena informacijama dostupnim tokom kompilacije programa. \par 
 
  Kompajler Clang pru\v{z}a infrastrukturu za pisanje razli\v{c}itih softverskih alata koji koriste sintaksne i semanti\v{c}ke informacije o programu. U nastavku \'{c}e biti opisano nekoliko bibloteka koje se mogu koristiti u ovu svrhu zajedno sa njihovim prednostima i manama.
 
@@ -857,7 +802,7 @@ Uopsteno, \texttt{LibTooling} treba koristiti kada:
 \texttt{LibTooling} nije najbolji izbor u slu\v{c}ajevima kada:
 \begin{itemize}
   \item je potrebno pokretati alat nakon promena u zavisnostima u sistemu za prevođenje.
-  \item je potreban stabilan interfejs tako da se k\^{o}d  alata ne mora menjati kada se AST interfejs promeni.
+  \item je potreban stabilan interfejs tako da se k\^{o}d alata ne mora menjati kada se AST interfejs promeni.
   \item su potrebne apstrakcije visokog nivoa kao \v{s}to su kursori.
   \item alat ne\'{c}e biti napisan u C++-u \cite{RightInterface}.
 \end{itemize}
@@ -928,8 +873,8 @@ int main(int argc, char **argv) {
 \label{chp:autofix}
 
 Alat \textit{Autofix} predstavlja alat za stati\v{c}ku analizu izvornog koda napisanog u jeziku C++14. Alat prijavljuje upozorenja
-za kod koji nije napisan u skladu sa odabranim podskupom pravila iz standarda kodiranja \textsc{autosar c++14} i zajedno sa upozorenjima
-ispisuje predlog k\^{o}da kojim se po\v{c}etni k\^{o}d mo\v{z}e zameniti kako bi bio u skladu sa standardom.
+za k\^{o}d koji nije napisan u skladu sa odabranim podskupom pravila iz standarda kodiranja \textsc{autosar c++14} i zajedno sa upozorenjima
+ispisuje predlog koda kojim se po\v{c}etni k\^{o}d mo\v{z}e zameniti kako bi bio u skladu sa standardom.
 Alat je implementiran u programskom jeziku \textit{C++} kori\v{s}\'{c}enjem biblioteka za razvoj alata dostupnim u okviru kompajlerske infrastrukture LLVM.
 Osnovna svrha alata je demonstracija kreiranja alata u okviru kompajlerske infrastrukture LLVM i predstavljanje tehnika obilaska i analize Clang-ovog AST-a. 
 Alat je dostupan i nalazi se na linku \url{https://github.com/ognjen-plavsic/master/tree/main/code}. Na pomenutom linku se nalaze neophodne datoteke alata, opis
@@ -947,7 +892,7 @@ Navedeni arumenti podrazumevaju sledeće:
   \item \textbf{options} - Ovde spadaju opcije koje se mogu proslediti alatu \textit{Autofix}. Podr\v{z}ane su opcije:
   \begin{enumerate}
     \item \textbf{--apply-fix}: Ovom opcijom se predlo\v{z}ene izmene mogu primeniti na kod, menjaju\'{c}i izvorni fajl nad kojim je pokrenuta analiza.
-    Predlozene izmene bi\'{c}e primenjene na kod ukoliko među njima ne postoji konflikt, odnosno ukoliko se razli\v{c}iti predlozi ne odnose na isti deo koda.
+    Predlozene izmene bi\'{c}e primenjene na k\^{o}d ukoliko među njima ne postoji konflikt, odnosno ukoliko se razli\v{c}iti predlozi ne odnose na isti deo koda.
     \item \textbf{--list-rules}: Ispisuje sva podr\v{z}ana pravila u okviru alata u formatu \texttt{oznaka: tekst-pravila} gde je \texttt{oznaka} jedinstvena oznaka pravila iz \textsc{autosar} dokumenta, a \texttt{tekst-pravila} prestavlja kratak opis pravila iz \textsc{autosar} dokumenta koji se ujedno ispisuje prilikom prijavljivanja upozorenja vezanih za to pravilo. Primer: \\ \\
   \texttt{A7-1-8 - A non-type specifier shall be placed before a type specifier in a declaration.} \\
     \item \textbf{--rules=<string>}: Omogu\'{c}ava navođenje podskupa implementiranih pravila za koje ce alat izvr\v{s}iti analizu. Pravila u okviru ove opcije
@@ -987,8 +932,8 @@ stati\v{c}ki analizator kompajlera \textit{Clang} \cite{CSAWebsite} (eng.~\texti
 \section{Primeri rada alata}
 
 U ovoj sekciji bi\'{c}e navedena sva pravila iz \textsc{autosar} dokumenta koje alat \textit{Autofix} podr\v{z}ava i bi\'{c}e prikazani primeri rada alata za svako od tih pravila.
-Primeri \'{c}e sadr\v{z}ati izvorni kod programa nad kojim se alat pokre\'{c}e i ispis na standardnom izlazu koji predstavlja rezultat izvr\v{s}avanja alata. U primeru rada alata
-pri zadavanju opcije \texttt{--apply-fix} bi\'{c}e prikazan i kod nakon zavr\v{s}etka rada alata, odnosno kod za primenjim predlozima izmena.\\
+Primeri \'{c}e sadr\v{z}ati izvorni k\^{o}d programa nad kojim se alat pokre\'{c}e i ispis na standardnom izlazu koji predstavlja rezultat izvr\v{s}avanja alata. U primeru rada alata
+pri zadavanju opcije \texttt{--apply-fix} bi\'{c}e prikazan i k\^{o}d nakon zavr\v{s}etka rada alata, odnosno k\^{o}d za primenjim predlozima izmena.\\
 
 \begin{primer}
          Pravilo A7-1-8 (obvezno, implementaciono, automatizovano) \newline
@@ -996,9 +941,9 @@ pri zadavanju opcije \texttt{--apply-fix} bi\'{c}e prikazan i kod nakon zavr\v{s
          ispred tipskih specifikatora.
 \end{primer}
 
-Razmotrimo kod sa listinga \ref{lst:label12}. Deklaracija metoda \texttt{f3} sadr\v{z}i tri specifikatora: \texttt{void}, \texttt{virtual} i \texttt{inline}.
+Razmotrimo k\^{o}d sa listinga \ref{lst:label12}. Deklaracija metoda \texttt{f3} sadr\v{z}i tri specifikatora: \texttt{void}, \texttt{virtual} i \texttt{inline}.
 Specifikator \texttt{void} ozna\v{c}ava "prazan" tip, odnosno da metoda \texttt{f3} nema povratnu vrednost. Stoga, \texttt{void} spada u tipske specifikatore.
-Specifikator \texttt{virtual} omogu\'{c}ava dinami\v{c}ki polimorfizam dok \texttt{inline} predla\v{z}e kompajleru da kod ove funkcije umetne u funkciju iz koje je pozvana
+Specifikator \texttt{virtual} omogu\'{c}ava dinami\v{c}ki polimorfizam dok \texttt{inline} predla\v{z}e kompajleru da k\^{o}d ove funkcije umetne u funkciju iz koje je pozvana
 kako bi se izbeglo dodatno vreme potrebno za pozivanje funkcije. Dakle \texttt{virtual} i \texttt{inline} se ne odnose na tipove i nisu tipski specifikatori. Pravilo
 \texttt{A7-1-8} nala\v{z}e da se specifikator \texttt{void} u deklaraciji nađe nakon specifikatora \texttt{virtual} i  \texttt{inline}, odnosno da metod \texttt{f3} bude
 deklarisan kao metod \texttt{f1} ili metod \texttt{f2}. sli\v{c}no va\v{z}i i za deklaraciju promenljive \texttt{x} i specifikatore \texttt{std::int32\_t} i \texttt{mutable}. \\ 
@@ -1036,7 +981,7 @@ inicijalizacijom viti\v{c}astih zagrada tipa \{\} ili =\{\}.
 Po standardu C++14 kompajler \'{c}e \texttt{auto} promenljivu inicijalizovanu sinaksom viti\v{c}astih zagrada tretirati kao objekat klase
 \texttt{std::initializer\_list}. Međutim neki kompajleri mogu implementirati ovo druga\v{c}ije i zaklju\v{c}iti tip \texttt{int} za objekat inicijalizovan
 sintaksom \texttt{\{\}}, dok \'{c}e za sintaksu \texttt{=\{\}} zaklju\v{c}iti tip \texttt{std::initializer\_list}. Da bi se izbegla konfuzija oko zaklju\v{c}ivanja
-tipova, \textsc{autosar} standard nala\v{z}e da se ne koristi nijedna od navede dve vrste inicijalizacije. Za kod sa listinga \ref{lst:label13} \textit{Autofix} \'{c}e
+tipova, \textsc{autosar} standard nala\v{z}e da se ne koristi nijedna od navede dve vrste inicijalizacije. Za k\^{o}d sa listinga \ref{lst:label13} \textit{Autofix} \'{c}e
 predlo\v{z}iti inicijalizaciju simbolom \texttt{=}. Ispis alata prikazan je na slici \ref{fig:A8-5-3}. \\
 
 \begin{lstlisting}[style=customc, caption={Primer koda koji nije napisan u skladu sa pravilom A8-5-3.}, label=lst:label13]
@@ -1096,7 +1041,7 @@ Pravilo A7-1-6 (obvezno, implementaciono, automatizovano) \\
 Ne treba koristiti specifikator \texttt{typedef}. 
 \end{primer}
 
-Specifikator \texttt{typedef} nije pogodan za kreiranje pseudionima (eng.~\textit{alias}) za \v{s}ablonske tipove ali i \v{c}ini kod manje \v{c}itljivim.
+Specifikator \texttt{typedef} nije pogodan za kreiranje pseudionima (eng.~\textit{alias}) za \v{s}ablonske tipove ali i \v{c}ini k\^{o}d manje \v{c}itljivim.
 Oba nedostatka mogu se zaobi\'{c}i kori\v{s}\'{c}enjem specifikatora \texttt{using}. Alat \textit{Autofix} od izraza za kreiranje pseudonima za tip kori\v{s}\'{c}enjem
 specifikatora \texttt{typedef} kreira i ispisuje analogni izraz koji koristi \texttt{using} sintaksu. Ispis alata pokrenutim nad fajlom sa kodom iz listinga \ref{lst:label15} prikazan je na slici \ref{fig:A7-1-6}. \\
 
@@ -1153,7 +1098,7 @@ Alat je podeljen na \v{c}etiri jedinice prevođenja: \texttt{AutoFix.cpp}, \text
 Alat \textit{Autofix} koristi biblioteku \texttt{LibAstMatchers} za analizu i obradu AST-a kompajlera \textit{Clang}. Svakom pravilu koje podr\v{z}ava alat \textit{Autofix} odgovara jedan upariva\v{c} (instanca klase \texttt{Matcher}). \textit{Autofix} koristi ovu biblioteku na slede\'{c}i na\v{c}in. U prvom delu defini\v{s}u se jednostavni upariva\v{c}i koji uparuju osnovne strukture iz AST-a na koje se pravilo odnosi. Na primer, ukoliko je pravilo vezano za enumeratore, ovaj upariva\v{c} \'{c}e upariti sve deklaracije enumeratora iz AST-a. Drugi deo implementiran je upotrebom klase \texttt{MatchCallback}. Svaka potklasa ove klase implementirana u okviru alata \textit{Autofix} odgovara jednom upariva\v{c}u, a samim tim i jednom pravilu. U okviru \texttt{run} metode ove klase vr\v{s}e se
 dodatne analize nad konstruktima AST-a koji su dobijeni rezultatom rada upariva\v{c}a i prijavljuje odgovaraju\'{c}a dijagnostika za izvorni kod. Zajedno sa dodatnom analizom u okviru \texttt{run} metode vr\v{s}i se i kreiranje stringova koji predstavljaju predloge izmena izvornog koda (eng. \textit{fixit hints}) kako bi k\^{o}d bio u skladu sa pravilom.
 \item{\textbf{AutoFix.cpp}} \\
-Ova jedica prevođenja predstavlja ulaznu ta\v{c}ku samog alata. U okviru nje, implementirane su klase \texttt{AutoFixConsumer} i \texttt{AutoFixAction} koje nasleđuju redom klase \texttt{ASTConsumer} i \texttt{ASTFrontendAction}. Uloga pomenutih baznih klasa pri kreiranju alata opisana je u sekciji ***. Osnovna uloga klase \texttt{AutoFixConsumer} jeste da obezbedi da se nad jedinicom prevođenja pokrenu odgovaraju\'{c}i upariva\v{c}i. To su upariva\v{c}i koji odgovaraju pravilima za koje korisnik \v{z}eli da proveri da li je izvorni kod napisan u skladu sa njima. Korisnik mo\v{z}e da zada podskup ovih pravila u okviru argumenta komadne linije \texttt{-rules}. Parsiranje ove opcije i samo pokretanje upariva\v{c}a nad AST-om implementirano je u okviru metode \texttt{HandleTranslationUnit} klase \texttt{AutoFixConsumer}. Ova metoda bi\'{c}e pozvana od strane parsera na kraju izgradnje AST-a za svaku jedinicu prevođenja nad kojom je pokrenut alat.
+Ova jedica prevođenja predstavlja ulaznu ta\v{c}ku samog alata. U okviru nje, implementirane su klase \texttt{AutoFixConsumer} i \texttt{AutoFixAction} koje nasleđuju redom klase \texttt{ASTConsumer} i \texttt{ASTFrontendAction}. Uloga pomenutih baznih klasa pri kreiranju alata opisana je u sekciji ***. Osnovna uloga klase \texttt{AutoFixConsumer} jeste da obezbedi da se nad jedinicom prevođenja pokrenu odgovaraju\'{c}i upariva\v{c}i. To su upariva\v{c}i koji odgovaraju pravilima za koje korisnik \v{z}eli da proveri da li je izvorni k\^{o}d napisan u skladu sa njima. Korisnik mo\v{z}e da zada podskup ovih pravila u okviru argumenta komadne linije \texttt{-rules}. Parsiranje ove opcije i samo pokretanje upariva\v{c}a nad AST-om implementirano je u okviru metode \texttt{HandleTranslationUnit} klase \texttt{AutoFixConsumer}. Ova metoda bi\'{c}e pozvana od strane parsera na kraju izgradnje AST-a za svaku jedinicu prevođenja nad kojom je pokrenut alat.
 \par 
 U okviru jedinice prevođenja \texttt{Autofix.cpp} takođe je implementirana \texttt{main} funkcija alata \textit{Autofix}. U okviru nje vr\v{s}i se parsiranje opcija komandne linije, kreira se instanca alata, inicijalizuje se kreiranim objektom klase \texttt{AutoFixDiagnosticConsumer} i pokre\'{c}e se nad zadatom jedinicom prevođenja.
 \end{description}
