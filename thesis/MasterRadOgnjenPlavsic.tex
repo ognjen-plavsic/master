@@ -640,9 +640,11 @@ Nakon formulisanja izraza za uparivanje kreirani upariva\v{c} se treba pokrenuti
 Za obilazak koji \'{c}e izvr\v{s}iti objekat klase \texttt{MatchFinder} upariva\v{c}i se registruju zajedno sa objektima koji implementiraju povratni poziv upariva\v{c}a (eng.~\textit{match callback}). 
 Ovo su objekti klase \texttt{MatchCallback} \v{c}iji metod \lstinline[style=customc]{run(const MatchResult &)} se poziva nakon svakog uspe\v{s}nog uparivanja 
 upariva\v{c}a sa kojim je ovaj povratni poziv registrovan. U okviru metode \texttt{run} mo\v{z}e se vr\v{s}iti dodatna analiza uparenih \v{c}vorova i po potrebi
-prijavljivati dijagnostika vezana za k\^{o}d koji taj rezultat predstavlja.
+prijavljivati dijagnostika vezana za k\^{o}d koji taj rezultat predstavlja. \par
+Na listingu \ref{lst:MatcherList} prikazan je primer upariva\v{c}a koji pronalazi sve enumeratore koji nisu deklarisani koriste\'{c}i specifikator \texttt{class}. Za ove enumeratore prijavljuje se upozoronje zajedno sa predlogom ispravke koda (eng.~\textit{fixit hint}) u okviru funkcije \texttt{emitWarningWithHintInsertion}. U svrhu samog
+prijavljivanja upozorenja funkciji se prosleđuje objekat klase \texttt{DiagnostcsEngine}. Ova klasa zadu\v{z}ena je prijavljivanje dijagnostike u okviru kompajlera \textit{Clang}.
 
-\begin{lstlisting}[style=customc, basicstyle=\tiny, caption={Primer upariva\v{c}a koji pronalazi sve deklaracije \texttt{enum class} enumeratora, odnosno enumeratora koji su deklarisani koriste\'{c}i specifikator \texttt{class}. Ovaj primer demonstrira i upotrebu klasa \texttt{MatchFinder}, \texttt{MatchCallback} i \texttt{MatchResult}.}, label=lst:label7]
+\begin{lstlisting}[style=customc, basicstyle=\tiny, caption={Primer upariva\v{c}a koji pronalazi sve deklaracije enumeratora koji nisu deklarisani koriste\'{c}i specifikator \texttt{class}. Ovaj primer demonstrira i upotrebu klasa \texttt{MatchFinder}, \texttt{MatchCallback} i \texttt{MatchResult}.}, label=lst:MatcherList]
 class A7_2_3 : public MatchFinder::MatchCallback {
 public:
   A7_2_3(ASTContext &ASTCtx) : ASTCtx(ASTCtx) {}
@@ -658,6 +660,7 @@ void A7_2_3::run(const MatchFinder::MatchResult &Result) {
       std::string msg =
           "Enumerations shall be declared as scoped enum classes.";
       std::string insStr = "class ";
+      // Function for emitting warnings with fixit hints using diagnostics engine.
       emitWarningWithHintInsertion(
           ASTCtx.getDiagnostics(), msg, insStr,
           ED->getSourceRange().getBegin().getLocWithOffset(5),
@@ -787,7 +790,7 @@ public:
 Kompajlerska infrastruktura LLVM pru\v{z}a podr\v{s}ku za jednostavno kreiranje kvalitetnih alata za stati\v{c}ku analizu izvornog koda. Ovi alati
 zasnivaju se na upotrebi interfejsa ka AST-u kompajlera \textit{Clang} ili kori\v{s}\'{c}enjem stati\v{c}kog analizatora kompajlera \textit{Clang} (eng.~\textit{Clang Static Analyzer}) za potrebe simboli\v{c}kog izvr\v{s}avanja programa. \par Alati za stati\v{c}ku analizu mogu koristiti kombinaciju tehnika obrade AST-a i simboli\v{c}kog izvr\v{s}avanja programa u zavisnosti od kompleksnosti analize koja je potrebna. Implementacija stati\v{c}ke analize obradom AST-a je jeftinija po pitanju ra\v{c}unarskih resursa ali je ograni\v{c}ena informacijama dostupnim tokom kompilacije programa. \par 
 
- Kompajler Clang pru\v{z}a infrastrukturu za pisanje razli\v{c}itih softverskih alata koji koriste sintaksne i semanti\v{c}ke informacije o programu. U nastavku \'{c}e biti opisano nekoliko bibloteka koje se mogu koristiti u ovu svrhu zajedno sa njihovim prednostima i manama.
+ Kompajler Clang pru\v{z}a vi\v{s}e infrastruktura za pisanje razli\v{c}itih vrsta softverskih alata koji koriste sintaksne i semanti\v{c}ke informacije o programu. U nastavku \'{c}e biti opisano nekoliko biblioteka koje se mogu koristiti u ovu svrhu zajedno sa njihovim prednostima i manama.
 
 
 \begin{itemize}
@@ -799,7 +802,7 @@ Treba ga koristiti u slu\v{c}ajevima kada:
   \item je potreban stabilni inferfejs koji je kompatibilan sa starijim verzijama kompajlera \textit{Clang}.
   \item su potrebne apstrakcije visokog nivoa kao \v{s}to je iteriranje kroz AST sa kursorima ili drugi detalji vezani za AST.
 \end{itemize}
-LibClang ne treba koristiti kada je potrebna puna kontrola nas AST-om \cite{RightInterface}.
+\texttt{LibClang} ne treba koristiti kada je potrebna puna kontrola nas AST-om \cite{RightInterface}.
 
 \item \texttt{Clang Plugins} biblioteka omogu\'{c}ava izvr\v{s}avanje dodatnih akcija nad AST-om tokom kompilacije programa. Ovo su dinami\v{c}ke biblioteke koje kompajler u\v{c}itava tokom izvr\v{s}avanja i lako ih je integrisati u okru\v{z}enje za prevođenje programa (eng.~\textit{build enviroment}).
 
@@ -818,7 +821,7 @@ Ne treba ih koristiti kada:
 \end{itemize}
 
 \item \texttt{LibTooling} je C++ interfejs koji slu\v{z}i za pisanje samostalnih alata. Ova biblioteka omogu\'{c}ava jednostavnu
-upotrebu opisanih akcija prednjeg dela kompajlera (eng.~frontend actions), ali i jednostavno dodavanje opcija komandne linije i pokretanje nad fajlovima 
+upotrebu opisanih akcija prednjeg dela kompajlera (eng.~\textit{frontend actions}), ali i jednostavno dodavanje opcija komandne linije i pokretanje nad fajlovima 
 nezavisnim od sistema za prevođenje. Ova svojstva \v{c}ine \texttt{LibTooling} biblioteku najkorisnijom od prethodno opisanih bibloteka u svrhu kreiranja alata za stati\v{c}ku analizu.
 Uopsteno, \texttt{LibTooling} treba koristiti kada:
 \begin{itemize}
@@ -831,68 +834,72 @@ Uopsteno, \texttt{LibTooling} treba koristiti kada:
   \item je potrebno pokretati alat nakon promena u zavisnostima u sistemu za prevođenje.
   \item je potreban stabilan interfejs tako da se k\^{o}d alata ne mora menjati kada se AST interfejs promeni.
   \item su potrebne apstrakcije visokog nivoa kao \v{s}to su kursori.
-  \item alat ne\'{c}e biti napisan u C++-u \cite{RightInterface}.
+  \item alat ne\'{c}e biti napisan u jeziku C++ \cite{RightInterface}.
 \end{itemize}
 \end{itemize}
 
-Na listingu \ref{lst:label9} prikazana je implementacija jednostavnog alata kori\v{s}\'{c}enjem opisanih interfejsa \texttt{ASTVisitor}, \texttt{ASTConsumer} i \texttt{FrontendAction}. Ovaj alat koristi \texttt{libtooling} biblioteku za pokretanje definisane \texttt{FrontendAction} akcije nad izvornim kodom koji je prosleđen kao argument komandne linije. Alat ispisuje lokacije svih struktura, unija i klasa sa imenom \texttt{n::m::C}. 
+Na listingu \ref{lst:label9} prikazana je implementacija jednostavnog alata kori\v{s}\'{c}enjem opisanih interfejsa \texttt{ASTConsumer} i \texttt{ASTFrontendAction}. Ovaj alat koristi \texttt{LibTooling} biblioteku za pokretanje definisane \texttt{ASTFrontendAction} akcije nad izvornim kodom koji je prosleđen kao argument komandne linije. U ovu svrhu koristi se funkcija \texttt{runToolOnCode} biblioteke \texttt{LibTooling}. Alat pronalazi sve enumeratore koji nisu deklarisani koriste\'{c}i specifikator \texttt{class} i za ove deklaracije se prijavljuje upozorenje zajedno sa predlogom izmene koda.
 \\
-\begin{lstlisting}[style=customc, basicstyle=\tiny, caption={Primer implementacije jednostavnog alata upotrebom interfejsa \texttt{ASTVisitor}, \texttt{ASTConsumer}, \texttt{FrontendAction} i bibliotekom \texttt{libtooling} \cite{ASTToolTutorial}.}, label=lst:label9]
+\begin{lstlisting}[style=customc, basicstyle=\tiny, caption={Primer implementacije jednostavnog alata upotrebom interfejsa \texttt{ASTConsumer}, \texttt{ASTFrontendAction} i bibliotekom \texttt{libtooling}.}, label=lst:label9]
 #include "clang/AST/ASTConsumer.h"
-#include "clang/AST/RecursiveASTVisitor.h"
+#include "clang/ASTMatchers/ASTMatchFinder.h"
+#include "clang/ASTMatchers/ASTMatchers.h"
 #include "clang/Frontend/CompilerInstance.h"
 #include "clang/Frontend/FrontendAction.h"
 #include "clang/Tooling/Tooling.h"
 
 using namespace clang;
 
-class FindNamedClassVisitor
-  : public RecursiveASTVisitor<FindNamedClassVisitor> {
+class A7_2_3 : public MatchFinder::MatchCallback {
 public:
-  explicit FindNamedClassVisitor(ASTContext *Context)
-    : Context(Context) {}
-
-  bool VisitCXXRecordDecl(CXXRecordDecl *Declaration) {
-    if (Declaration->getQualifiedNameAsString() == "n::m::C") {
-      FullSourceLoc FullLocation = Context->getFullLoc(Declaration->getBeginLoc());
-      if (FullLocation.isValid())
-        llvm::outs() << "Found declaration at "
-                     << FullLocation.getSpellingLineNumber() << ":"
-                     << FullLocation.getSpellingColumnNumber() << "\n";
+  A7_2_3(ASTContext &ASTCtx) : ASTCtx(ASTCtx) {}
+  virtual void run(const MatchFinder::MatchResult &Result) {
+    if (auto ED = Result.Nodes.getNodeAs<clang::EnumDecl>("A7_2_3_Matcher")) {
+      if (!ED->isScopedUsingClassTag()) {
+      std::string msg =
+          "Enumerations shall be declared as scoped enum classes.";
+      std::string insStr = "class ";
+      // Function for emitting warnings with fixit hints using diagnostics engine.
+      emitWarningWithHintInsertion(
+          ASTCtx.getDiagnostics(), msg, insStr,
+          ED->getSourceRange().getBegin().getLocWithOffset(5),
+          ED->getLocation());
+      }
     }
-    return true;
   }
 
 private:
-  ASTContext *Context;
+  ASTContext &ASTCtx;
 };
 
-class FindNamedClassConsumer : public clang::ASTConsumer {
+class AutoFixConsumer : public clang::ASTConsumer {
 public:
-  explicit FindNamedClassConsumer(ASTContext *Context)
-    : Visitor(Context) {}
+  explicit AutoFixConsumer(ASTContext *Context) : Context(Context) {}
 
   virtual void HandleTranslationUnit(clang::ASTContext &Context) {
-    Visitor.TraverseDecl(Context.getTranslationUnitDecl());
+    MatchFinder Finder;
+    Matcher<Decl> Matcher =
+        enumDecl(isExpansionInMainFile()).bind("A7_2_3_Matcher");
+    MatchCallback *Callback = new A7_2_3(Context);
+    Finder.addMatcher(Matcher, Callback);
   }
-private:
-  FindNamedClassVisitor Visitor;
 };
 
-class FindNamedClassAction : public clang::ASTFrontendAction {
+class AutoFixAction : public clang::ASTFrontendAction {
 public:
-  virtual std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(
-    clang::CompilerInstance &Compiler, llvm::StringRef InFile) {
-    return std::make_unique<FindNamedClassConsumer>(&Compiler.getASTContext());
+  virtual std::unique_ptr<clang::ASTConsumer>
+  CreateASTConsumer(clang::CompilerInstance &Compiler, llvm::StringRef InFile) {
+    return std::make_unique<AutoFixConsumer>(&Compiler.getASTContext(),
+                                             Compiler.getSourceManager());
   }
 };
 
 int main(int argc, char **argv) {
   if (argc > 1) {
-    clang::tooling::runToolOnCode(std::make_unique<FindNamedClassAction>(), argv[1]);
+    clang::tooling::runToolOnCode(std::make_unique<FindNamedClassAction>(),
+                                  argv[1]);
   }
 }
-
 \end{lstlisting}
 
 
