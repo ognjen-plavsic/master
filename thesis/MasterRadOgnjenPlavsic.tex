@@ -69,28 +69,6 @@
   numbers=left,
   numberstyle=\tiny,
 }
-% \lstset{%
-% language=C++,
-% frame=XL,
-% numbers=left,
-% numberstyle=\footnotesize,
-% tabsize=2,
-% keepspaces=true,
-% columns=fullflexible,
-% stringstyle=\color{red}\ttfamily,
-% basicstyle=\fontsize{11}{10}\ttfamily,
-% keywordstyle=\color{blue},
-%   belowskip=1em,
-%   aboveskip=1em
-% }
-
-% \lstset{language=C++,
-%                 basicstyle=\ttfamily,
-%                 keywordstyle=\color{blue}\ttfamily,
-%                 stringstyle=\color{red}\ttfamily,
-%                 commentstyle=\color{green}\ttfamily,
-%                 morecomment=[l][\color{magenta}]{\#}
-% }
 
 % \usepackage[serbian]{babel}%
 % Podrazumevano pismo je ćirilica.
@@ -147,13 +125,11 @@
 \apstr{%
 Standardi za pravilno pisanje C++ koda sve su zastupljeniji u industrijama koje razvijaju sisteme sa ugrađenim ra\v{c}unarom (eng.~\textit{embedded systems}) i druge sisteme
 sa kriti\v{c}nom sigurno\v{s}\'{c}u. Standard \textsc{autosar} C++14 jedan je od vode\'{c}ih standarda ovog tipa. Primarno se koristi u automobilskoj industriji, odnosno za
-razvoj softvera za automobile. \v{S}iroka upotreba ovih standarda izrodila je potrebu za alatima za stati\v{c}ku analizu koji bi automatizovali proces provere da li je kod napisan u skladu sa standardom. Kompajlerska infrastruktura LLVM pru\v{z}a podr\v{s}ku za jednostavno razvijanje kvalitetnih alata ovog tipa. Cilj ovog rada je izrada alata
-za stati\v{c}ku analizu koji proverava da li je kod napisan u skladu sa podskupom pravila koja se odnose na deklaracije u okviru standarda \textsc{autosar} C++14. Alat treba ispisivati upozorenja za delove koda koji nisu u skladu sa nekim od pravila i predlagati izmene tog koda. Ideja za ostvarivanje ovog cilja je da se iskoriste biblioteke
-kompajlerske infrastrukture LLVM koji omogu\'{c}avaju analizu informacija o izvornom kodu koje se mogu dobiti tokom kompilacije programa.
+razvoj softvera za automobile. \v{S}iroka upotreba ovih standarda izrodila je potrebu za alatima za stati\v{c}ku analizu koji bi automatizovali proces provere da li je k\^{o}d napisan u skladu sa standardom. Kompajlerska infrastruktura LLVM pru\v{z}a podr\v{s}ku za jednostavno razvijanje kvalitetnih alata ovog tipa. Cilj ovog rada je implementacija alata za stati\v{c}ku analizu \textit{Autofix} koji proverava da li je k\^{o}d napisan u skladu sa podskupom pravila koja se odnose na deklaracije u okviru standarda \textsc{autosar} C++14. Alat ispisuje upozorenja za delove koda koji nisu u skladu sa nekim od pravila i predla\v{z}e izmene tog koda. 
 }
 \usepackage{tcolorbox}
 % Ključne reči na srpskom jeziku (u odabranom pismu)
-\kljucnereci{\textsc{autosar}, Clang, LLVM, C++, stati\v{c}ka analiza}
+\kljucnereci{verifikacija softvera, stati\v{c}ka analiza programa, programski jezik C++, standardi kodiranja, \textsc{autosar}, kompajleri, LLVM,  Clang}
 
 \begin{document}
 % ==============================================================================
@@ -190,9 +166,10 @@ S obzirom da industrije koje primenjuju ovaj standard \v{c}esto koriste jako kom
 se alati za stati\v{c}ku analizu koda. Alati za stati\v{c}ku analizu proveravaju ispravnost programa bez njegovog izvr\v{s}avanja. Ovakvi alati se mogu implementirati na
 vi\v{s}e na\v{c}ina. Jednostavniji alati koriste informacije dobijene tokom kompilacije programa da utvrde da li k\^{o}d sadr\v{z}i gre\v{s}ku. Napredniji alati za stati\v{c}ku analizu vr\v{s}e i simboli\v{c}ko izvr\v{s}avanje programa, odnosno koriste razli\v{c}ite tehnike kojima simuliraju izvr\v{s}avanje programa, bez njegovog pokretanja.
 \par
-Kompajlerska infrastruktura LLVM omogu\'{c}ava izradu ovakvih alata. Ova infrastruktura sadr\v{z}i niz biblioteka koje omogu\'{c}avaju analizu informacija dobijenih tokom kompilacije, ali sadr\v{z}i i biblioteke koje omogu\'{c}avaju izradu samostalnih alata.
+Kompajlerska infrastruktura LLVM omogu\'{c}ava izradu alata za stati\v{c}ku analizu. Ova infrastruktura sadr\v{z}i niz biblioteka koje omogu\'{c}avaju analizu informacija dobijenih tokom kompilacije, ali sadr\v{z}i i biblioteke koje omogu\'{c}avaju izradu samostalnih alata. Cilj ovog rada je implementacija alata za stati\v{c}ku analizu
+\textit{Autofix}. \textit{Autofix} proverava da li je k\^{o}d napisan u skladu sa podskupom pravila iz standarda \textsc{autosar} C++14 koji se odnose na deklaracije u programskom jeziku C++14. Ukoliko k\^{o}d nije napisan u skladu sa nekim od tih pravila, alat prijavljuje upozorenje zajedno sa predlogom izmene koda. 
 
-U glavi 2 opisan je programski jezik C++ i standard kodiranja \textsc{autosar} C++14. Opisana je klasifikacija pravila u okviru standarda i navedeni su primeri pravila koja pripadaju svakoj od grupa u okviru klasifikacije. U glavi 3 opisani su delovi kompajlerske strukture LLVM koji su kori\v{s}\'{c}eni za izradu alata \textit{Autofix}, koji predstavlja rezultat ovog rada. \textit{Autofix} je alat za stati\v{c}ku analizu koda koji proverava da li je k\^{o}d napisan u skladu sa podskupom pravila iz standarda \textsc{autosar} C++14 koji se odnose na deklaracije u programskom jeziku C++14. Ukoliko k\^{o}d nije napisan u skladu sa nekim od tih pravila, alat prijavljuje upozorenje zajedno sa predlogom izmene koda. U glavi 4 opisana je implementacija alata \textit{Autofix} i na\v{c}in upotrebe alata. Takođe, opisano je i svako od pravila iz standarda \textsc{autosar} C++14 koje alat podr\v{z}ava. U zaklju\v{c}ku iznet je osvrt na ceo rad i predlo\v{z}en je dalji tok razvoja alata \textit{Autofix}.
+U glavi \ref{chp:autosar} opisan je programski jezik C++ i standard kodiranja \textsc{autosar} C++14. Opisana je klasifikacija pravila u okviru standarda i navedeni su primeri pravila koja pripadaju svakoj od grupa u okviru klasifikacije. U glavi \ref{chp:llvm} opisani su delovi kompajlerske strukture LLVM koji su kori\v{s}\'{c}eni za izradu alata \textit{Autofix}, koji predstavlja rezultat ovog rada. U glavi 4 opisana je implementacija alata \textit{Autofix} i na\v{c}in upotrebe alata. Takođe, opisano je i svako od pravila iz standarda \textsc{autosar} C++14 koje alat podr\v{z}ava. U zaklju\v{c}ku iznet je osvrt na ceo rad i predlo\v{z}en je dalji tok razvoja alata \textit{Autofix}.
 \chapter{Standard kodiranja \textsc{AUTOSAR} C++14}
 \label{chp:autosar}
 
@@ -369,9 +346,6 @@ Pravilo A0-4-1 (obvezno, pravilo za infrastrukturu/alate, neautomatizovano) \\
 Implementacija brojeva u pokretnom zarezu treba da bude u skladu sa standardom IEEE 754.
 \end{tcolorbox}
 \end{center}
-
-
-
 
 
 \chapter{Kompajlerska infrastruktura LLVM}
@@ -1129,35 +1103,14 @@ tokom razvoja softvera pove\'{c}ava kvalitet softvera time \v{s}to smanjuje vero
 najzastupljeniji standard za pravilno pisanje koda u jeziku C++14 je standard \textsc{autosar} C++14.
 \par
 Ru\v{c}no proveravanje da li je k\^{o}d napisan u skladu sa standardom predstavlja mukotrpan i neefikasan proces. U svrhu automatizovanja ovog procesa
-koriste se alati za stati\v{c}ku analizu koda, koji bez pokretanja programa detektuju k\^{o}d koji nije napisan u skladu sa standardom. Alat \textit{Autofix}, koji je razvijen u ovom radu, ispisuje upozorenja vezana za k\^{o}d koji nije napisan u skladu sa podskupom pravila iz standarda \textsc{autosar} C++14 koja se odnose na deklaracije u programskom jeziku C++14 i predla\v{z}e kako izmeniti k\^{o}d da bi bio u skladu sa standardom. \textit{Autofix} podr\v{z}ava i opciju komandne linije kojom se predlo\v{z}ene izmene mogu primeniti na izvorni k\^{o}d. Alat je razvijen kori\v{s}\'{c}enjem biblioteka koje pru\v{z}a kompajlerska infrastruktura LLVM. Pravila standarda \textsc{autosar} C++14 podr\v{z}ana u okviru alata \textit{Autofix} su:
-
-\begin{itemize}
-
-\item{\textbf{Pravilo A7-1-8} \\
-         U deklaracijama specifikatori koji nisu vezani za tipove treba da stoje
-         ispred tipskih specifikatora.
-}
-\item{\textbf{Pravilo A8-5-3} \\
-Varijabla tipa \texttt{auto} ne sme biti inicijalizovana kori\v{s}\'{c}enjem
-inicijalizacije viti\v{c}astih zagrada tipa \{\} ili =\{\}.
-}
-\item{\textbf{Pravilo A8-5-2} \\
-Inicijalizacija viti\v{c}astim zagradama bez znaka jednako (\texttt{=}) treba biti kori\v{s}\'{c}ena za inicijalizaciju promenljive.
-}
-\item{\textbf{Pravilo A7-1-6} \\
-Ne treba koristiti specifikator \texttt{typedef}. 
-}
-\item{\textbf{Pravilo A7-2-3} \\
-Nabrajanja treba deklarisati kao nabrajanja sa opsegom odnosno treba koristiti \texttt{scoped enum class} sintaksu.
-}
-
-\end{itemize}
+koriste se alati za stati\v{c}ku analizu koda, koji bez pokretanja programa detektuju k\^{o}d koji nije napisan u skladu sa standardom. Alat \textit{Autofix}, koji je razvijen u ovom radu, ispisuje upozorenja vezana za k\^{o}d koji nije napisan u skladu sa podskupom pravila iz standarda \textsc{autosar} C++14 koja se odnose na deklaracije u programskom jeziku C++14 i predla\v{z}e kako izmeniti k\^{o}d da bi bio u skladu sa standardom. \textit{Autofix} podr\v{z}ava i opciju komandne linije kojom se predlo\v{z}ene izmene mogu primeniti na izvorni k\^{o}d. Alat je razvijen kori\v{s}\'{c}enjem biblioteka koje pru\v{z}a kompajlerska infrastruktura LLVM. Pravila standarda \textsc{autosar} C++14 podr\v{z}ana u okviru alata \textit{Autofix} su \textbf{A7-1-8}, \textbf{A8-5-3}, \textbf{A8-5-2}, \textbf{A7-1-6}, \textbf{A7-2-3}.
 
 \par
 U daljem razvoju alat se mo\v{z}e unaprediti na nekoliko na\v{c}ina. 
 Stati\v{c}ka analiza u okviru alata mogla bi se unaprediti upotrebom naprednijih tehnika kao \v{s}to je simboli\v{c}ko izvr\v{s}avanje programa. Ovakva analiza
 omogu\'{c}ila bi i podr\v{s}ku zna\v{c}ajno \v{s}ireg skupa pravila. U ovu svrhu u okviru alata \textit{Autofix} mogao bi se integrisati stati\v{c}ki analizator kompajlera \textit{Clang} koji omogu\'{c}ava ovakav tip analize. Alat bi se mogao unaprediti i implementiranjem dodatnih opcija komandne linije koje bi omogu\'{c}ile korisniku ve\'{c}u
 kontrolu nad samim alatom. Na primer, mogla bi se dodati opcija koja omogu\'{c}ava korisniku da isklju\v{c}i analizu u zadatim delovima koda.
+Alat \textit{Autofix} je testiran upotrebom \texttt{FileCheck} alata iz kompajlerske infrastrukture LLVM.
 
 
 
@@ -1175,11 +1128,11 @@ kontrolu nad samim alatom. Na primer, mogla bi se dodati opcija koja omogu\'{c}a
 % Biografija kandidata
 \begin{biografija}
   \textbf{Ognjen Plavšić} rođen je 14.06.1995. u Leskovcu. Zavr\v{s}io je Gimnaziju u Leskovcu, Matemati\v{c}ki smer, 2014. godine
-  i iste godine upisao Matemati\v{c}ki fakultet u Beogradu. 2019. godine je zavr\v{s}io osnovne studije Matemati\v{c}kog fakulteta i iste
+  i iste godine upisao Matemati\v{c}ki fakultet u Beogradu. 2019. godine je zavr\v{s}io osnovne studije Matemati\v{c}kog fakulteta sa prosekom 9.14 i iste
   godine upisao master studije. Marta 2019. godine kre\'{c}e na praksu u Nau\v{c}no-istra\v{z}iva\v{c}kom centru RT-RK (kasnije Syrmia), gde
-  se Oktobra iste godine zapo\v{s}ljava na poziciji softverskog in\v{z}enjera. Jula 2021. godine prelazi u kompaniju HTEC Group gde i danas
-  radi kao softverski in\v{z}enjer. Radio je na projektu \v{c}iji je cilj bio kreiranje alata za stati\v{c}ku analizu u okviru kompajlerske infrastrukture
-  LLVM. Zajedno sa ostalim kolegama koji su radili na projektu objavio je rad na konferenciji \textit{ZINC}. Trenutno se bavi kompajlerima za ma\v{s}insko u\v{c}enje
+  se oktobra iste godine zapo\v{s}ljava na poziciji softverskog in\v{z}enjera. Radio je na projektu \v{c}iji je cilj bio kreiranje alata za stati\v{c}ku analizu u okviru kompajlerske infrastrukture
+  LLVM. Jula 2021. godine prelazi u kompaniju HTEC Group gde i danas
+  radi kao softverski in\v{z}enjer. Vezano za temu master teze, ima objavljen rad na konferenciji \textit{ZINC}. Trenutno se bavi kompajlerima za ma\v{s}insko u\v{c}enje
   (eng.~\textit{machine learning (ML) compilers}). U okviru ovih kompajlera radi na generisanju i optimizaciji koda od modela ma\v{s}inskog u\v{c}enja predstavljenim u nekom od formata poznatih okru\v{z}enja ma\v{s}inskog u\v{c}enja (eng. machine learning frameworks). \par
   Radovi:
   \begin{enumerate}
