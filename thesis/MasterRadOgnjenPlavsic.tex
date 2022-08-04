@@ -145,7 +145,11 @@
 
 % Apstrakt na srpskom jeziku (u odabranom pismu)
 \apstr{%
-% \pangrami
+Standardi za pravilno pisanje C++ koda sve su zastupljeniji u industrijama koje razvijaju sisteme sa ugrađenim ra\v{c}unarom (eng.~\textit{embedded systems}) i druge sisteme
+sa kriti\v{c}nom sigurno\v{s}\'{c}u. Standard \textsc{autosar} C++14 jedan je od vode\'{c}ih standarda ovog tipa. Primarno se koristi u automobilskoj industriji, odnosno za
+razvoj softvera za automobile. \v{S}iroka upotreba ovih standarda izrodila je potrebu za alatima za stati\v{c}ku analizu koji bi automatizovali proces provere da li je kod napisan u skladu sa standardom. Kompajlerska infrastruktura LLVM pru\v{z}a podr\v{s}ku za jednostavno razvijanje kvalitetnih alata ovog tipa. Cilj ovog rada je izrada alata
+za stati\v{c}ku analizu koji proverava da li je kod napisan u skladu sa podskupom pravila koja se odnose na deklaracije u okviru standarda \textsc{autosar} C++14. Alat treba ispisivati upozorenja za delove koda koji nisu u skladu sa nekim od pravila i predlagati izmene tog koda. Ideja za ostvarivanje ovog cilja je da se iskoriste biblioteke
+kompajlerske infrastrukture LLVM koji omogu\'{c}avaju analizu informacija o izvornom kodu koje se mogu dobiti tokom kompilacije programa.
 }
 \usepackage{tcolorbox}
 % Ključne reči na srpskom jeziku (u odabranom pismu)
@@ -195,7 +199,7 @@ U glavi 2 opisan je programski jezik C++ i standard kodiranja \textsc{autosar} C
 \textit{AUTomotive Open System ARchitecture (\textsc{AUTOSAR})} je međunarodna organizacija proizvođača vozila, dobavljača, pružaoca usluga i kompanija iz automobilske industrije i industrija elektronike, poluprovodnika i softvera \cite{autosarWebsite}. 
 Cilj organizacije je da stvori i uspostavi otvorenu i standardizovanu softversku arhitekturu za automobilske elektronske upravljačke jedinice (\textit{eng.~Electronic Control Units, skra\'{c}eno ЕCU}).
 Radi ostvarenja pomenutih ciljeva \textsc{autosar} definiše, između ostalog, pravila kodiranja u programskom jeziku C++14 za sisteme sa kriti\v{c}nom sigurno\v{s}\'{c}u. Glavni sektor primene standarda kodiranja \textsc{autosar} C++14 je automobilska industrija, međutim ovaj standard može biti primenjen
-i na druge aplikacije za sisteme sa ugrađenim računarom (\textit{eng.~embedded systems}). Ovaj standard predstavlja nadogradnju standarda MISRA C++:2008 \cite{AutosarGuidelines}.
+i na druge aplikacije za sisteme sa ugrađenim računarom. Ovaj standard predstavlja nadogradnju standarda MISRA C++:2008 \cite{AutosarGuidelines}.
 
 \section{Programski jezik C++}
 
@@ -1170,21 +1174,20 @@ kontrolu nad samim alatom. Na primer, mogla bi se dodati opcija koja omogu\'{c}a
 % ------------------------------------------------------------------------------
 % Biografija kandidata
 \begin{biografija}
-  % \textbf{Ognjen Plavšić} (\emph{Tršić,
-  %   26. oktobar/6. novembar 1787. — Beč, 7. februar 1864.}) bio je
-  % srpski filolog, reformator srpskog jezika, sakupljač narodnih
-  % umotvorina i pisac prvog rečnika srpskog jezika.  Vuk je
-  % najznačajnija ličnost srpske književnosti prve polovine XIX
-  % veka. Stekao je i nekoliko počasnih mastera.  Učestvovao je u
-  % Prvom srpskom ustanku kao pisar i činovnik u Negotinskoj krajini, a
-  % nakon sloma ustanka preselio se u Beč, 1813. godine. Tu je upoznao
-  % Jerneja Kopitara, cenzora slovenskih knjiga, na čiji je podsticaj
-  % krenuo u prikupljanje srpskih narodnih pesama, reformu ćirilice i
-  % borbu za uvođenje narodnog jezika u srpsku književnost. Vukovim
-  % reformama u srpski jezik je uveden fonetski pravopis, a srpski jezik
-  % je potisnuo slavenosrpski jezik koji je u to vreme bio jezik
-  % obrazovanih ljudi. Tako se kao najvažnije godine Vukove reforme
-  % ističu 1818., 1836., 1839., 1847. i 1852.
+  \textbf{Ognjen Plavšić} rođen je 14.06.1995. u Leskovcu. Zavr\v{s}io je Gimnaziju u Leskovcu, Matemati\v{c}ki smer, 2014. godine
+  i iste godine upisao Matemati\v{c}ki fakultet u Beogradu. 2019. godine je zavr\v{s}io osnovne studije Matemati\v{c}kog fakulteta i iste
+  godine upisao master studije. Marta 2019. godine kre\'{c}e na praksu u Nau\v{c}no-istra\v{z}iva\v{c}kom centru RT-RK (kasnije Syrmia), gde
+  se Oktobra iste godine zapo\v{s}ljava na poziciji softverskog in\v{z}enjera. Jula 2021. godine prelazi u kompaniju HTEC Group gde i danas
+  radi kao softverski in\v{z}enjer. Radio je na projektu \v{c}iji je cilj bio kreiranje alata za stati\v{c}ku analizu u okviru kompajlerske infrastrukture
+  LLVM. Zajedno sa ostalim kolegama koji su radili na projektu objavio je rad na konferenciji \textit{ZINC}. Trenutno se bavi kompajlerima za ma\v{s}insko u\v{c}enje
+  (eng.~\textit{machine learning (ML) compilers}). U okviru ovih kompajlera radi na generisanju i optimizaciji koda od modela ma\v{s}inskog u\v{c}enja predstavljenim u nekom od formata poznatih okru\v{z}enja ma\v{s}inskog u\v{c}enja (eng. machine learning frameworks). \par
+  Radovi:
+  \begin{enumerate}
+    \item{\textit{Milena Vujo\v{s}evi\'{c} Jani\v{c}i\'{c}, Ognjen Plav\v{s}i\'{c}, Mirko Brku\v{s}anin, Petar Jovanovi\'{c}: AUTOCHECK: A Tool For Checking Compliance With Automotive Coding Standards, 2021 Zooming Innovation in Consumer Electronics International Conference (ZINC), (Novi Sad, Serbia)}
+    }
+    
+  \end{enumerate}
+
 \end{biografija}
 % ------------------------------------------------------------------------------
 
