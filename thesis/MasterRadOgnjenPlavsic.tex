@@ -149,7 +149,7 @@
 }
 \usepackage{tcolorbox}
 % Ključne reči na srpskom jeziku (u odabranom pismu)
-\kljucnereci{računarstvo, \textsc{autosar}, clang, llvm, c++}
+\kljucnereci{\textsc{autosar}, Clang, LLVM, C++, stati\v{c}ka analiza}
 
 \begin{document}
 % ==============================================================================
@@ -175,86 +175,26 @@
 % ------------------------------------------------------------------------------
 \chapter{Uvod}
 % ------------------------------------------------------------------------------
-% \pangrami
 
-% \section{Primeri korišćenja klasičnih \LaTeX{} elemenata}
-% % Primeri citiranja
-% Još jedan citat \cite{GuSh:243}.
-% % Primeri navodnika
-% Isprobavamo navodnike: "Rekao je da mu se javimo sutra".
-% % Primer referisanja na tabelu (koja se javlja kasnije)
-% U tabeli \ref{tbl:rezultati} koja sledi prikazani su rezultati eksperimenta.
-% % Primer kraćeg ćiriličkog teksta
-% {\cir Ово је пример ћириличког текста који се јавља у латиничком документу.}
-% U ovoj rečenici se javlja jedna reč na {\cir ћирилици}.
-% % Primer korišćenja fusnota
-% Iza ove rečenice sledi fusnota.\footnote{Ovo je fusnota.}
+Softver je neizostavni deo modernog sveta. U zavisnosti od primene softvera i konteksta u kome se koristi, kvalitet softvera mo\v{z}e da igra
+manju ili ve\'{c}u ulogu. Na primer, gre\v{s}ke u video igri ima\'{c}e za posledicu samo nezadovoljstvo korisnika, dok gre\v{s}ke u softveru
+za kontrolisanje ko\v{c}nica automobila mogu imati fatalne posledice. Iz ovog razloga određene industrije ula\v{z}u dodatni napor kako bi se uverile u kvalitet softvera
+i kako bi smanjili mogu\'{c}nost pojave gre\v{s}ke. \par
+Na\v{c}in da se smanji mogu\'{c}nost pojave gre\v{s}ke u kodu jeste definisanje strogog pravila kodiranja u
+izabranom programskom jeziku. Jedan takav standard za programski jezik C++14 (jezik C++ iz verzije standarda za 2014. godinu) predstavlja standard kodiranja \textsc{autosar} C++14. Ovaj standard primarno se primenjuje u automobilskoj industriji. \par
+S obzirom da industrije koje primenjuju ovaj standard \v{c}esto koriste jako kompleksne softvere, potrebno je automatizovati proces provere da li je k\^{o}d napisan u skladu sa standardom. U ovu svrhu koriste
+se alati za stati\v{c}ku analizu koda. Alati za stati\v{c}ku analizu proveravaju ispravnost programa bez njegovog izvr\v{s}avanja. Ovakvi alati se mogu implementirati na
+vi\v{s}e na\v{c}ina. Jednostavniji alati koriste informacije dobijene tokom kompilacije programa da utvrde da li k\^{o}d sadr\v{z}i gre\v{s}ku. Napredniji alati za stati\v{c}ku analizu vr\v{s}e i simboli\v{c}ko izvr\v{s}avanje programa, odnosno koriste razli\v{c}ite tehnike kojima simuliraju izvr\v{s}avanje programa, bez njegovog pokretanja.
+\par
+Kompajlerska infrastruktura LLVM omogu\'{c}ava izradu ovakvih alata. Ova infrastruktura sadr\v{z}i niz biblioteka koje omogu\'{c}avaju analizu informacija dobijenih tokom kompilacije, ali sadr\v{z}i i biblioteke koje omogu\'{c}avaju izradu samostalnih alata.
 
-% % Primer dužeg ćirličkog teksta
-% \begin{cirilica}
-%   Ово је мало дужи блок текста исписан ћириличким писмом у оквиру
-%   латиничког документа. Фијуче ветар у шибљу, леди пасаже и куће иза
-%   њих и гунђа у оџацима.
-% \end{cirilica}
-
-% % Primer korišćenja tabele
-% \begin{table}
-% \centering
-% \caption{Rezultati}
-% \label{tbl:rezultati}
-% \begin{tabular}{c>{\centering}p{2cm}c}
-% \toprule
-% 1 & 2 & 3\\\midrule
-% 4 & 5 & 6\\\cmidrule(rl){1-2}
-% 7 & 8 & 8\\
-% \bottomrule
-% \end{tabular}
-% \end{table}
-
-% % Primer korišćenja slike
-% \begin{figure}[!ht]
-%   \centering
-%   \label{fig:grafikon}
-%   \includegraphics[width=0.5\textwidth]{graph.png}
-%   \caption{Grafikon}
-% \end{figure}
-
-
-% % Primer jednostavnije matematičke formule
-% Evo i jedan primer matematičke formule: $e^{i\pi} + 1 = 0$. 
-% % Primer referisanja na sliku
-% Na slici \ref{fig:grafikon} prikazan je jedan grafikon.
-
-% % primer kompleksnije matematičke formule
-% $$
-% \int_a^b f(x)\ \mathrm{d}x \ =_{def}\ \lim_{\max{\Delta x_k \rightarrow 0}} \sum_{k=1}^n f(x_k^*)\Delta x_k
-% $$
-
-% % primer referisanja na poglavlja i strane poglavlja
-% Više detalja biće dato u glavi \ref{chp:razrada} na strani \pageref{chp:razrada}.
-
-% % primer liste
-% Možemo praviti i nabrajanja:
-% \begin{enumerate}
-% \item Analiza 1
-% \item Linearna algebra
-% \item Analitička geometrija
-% \item Osnovi programiranja
-% \end{enumerate}
-
-% \pangrami
-
-% ------------------------------------------------------------------------------
-
-
-
-
+U glavi 2 opisan je programski jezik C++ i standard kodiranja \textsc{autosar} C++14. Opisana je klasifikacija pravila u okviru standarda i navedeni su primeri pravila koja pripadaju svakoj od grupa u okviru klasifikacije. U glavi 3 opisani su delovi kompajlerske strukture LLVM koji su kori\v{s}\'{c}eni za izradu alata \textit{Autofix}, koji predstavlja rezultat ovog rada. \textit{Autofix} je alat za stati\v{c}ku analizu koda koji proverava da li je k\^{o}d napisan u skladu sa podskupom pravila iz standarda \textsc{autosar} C++14 koji se odnose na deklaracije u programskom jeziku C++14. Ukoliko k\^{o}d nije napisan u skladu sa nekim od tih pravila, alat prijavljuje upozorenje zajedno sa predlogom izmene koda. U glavi 4 opisana je implementacija alata \textit{Autofix} i na\v{c}in upotrebe alata. Takođe, opisano je i svako od pravila iz standarda \textsc{autosar} C++14 koje alat podr\v{z}ava. U zaklju\v{c}ku iznet je osvrt na ceo rad i predlo\v{z}en je dalji tok razvoja alata \textit{Autofix}.
 \chapter{Standard kodiranja \textsc{AUTOSAR} C++14}
 \label{chp:autosar}
 
 \textit{AUTomotive Open System ARchitecture (\textsc{AUTOSAR})} je međunarodna organizacija proizvođača vozila, dobavljača, pružaoca usluga i kompanija iz automobilske industrije i industrija elektronike, poluprovodnika i softvera \cite{autosarWebsite}. 
 Cilj organizacije je da stvori i uspostavi otvorenu i standardizovanu softversku arhitekturu za automobilske elektronske upravljačke jedinice (\textit{eng.~Electronic Control Units, skra\'{c}eno ЕCU}).
-Radi ostvarenja pomenutih ciljeva \textsc{autosar} definiše, između ostalog, pravila kodiranja u programskom jeziku C++14 (jezik C++ iz verzije standarda za 2014. godinu) za sisteme sa kriti\v{c}nom sigurno\v{s}\'{c}u. Glavni sektor primene standarda kodiranja \textsc{autosar} C++14 je automobilska industrija, međutim ovaj standard može biti primenjen
+Radi ostvarenja pomenutih ciljeva \textsc{autosar} definiše, između ostalog, pravila kodiranja u programskom jeziku C++14 za sisteme sa kriti\v{c}nom sigurno\v{s}\'{c}u. Glavni sektor primene standarda kodiranja \textsc{autosar} C++14 je automobilska industrija, međutim ovaj standard može biti primenjen
 i na druge aplikacije za sisteme sa ugrađenim računarom (\textit{eng.~embedded systems}). Ovaj standard predstavlja nadogradnju standarda MISRA C++:2008 \cite{AutosarGuidelines}.
 
 \section{Programski jezik C++}
@@ -1179,9 +1119,43 @@ U okviru jedinice prevođenja \texttt{Autofix.cpp} takođe je implementirana \te
 % ------------------------------------------------------------------------------
 \chapter{Zaključak}
 % ------------------------------------------------------------------------------
-% \pangrami
 
-% \pangrami
+Standardi za pravilno pisanje koda u programskom jeziku defini\v{s}u niz pravila koje programer treba da sledi tokom razvoja softvera. Primena ovakvih standarda
+tokom razvoja softvera pove\'{c}ava kvalitet softvera time \v{s}to smanjuje verovatno\'{c}u pojavljivanja gre\v{s}ke u kodu. U automobilskoj industriji,
+najzastupljeniji standard za pravilno pisanje koda u jeziku C++14 je standard \textsc{autosar} C++14.
+\par
+Ru\v{c}no proveravanje da li je k\^{o}d napisan u skladu sa standardom predstavlja mukotrpan i neefikasan proces. U svrhu automatizovanja ovog procesa
+koriste se alati za stati\v{c}ku analizu koda, koji bez pokretanja programa detektuju k\^{o}d koji nije napisan u skladu sa standardom. Alat \textit{Autofix}, koji je razvijen u ovom radu, ispisuje upozorenja vezana za k\^{o}d koji nije napisan u skladu sa podskupom pravila iz standarda \textsc{autosar} C++14 koja se odnose na deklaracije u programskom jeziku C++14 i predla\v{z}e kako izmeniti k\^{o}d da bi bio u skladu sa standardom. \textit{Autofix} podr\v{z}ava i opciju komandne linije kojom se predlo\v{z}ene izmene mogu primeniti na izvorni k\^{o}d. Alat je razvijen kori\v{s}\'{c}enjem biblioteka koje pru\v{z}a kompajlerska infrastruktura LLVM. Pravila standarda \textsc{autosar} C++14 podr\v{z}ana u okviru alata \textit{Autofix} su:
+
+\begin{itemize}
+
+\item{\textbf{Pravilo A7-1-8} \\
+         U deklaracijama specifikatori koji nisu vezani za tipove treba da stoje
+         ispred tipskih specifikatora.
+}
+\item{\textbf{Pravilo A8-5-3} \\
+Varijabla tipa \texttt{auto} ne sme biti inicijalizovana kori\v{s}\'{c}enjem
+inicijalizacije viti\v{c}astih zagrada tipa \{\} ili =\{\}.
+}
+\item{\textbf{Pravilo A8-5-2} \\
+Inicijalizacija viti\v{c}astim zagradama bez znaka jednako (\texttt{=}) treba biti kori\v{s}\'{c}ena za inicijalizaciju promenljive.
+}
+\item{\textbf{Pravilo A7-1-6} \\
+Ne treba koristiti specifikator \texttt{typedef}. 
+}
+\item{\textbf{Pravilo A7-2-3} \\
+Nabrajanja treba deklarisati kao nabrajanja sa opsegom odnosno treba koristiti \texttt{scoped enum class} sintaksu.
+}
+
+\end{itemize}
+
+\par
+U daljem razvoju alat se mo\v{z}e unaprediti na nekoliko na\v{c}ina. 
+Stati\v{c}ka analiza u okviru alata mogla bi se unaprediti upotrebom naprednijih tehnika kao \v{s}to je simboli\v{c}ko izvr\v{s}avanje programa. Ovakva analiza
+omogu\'{c}ila bi i podr\v{s}ku zna\v{c}ajno \v{s}ireg skupa pravila. U ovu svrhu u okviru alata \textit{Autofix} mogao bi se integrisati stati\v{c}ki analizator kompajlera \textit{Clang} koji omogu\'{c}ava ovakav tip analize. Alat bi se mogao unaprediti i implementiranjem dodatnih opcija komandne linije koje bi omogu\'{c}ile korisniku ve\'{c}u
+kontrolu nad samim alatom. Na primer, mogla bi se dodati opcija koja omogu\'{c}ava korisniku da isklju\v{c}i analizu u zadatim delovima koda.
+
+
 
 % ------------------------------------------------------------------------------
 % Literatura
