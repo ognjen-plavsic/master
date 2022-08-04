@@ -125,7 +125,7 @@
 \apstr{%
 Standardi za pravilno pisanje C++ koda sve su zastupljeniji u industrijama koje razvijaju sisteme sa ugrađenim ra\v{c}unarom (eng.~\textit{embedded systems}) i druge sisteme
 sa kriti\v{c}nom sigurno\v{s}\'{c}u. Standard \textsc{autosar} C++14 jedan je od vode\'{c}ih standarda ovog tipa. Primarno se koristi u automobilskoj industriji, odnosno za
-razvoj softvera za automobile. \v{S}iroka upotreba ovih standarda izrodila je potrebu za alatima za stati\v{c}ku analizu koji bi automatizovali proces provere da li je k\^{o}d napisan u skladu sa standardom. Kompajlerska infrastruktura LLVM pru\v{z}a podr\v{s}ku za jednostavno razvijanje kvalitetnih alata ovog tipa. Cilj ovog rada je implementacija alata za stati\v{c}ku analizu \textit{Autofix} koji proverava da li je k\^{o}d napisan u skladu sa podskupom pravila koja se odnose na deklaracije u okviru standarda \textsc{autosar} C++14. Alat ispisuje upozorenja za delove koda koji nisu u skladu sa nekim od pravila i predla\v{z}e izmene tog koda. 
+razvoj softvera za automobile. \v{S}iroka upotreba ovih standarda izrodila je potrebu za alatima za stati\v{c}ku analizu koji bi automatizovali proces provere da li je k\^{o}d napisan u skladu sa standardom. Kompajlerska infrastruktura LLVM pru\v{z}a podr\v{s}ku za jednostavno razvijanje kvalitetnih alata ovog tipa. Cilj ovog rada je implementacija alata za stati\v{c}ku analizu \textit{AutoFix} koji proverava da li je k\^{o}d napisan u skladu sa podskupom pravila koja se odnose na deklaracije u okviru standarda \textsc{autosar} C++14. Alat ispisuje upozorenja za delove koda koji nisu u skladu sa nekim od pravila i predla\v{z}e izmene tog koda. 
 }
 \usepackage{tcolorbox}
 % Ključne reči na srpskom jeziku (u odabranom pismu)
@@ -167,9 +167,9 @@ se alati za stati\v{c}ku analizu koda. Alati za stati\v{c}ku analizu proveravaju
 vi\v{s}e na\v{c}ina. Jednostavniji alati koriste informacije dobijene tokom kompilacije programa da utvrde da li k\^{o}d sadr\v{z}i gre\v{s}ku. Napredniji alati za stati\v{c}ku analizu vr\v{s}e i simboli\v{c}ko izvr\v{s}avanje programa, odnosno koriste razli\v{c}ite tehnike kojima simuliraju izvr\v{s}avanje programa, bez njegovog pokretanja.
 \par
 Kompajlerska infrastruktura LLVM omogu\'{c}ava izradu alata za stati\v{c}ku analizu. Ova infrastruktura sadr\v{z}i niz biblioteka koje omogu\'{c}avaju analizu informacija dobijenih tokom kompilacije, ali sadr\v{z}i i biblioteke koje omogu\'{c}avaju izradu samostalnih alata. Cilj ovog rada je implementacija alata za stati\v{c}ku analizu
-\textit{Autofix}. \textit{Autofix} proverava da li je k\^{o}d napisan u skladu sa podskupom pravila iz standarda \textsc{autosar} C++14 koji se odnose na deklaracije u programskom jeziku C++14. Ukoliko k\^{o}d nije napisan u skladu sa nekim od tih pravila, alat prijavljuje upozorenje zajedno sa predlogom izmene koda. 
+\textit{AutoFix}. \textit{AutoFix} proverava da li je k\^{o}d napisan u skladu sa podskupom pravila iz standarda \textsc{autosar} C++14 koji se odnose na deklaracije u programskom jeziku C++14. Ukoliko k\^{o}d nije napisan u skladu sa nekim od tih pravila, alat prijavljuje upozorenje zajedno sa predlogom izmene koda. 
 
-U glavi \ref{chp:autosar} opisan je programski jezik C++ i standard kodiranja \textsc{autosar} C++14. Opisana je klasifikacija pravila u okviru standarda i navedeni su primeri pravila koja pripadaju svakoj od grupa u okviru klasifikacije. U glavi \ref{chp:llvm} opisani su delovi kompajlerske strukture LLVM koji su kori\v{s}\'{c}eni za izradu alata \textit{Autofix}, koji predstavlja rezultat ovog rada. U glavi 4 opisana je implementacija alata \textit{Autofix} i na\v{c}in upotrebe alata. Takođe, opisano je i svako od pravila iz standarda \textsc{autosar} C++14 koje alat podr\v{z}ava. U zaklju\v{c}ku iznet je osvrt na ceo rad i predlo\v{z}en je dalji tok razvoja alata \textit{Autofix}.
+U glavi \ref{chp:autosar} opisan je programski jezik C++ i standard kodiranja \textsc{autosar} C++14. Opisana je klasifikacija pravila u okviru standarda i navedeni su primeri pravila koja pripadaju svakoj od grupa u okviru klasifikacije. U glavi \ref{chp:llvm} opisani su delovi kompajlerske strukture LLVM koji su kori\v{s}\'{c}eni za izradu alata \textit{AutoFix}, koji predstavlja rezultat ovog rada. U glavi 4 opisana je implementacija alata \textit{AutoFix} i na\v{c}in upotrebe alata. Takođe, opisano je i svako od pravila iz standarda \textsc{autosar} C++14 koje alat podr\v{z}ava. U zaklju\v{c}ku iznet je osvrt na ceo rad i predlo\v{z}en je dalji tok razvoja alata \textit{AutoFix}.
 \chapter{Standard kodiranja \textsc{AUTOSAR} C++14}
 \label{chp:autosar}
 
@@ -351,18 +351,18 @@ Implementacija brojeva u pokretnom zarezu treba da bude u skladu sa standardom I
 \chapter{Kompajlerska infrastruktura LLVM}
 \label{chp:llvm}
 
-U ovom poglavlju opisane su biblioteke i klase kompajlerske infrastrukture LLVM koje su kori\v{s}\'{c}ene za implementaciju alata za stati\v{c}ku analizu \textit{Autofix}. Biblioteke su opisivane ukoliko su u celosti
+U ovom poglavlju opisane su biblioteke i klase kompajlerske infrastrukture LLVM koje su kori\v{s}\'{c}ene za implementaciju alata za stati\v{c}ku analizu \textit{AutoFix}. Biblioteke su opisivane ukoliko su u celosti
 bitne za implementaciju. Ukoliko nisu bitne u celosti, opisivane su samo klase tih biblioteka koje implementiraju funkcionalnosti koje alat koristi. Za bazne apstraktne klase u daljem tekstu koristi se termin \textit{interfejs}. \par 
-S obzirom da se alat \textit{Autofix} zasniva na analizi apstraktnog sintaksnog stabla, u ovom poglavlju opisana je biblioteka \texttt{clangAST} koja implementira osnovne
+S obzirom da se alat \textit{AutoFix} zasniva na analizi apstraktnog sintaksnog stabla, u ovom poglavlju opisana je biblioteka \texttt{clangAST} koja implementira osnovne
 strukture i algoritme za konstrukciju stabla i njegov obilazak. U okviru ove biblioteke posebno je obja\v{s}njen interfejs \texttt{RecursiveASTVisitor} koji omogu\'{c}ava obilazak stabla.
 Opisana je i biblioteka \texttt{libASTMatchers} koja implementira jezik specijalne namene (eng.~\textit{domain specific language}) kojim se mogu prona\'{c}i i obraditi specifi\v{c}ne sintaksne strukture iz apstraktnog sintaksnog stabla.
 \par
-Interfejsi \texttt{ASTConsumer} i \texttt{FrontendAction} omogu\'{c}avaju interakciju alata sa prednjim delom kompajlera. Alat \textit{Autofix} ih
+Interfejsi \texttt{ASTConsumer} i \texttt{FrontendAction} omogu\'{c}avaju interakciju alata sa prednjim delom kompajlera. Alat \textit{AutoFix} ih
 koristi u kontekstu kreiranja i izvr\v{s}avanja akcija nad apstraktnim sintaksnim
 stablom.
 \par
-Za kreiranje alata \textit{Autofix} kori\v{s}\'{c}ena je i biblioteka \texttt{LibTooling} koja u okviru infrastrukture LLVM omogu\'{c}ava kreiranje samostalnih alata. Pored ove biblioteke podr\v{s}ku za kreiranje alata pru\v{z}aju i biblioteke
-\texttt{LibClang} i \texttt{ClangPlugins}. U okviru ovog poglavlja diskutovane su prednosti i mane upotrebe ovih biblioteka kao i razlozi zbog kojih je biblioteka \texttt{LibTooling} izabrana za implementaciju alata \textit{Autofix}.
+Za kreiranje alata \textit{AutoFix} kori\v{s}\'{c}ena je i biblioteka \texttt{LibTooling} koja u okviru infrastrukture LLVM omogu\'{c}ava kreiranje samostalnih alata. Pored ove biblioteke podr\v{s}ku za kreiranje alata pru\v{z}aju i biblioteke
+\texttt{LibClang} i \texttt{ClangPlugins}. U okviru ovog poglavlja diskutovane su prednosti i mane upotrebe ovih biblioteka kao i razlozi zbog kojih je biblioteka \texttt{LibTooling} izabrana za implementaciju alata \textit{AutoFix}.
 
 \section{LLVM i Clang}
 
@@ -400,7 +400,7 @@ ugrubo je podeljena na tri dela: prednji (eng.~\textit{frontend}), srednji (eng.
         biblioteke \texttt{clangSema} kako bi ispitala semanti\v{c}ku validnost sintaksnih konstrukta (niza tokena) od kojih kreira \v{c}vorove apstraktnog sintaksnog stabla.
         Parser kompajlera \textit{Clang} je implementiran kao parser rekurzivnog spuštanja (eng.~\textit{recursive-descent parser}), odnosno analizira izvorni k\^{o}d od vrha ka dnu nizom rekurzivnih funkcija \cite{LLVMCoreLibraries}.
   \item[Biblioteka \texttt{clangAST}]
-        implementira algoritme i strukture podataka koje parser koristi za izgradnju AST-a. Specifična je po strukturi čvorova koji podsećaju na izvorni C++ k\^{o}d što je čini pogodnom za kreiranje alata za refaktorisanje koda i statičku analizu. S obzirom da se ova biblioteka koristi u okviru alata \textit{Autofix}, opisana je detaljnije u poglavlju 3.2.
+        implementira algoritme i strukture podataka koje parser koristi za izgradnju AST-a. Specifična je po strukturi čvorova koji podsećaju na izvorni C++ k\^{o}d što je čini pogodnom za kreiranje alata za refaktorisanje koda i statičku analizu. S obzirom da se ova biblioteka koristi u okviru alata \textit{AutoFix}, opisana je detaljnije u poglavlju 3.2.
   \item[Biblioteka \texttt{clangSema}]
         vrši semantičku analizu programa tokom parsiranja. Usko je povezana sa bibliotekama \texttt{clangParse} i \texttt{clangAST}.
   \item[Biblioteka \texttt{clangCodeGen}]
@@ -635,13 +635,13 @@ Ovaj metod bi\'{c}e pozvan nakon \v{s}to je kreiran AST za jedinicu prevođenja,
 U okviru njega, nad asptraktnim sintaksnim stablom, mo\v{z}e se pozvati AST upariva\v{c} koji \'{c}e izvr\v{s}iti obilazak i analizu apstraktnog sintaksnog stabla \cite{ASTConsumer}.
 
 \par
-Na listingu \ref{lst:labelConsumer} prikazana je implementacije klase \texttt{AutoFixConsumer}. Ova klasa, u okviru alata \textit{Autofix}, slu\v{z}i za pokretanje 
+Na listingu \ref{lst:labelConsumer} prikazana je implementacije klase \texttt{AutoFixConsumer}. Ova klasa, u okviru alata \textit{AutoFix}, slu\v{z}i za pokretanje 
 upariva\v{c}a nad apstraktnim sintaksnim stablom. U okviru opisanog metoda \texttt{HandleTranslationUnit} parsiraju se pravila koje je korisnik zadao kao argumente komandne linije (linija 8). Za svako
 od pravila u petlji (linija 20) se kreira po jedan upariva\v{c} (u okviru funkcije \texttt{matcherFactory}) i jedan objekat povratnog poziva (u okviru funkcije \texttt{printerFactory}).
-Ukoliko je prosleđen string \texttt{"all"}, kreira\'{c}e se svi upariva\v{c}i koje alat \textit{Autofix} podr\v{z}ava (linija 10).
+Ukoliko je prosleđen string \texttt{"all"}, kreira\'{c}e se svi upariva\v{c}i koje alat \textit{AutoFix} podr\v{z}ava (linija 10).
 Upariva\v{c}i i povratni pozivi se zatim registruju za obilazak apstraktnog sintaksnog stabla koji izvr\v{s}ava objekat klase \texttt{MatchFinder} (linija 30). Nakon registrovanja poziva se metod \texttt{matchAST} kojim se registrovani upariva\v{c}i pokre\'{c}u nad asptraktnim sintaksnim stablom (linija 37).
 
-\begin{lstlisting}[style=customc, basicstyle=\tiny, caption={Implementacija klase \texttt{AutoFixConsumer} u okviru alata \textit{Autofix}.}, label=lst:labelConsumer]
+\begin{lstlisting}[style=customc, basicstyle=\tiny, caption={Implementacija klase \texttt{AutoFixConsumer} u okviru alata \textit{AutoFix}.}, label=lst:labelConsumer]
 class AutoFixConsumer : public clang::ASTConsumer {
 public:
   explicit AutoFixConsumer(ASTContext *Context, SourceManager &SM) : SM(SM) {}
@@ -701,9 +701,9 @@ Na slici \ref{fig:ASTAction} prikazane su klase u okviru \textit{Clang} kompajle
 Da bi se implementirala specifi\v{c}na akcija nad apstraktnim sintaksnim stablom, dovoljno je implementirati klasu koja nasleđuje klasu \texttt{ASTFronendAction} i dodeliti joj \texttt{ASTConsumer} objekat koji implementira \v{z}eljenu akciju. Objekat se kreira i dodeljuje predefinisanjem metode \\ \texttt{virtual unique\_ptr<ASTConsumer> CreateASTConsumer(CompilerInstance 
 \&Compiler, StringRef InFile)}. \\
 Ova metoda za argumente dobiija instancu kompajlera \texttt{Clang} i ime fajla za koji se kreira AST. Povratna vrednost metode je pokaziva\v{c} na kreirani objekat klase \texttt{ASTConsumer}.
-Na listingu \ref{lst:ASTAction} prikazana je implementacija klase \texttt{AutoFixAction} koja izvr\v{s}ava akcije nad AST-om implementirane u okviru alata \textit{Autofix}.
+Na listingu \ref{lst:ASTAction} prikazana je implementacija klase \texttt{AutoFixAction} koja izvr\v{s}ava akcije nad AST-om implementirane u okviru alata \textit{AutoFix}.
 
-\begin{lstlisting}[style=customc, basicstyle=\tiny, caption={Implementacija klase AutoFixAction kori\v{s}\'{c}ene u okviru alata \textit{Autofix}.}, label=lst:ASTAction]
+\begin{lstlisting}[style=customc, basicstyle=\tiny, caption={Implementacija klase AutoFixAction kori\v{s}\'{c}ene u okviru alata \textit{AutoFix}.}, label=lst:ASTAction]
 class AutoFixAction : public clang::ASTFrontendAction {
 public:
   virtual std::unique_ptr<clang::ASTConsumer>
@@ -857,7 +857,7 @@ int main(int argc, char **argv) {
 \chapter{Alat Autofix}
 \label{chp:autofix}
 
-Alat \textit{Autofix} predstavlja alat za stati\v{c}ku analizu izvornog koda napisanog u jeziku C++14. Alat prijavljuje upozorenja
+Alat \textit{AutoFix} predstavlja alat za stati\v{c}ku analizu izvornog koda napisanog u jeziku C++14. Alat prijavljuje upozorenja
 za k\^{o}d koji nije napisan u skladu sa odabranim podskupom pravila iz standarda kodiranja \textsc{autosar c++14} i zajedno sa upozorenjima
 ispisuje predlog koda kojim se po\v{c}etni k\^{o}d mo\v{z}e zameniti kako bi bio u skladu sa standardom.
 Alat je implementiran u programskom jeziku \textit{C++} kori\v{s}\'{c}enjem biblioteka za razvoj alata dostupnim u okviru kompajlerske infrastrukture LLVM.
@@ -867,14 +867,14 @@ sistema, kao i skup test primera i njihova pokretanja.
 
 \section{Kori\v{s}\'{c}enje alata}
 
-Alat \textit{Autofix} se pokre\'{c}e komandom:
+Alat \textit{AutoFix} se pokre\'{c}e komandom:
 \\ \\
  \indent \indent \texttt{auto-fix [options] <source0> [... <sourceN>]}
 \\ 
 
 Navedeni arumenti podrazumevaju sledeće:
 \begin{itemize}
-  \item \textbf{options} - Ovde spadaju opcije koje se mogu proslediti alatu \textit{Autofix}. Podr\v{z}ane su opcije:
+  \item \textbf{options} - Ovde spadaju opcije koje se mogu proslediti alatu \textit{AutoFix}. Podr\v{z}ane su opcije:
   \begin{enumerate}
     \item \textbf{--apply-fix}: Ovom opcijom se predlo\v{z}ene izmene mogu primeniti na kod, menjaju\'{c}i izvorni fajl nad kojim je pokrenuta analiza.
     Predlozene izmene bi\'{c}e primenjene na k\^{o}d ukoliko među njima ne postoji konflikt, odnosno ukoliko se razli\v{c}iti predlozi ne odnose na isti deo koda.
@@ -916,7 +916,7 @@ stati\v{c}ki analizator kompajlera \textit{Clang} \cite{CSAWebsite} (eng.~\texti
 
 \section{Primeri rada alata}
 
-U ovoj sekciji bi\'{c}e navedena sva pravila iz \textsc{autosar} dokumenta koje alat \textit{Autofix} podr\v{z}ava i bi\'{c}e prikazani primeri rada alata za svako od tih pravila.
+U ovoj sekciji bi\'{c}e navedena sva pravila iz \textsc{autosar} dokumenta koje alat \textit{AutoFix} podr\v{z}ava i bi\'{c}e prikazani primeri rada alata za svako od tih pravila.
 Primeri \'{c}e sadr\v{z}ati izvorni k\^{o}d programa nad kojim se alat pokre\'{c}e i ispis na standardnom izlazu koji predstavlja rezultat izvr\v{s}avanja alata. U primeru rada alata
 pri zadavanju opcije \texttt{--apply-fix} bi\'{c}e prikazan i k\^{o}d nakon zavr\v{s}etka rada alata, odnosno k\^{o}d za primenjim predlozima izmena.\\
 
@@ -966,7 +966,7 @@ inicijalizacijom viti\v{c}astih zagrada tipa \{\} ili =\{\}.
 Po standardu C++14 kompajler \'{c}e \texttt{auto} promenljivu inicijalizovanu sinaksom viti\v{c}astih zagrada tretirati kao objekat klase
 \texttt{std::initializer\_list}. Međutim neki kompajleri mogu implementirati ovo druga\v{c}ije i zaklju\v{c}iti tip \texttt{int} za objekat inicijalizovan
 sintaksom \texttt{\{\}}, dok \'{c}e za sintaksu \texttt{=\{\}} zaklju\v{c}iti tip \texttt{std::initializer\_list}. Da bi se izbegla konfuzija oko zaklju\v{c}ivanja
-tipova, \textsc{autosar} standard nala\v{z}e da se ne koristi nijedna od navede dve vrste inicijalizacije. Za k\^{o}d sa listinga \ref{lst:label13} \textit{Autofix} \'{c}e
+tipova, \textsc{autosar} standard nala\v{z}e da se ne koristi nijedna od navede dve vrste inicijalizacije. Za k\^{o}d sa listinga \ref{lst:label13} \textit{AutoFix} \'{c}e
 predlo\v{z}iti inicijalizaciju simbolom \texttt{=}. Ispis alata prikazan je na slici \ref{fig:A8-5-3}. \\
 
 \begin{lstlisting}[style=customc, caption={Primer koda koji nije napisan u skladu sa pravilom A8-5-3.}, label=lst:label13]
@@ -1027,7 +1027,7 @@ Ne treba koristiti specifikator \texttt{typedef}.
 \end{primer}
 
 Specifikator \texttt{typedef} nije pogodan za kreiranje pseudionima (eng.~\textit{alias}) za \v{s}ablonske tipove ali i \v{c}ini k\^{o}d manje \v{c}itljivim.
-Oba nedostatka mogu se zaobi\'{c}i kori\v{s}\'{c}enjem specifikatora \texttt{using}. Alat \textit{Autofix} od izraza za kreiranje pseudonima za tip kori\v{s}\'{c}enjem
+Oba nedostatka mogu se zaobi\'{c}i kori\v{s}\'{c}enjem specifikatora \texttt{using}. Alat \textit{AutoFix} od izraza za kreiranje pseudonima za tip kori\v{s}\'{c}enjem
 specifikatora \texttt{typedef} kreira i ispisuje analogni izraz koji koristi \texttt{using} sintaksu. Ispis alata pokrenutim nad fajlom sa kodom iz listinga \ref{lst:label15} prikazan je na slici \ref{fig:A7-1-6}. \\
 
 \begin{lstlisting}[style=customc, caption={Primer koda koji nije napisan u skladu sa pravilom A7-1-6.}, label=lst:label15]
@@ -1055,7 +1055,7 @@ Nabrajanja (eng.~\textit{enumerators}) treba deklarisati kao nabrajanja sa opseg
 
 Ukoliko je nabrajanje bez opsega deklarisano u globalnom opsegu, onda njegove vrednosti mogu ponovo deklarisati konstante koje su deklarisane sa istim identifikatorom u globalnom opsegu. Kori\v{s}\'{c}enjem nabrajanja sa opsegom, odnosno upotrebom \texttt{scoped enum class} sintakse, identifikatori kori\v{s}\'{c}eni prilikom
 nabrajanja bi\'{c}e deklarisani u svom unutra\v{s}njem opsegu i time spre\v{c}iti ponovno deklarisanje identifikatora iz spolja\v{s}njeg opsega. 
-Ispis alata \textit{Autofix} pokrenutim nad fajlom sa kodom iz listinga \ref{lst:label16} prikazan je na slici \ref{fig:A7-2-3}. \\
+Ispis alata \textit{AutoFix} pokrenutim nad fajlom sa kodom iz listinga \ref{lst:label16} prikazan je na slici \ref{fig:A7-2-3}. \\
 
 \begin{lstlisting}[style=customc, caption={Primer koda koji nije napisan u skladu sa pravilom A7-2-3.}, label=lst:label16]
 #include <cstdint>
@@ -1075,17 +1075,17 @@ enum E1 : std::int32_t { E10, E11, E12 };
 
 \section{Opis implementacije}
 
-\textit{Autofix} implementiran je u okviru \texttt{clang-tools-extra} projekta koji sadr\v{z}i alate implementirane interfejsima za alate kompajlera \textit{Clang} (eng.~\textit{Clang’s tooling APIs}).
+\textit{AutoFix} implementiran je u okviru \texttt{clang-tools-extra} projekta koji sadr\v{z}i alate implementirane interfejsima za alate kompajlera \textit{Clang} (eng.~\textit{Clang’s tooling APIs}).
 Alat je podeljen na \v{c}etiri jedinice prevođenja: \texttt{AutoFix.cpp}, \texttt{AutoFixMatchers.cpp}, \texttt{AutofixDiagnosticConsumer.cpp} i \texttt{AutofixHelper.cpp}.
 
 \begin{description}
 \item{\textbf{AutoFixMatchers.cpp}} \\
-Alat \textit{Autofix} koristi biblioteku \texttt{LibAstMatchers} za analizu i obradu AST-a kompajlera \textit{Clang}. Svakom pravilu koje podr\v{z}ava alat \textit{Autofix} odgovara jedan upariva\v{c} (instanca klase \texttt{Matcher}). \textit{Autofix} koristi ovu biblioteku na slede\'{c}i na\v{c}in. U prvom delu defini\v{s}u se jednostavni upariva\v{c}i koji uparuju osnovne strukture iz AST-a na koje se pravilo odnosi. Na primer, ukoliko je pravilo vezano za enumeratore, ovaj upariva\v{c} \'{c}e upariti sve deklaracije enumeratora iz AST-a. Drugi deo implementiran je upotrebom klase \texttt{MatchCallback}. Svaka potklasa ove klase implementirana u okviru alata \textit{Autofix} odgovara jednom upariva\v{c}u, a samim tim i jednom pravilu. U okviru \texttt{run} metode ove klase vr\v{s}e se
+Alat \textit{AutoFix} koristi biblioteku \texttt{LibAstMatchers} za analizu i obradu AST-a kompajlera \textit{Clang}. Svakom pravilu koje podr\v{z}ava alat \textit{AutoFix} odgovara jedan upariva\v{c} (instanca klase \texttt{Matcher}). \textit{AutoFix} koristi ovu biblioteku na slede\'{c}i na\v{c}in. U prvom delu defini\v{s}u se jednostavni upariva\v{c}i koji uparuju osnovne strukture iz AST-a na koje se pravilo odnosi. Na primer, ukoliko je pravilo vezano za enumeratore, ovaj upariva\v{c} \'{c}e upariti sve deklaracije enumeratora iz AST-a. Drugi deo implementiran je upotrebom klase \texttt{MatchCallback}. Svaka potklasa ove klase implementirana u okviru alata \textit{AutoFix} odgovara jednom upariva\v{c}u, a samim tim i jednom pravilu. U okviru \texttt{run} metode ove klase vr\v{s}e se
 dodatne analize nad konstruktima AST-a koji su dobijeni rezultatom rada upariva\v{c}a i prijavljuje odgovaraju\'{c}a dijagnostika za izvorni kod. Zajedno sa dodatnom analizom u okviru \texttt{run} metode vr\v{s}i se i kreiranje stringova koji predstavljaju predloge izmena izvornog koda (eng. \textit{fixit hints}) kako bi k\^{o}d bio u skladu sa pravilom.
 \item{\textbf{AutoFix.cpp}} \\
 Ova jedica prevođenja predstavlja ulaznu ta\v{c}ku samog alata. U okviru nje, implementirane su klase \texttt{AutoFixConsumer} i \texttt{AutoFixAction} koje nasleđuju redom klase \texttt{ASTConsumer} i \texttt{ASTFrontendAction}. Uloga pomenutih baznih klasa pri kreiranju alata opisana je u sekciji ***. Osnovna uloga klase \texttt{AutoFixConsumer} jeste da obezbedi da se nad jedinicom prevođenja pokrenu odgovaraju\'{c}i upariva\v{c}i. To su upariva\v{c}i koji odgovaraju pravilima za koje korisnik \v{z}eli da proveri da li je izvorni k\^{o}d napisan u skladu sa njima. Korisnik mo\v{z}e da zada podskup ovih pravila u okviru argumenta komadne linije \texttt{-rules}. Parsiranje ove opcije i samo pokretanje upariva\v{c}a nad AST-om implementirano je u okviru metode \texttt{HandleTranslationUnit} klase \texttt{AutoFixConsumer}. Ova metoda bi\'{c}e pozvana od strane parsera na kraju izgradnje AST-a za svaku jedinicu prevođenja nad kojom je pokrenut alat.
 \par 
-U okviru jedinice prevođenja \texttt{Autofix.cpp} takođe je implementirana \texttt{main} funkcija alata \textit{Autofix}. U okviru nje vr\v{s}i se parsiranje opcija komandne linije, kreira se instanca alata, inicijalizuje se kreiranim objektom klase \texttt{AutoFixDiagnosticConsumer} i pokre\'{c}e se nad zadatom jedinicom prevođenja.
+U okviru jedinice prevođenja \texttt{Autofix.cpp} takođe je implementirana \texttt{main} funkcija alata \textit{AutoFix}. U okviru nje vr\v{s}i se parsiranje opcija komandne linije, kreira se instanca alata, inicijalizuje se kreiranim objektom klase \texttt{AutoFixDiagnosticConsumer} i pokre\'{c}e se nad zadatom jedinicom prevođenja.
 \end{description}
 
 % ------------------------------------------------------------------------------
@@ -1103,14 +1103,14 @@ tokom razvoja softvera pove\'{c}ava kvalitet softvera time \v{s}to smanjuje vero
 najzastupljeniji standard za pravilno pisanje koda u jeziku C++14 je standard \textsc{autosar} C++14.
 \par
 Ru\v{c}no proveravanje da li je k\^{o}d napisan u skladu sa standardom predstavlja mukotrpan i neefikasan proces. U svrhu automatizovanja ovog procesa
-koriste se alati za stati\v{c}ku analizu koda, koji bez pokretanja programa detektuju k\^{o}d koji nije napisan u skladu sa standardom. Alat \textit{Autofix}, koji je razvijen u ovom radu, ispisuje upozorenja vezana za k\^{o}d koji nije napisan u skladu sa podskupom pravila iz standarda \textsc{autosar} C++14 koja se odnose na deklaracije u programskom jeziku C++14 i predla\v{z}e kako izmeniti k\^{o}d da bi bio u skladu sa standardom. \textit{Autofix} podr\v{z}ava i opciju komandne linije kojom se predlo\v{z}ene izmene mogu primeniti na izvorni k\^{o}d. Alat je razvijen kori\v{s}\'{c}enjem biblioteka koje pru\v{z}a kompajlerska infrastruktura LLVM. Pravila standarda \textsc{autosar} C++14 podr\v{z}ana u okviru alata \textit{Autofix} su \textbf{A7-1-8}, \textbf{A8-5-3}, \textbf{A8-5-2}, \textbf{A7-1-6}, \textbf{A7-2-3}.
+koriste se alati za stati\v{c}ku analizu koda, koji bez pokretanja programa detektuju k\^{o}d koji nije napisan u skladu sa standardom. Alat \textit{AutoFix}, koji je razvijen u ovom radu, ispisuje upozorenja vezana za k\^{o}d koji nije napisan u skladu sa podskupom pravila iz standarda \textsc{autosar} C++14 koja se odnose na deklaracije u programskom jeziku C++14 i predla\v{z}e kako izmeniti k\^{o}d da bi bio u skladu sa standardom. \textit{AutoFix} podr\v{z}ava i opciju komandne linije kojom se predlo\v{z}ene izmene mogu primeniti na izvorni k\^{o}d. Alat je razvijen kori\v{s}\'{c}enjem biblioteka koje pru\v{z}a kompajlerska infrastruktura LLVM. Pravila standarda \textsc{autosar} C++14 podr\v{z}ana u okviru alata \textit{AutoFix} su \textbf{A7-1-8}, \textbf{A8-5-3}, \textbf{A8-5-2}, \textbf{A7-1-6}, \textbf{A7-2-3}.
 
 \par
 U daljem razvoju alat se mo\v{z}e unaprediti na nekoliko na\v{c}ina. 
 Stati\v{c}ka analiza u okviru alata mogla bi se unaprediti upotrebom naprednijih tehnika kao \v{s}to je simboli\v{c}ko izvr\v{s}avanje programa. Ovakva analiza
-omogu\'{c}ila bi i podr\v{s}ku zna\v{c}ajno \v{s}ireg skupa pravila. U ovu svrhu u okviru alata \textit{Autofix} mogao bi se integrisati stati\v{c}ki analizator kompajlera \textit{Clang} koji omogu\'{c}ava ovakav tip analize. Alat bi se mogao unaprediti i implementiranjem dodatnih opcija komandne linije koje bi omogu\'{c}ile korisniku ve\'{c}u
+omogu\'{c}ila bi i podr\v{s}ku zna\v{c}ajno \v{s}ireg skupa pravila. U ovu svrhu u okviru alata \textit{AutoFix} mogao bi se integrisati stati\v{c}ki analizator kompajlera \textit{Clang} koji omogu\'{c}ava ovakav tip analize. Alat bi se mogao unaprediti i implementiranjem dodatnih opcija komandne linije koje bi omogu\'{c}ile korisniku ve\'{c}u
 kontrolu nad samim alatom. Na primer, mogla bi se dodati opcija koja omogu\'{c}ava korisniku da isklju\v{c}i analizu u zadatim delovima koda.
-Alat \textit{Autofix} je testiran upotrebom \texttt{FileCheck} alata iz kompajlerske infrastrukture LLVM.
+Alat \textit{AutoFix} je testiran upotrebom \texttt{FileCheck} alata iz kompajlerske infrastrukture LLVM.
 
 
 
@@ -1132,8 +1132,8 @@ Alat \textit{Autofix} je testiran upotrebom \texttt{FileCheck} alata iz kompajle
   godine upisao master studije. Marta 2019. godine kre\'{c}e na praksu u Nau\v{c}no-istra\v{z}iva\v{c}kom centru RT-RK (kasnije Syrmia), gde
   se oktobra iste godine zapo\v{s}ljava na poziciji softverskog in\v{z}enjera. Radio je na projektu \v{c}iji je cilj bio kreiranje alata za stati\v{c}ku analizu u okviru kompajlerske infrastrukture
   LLVM. Jula 2021. godine prelazi u kompaniju HTEC Group gde i danas
-  radi kao softverski in\v{z}enjer. Vezano za temu master teze, ima objavljen rad na konferenciji \textit{ZINC}. Trenutno se bavi kompajlerima za ma\v{s}insko u\v{c}enje
-  (eng.~\textit{machine learning (ML) compilers}). U okviru ovih kompajlera radi na generisanju i optimizaciji koda od modela ma\v{s}inskog u\v{c}enja predstavljenim u nekom od formata poznatih okru\v{z}enja ma\v{s}inskog u\v{c}enja (eng. machine learning frameworks). \par
+  radi kao softverski in\v{z}enjer. Trenutno se bavi kompajlerima za ma\v{s}insko u\v{c}enje
+  (eng.~\textit{machine learning (ML) compilers}). U okviru ovih kompajlera radi na generisanju i optimizaciji koda od modela ma\v{s}inskog u\v{c}enja predstavljenim u nekom od formata poznatih okru\v{z}enja ma\v{s}inskog u\v{c}enja (eng. machine learning frameworks). Vezano za temu master teze, ima objavljen rad na konferenciji \textit{ZINC}. \par
   Radovi:
   \begin{enumerate}
     \item{\textit{Milena Vujo\v{s}evi\'{c} Jani\v{c}i\'{c}, Ognjen Plav\v{s}i\'{c}, Mirko Brku\v{s}anin, Petar Jovanovi\'{c}: AUTOCHECK: A Tool For Checking Compliance With Automotive Coding Standards, 2021 Zooming Innovation in Consumer Electronics International Conference (ZINC), (Novi Sad, Serbia)}
