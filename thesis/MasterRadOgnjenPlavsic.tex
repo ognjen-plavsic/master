@@ -349,7 +349,7 @@ Implementacija brojeva u pokretnom zarezu treba da bude u skladu sa standardom I
 \end{center}
 
 
-\chapter{Kompajlerska infrastruktura LLVM}
+\chapter{Stati\v{c}ka analiza u okviru kompajlerske infrastrukture LLVM}
 \label{chp:llvm}
 
 U ovom poglavlju opisane su biblioteke i klase kompajlerske infrastrukture LLVM koje su kori\v{s}\'{c}ene za implementaciju alata za stati\v{c}ku analizu \textit{AutoFix}. Biblioteke su opisivane ukoliko su u celosti
@@ -918,7 +918,6 @@ Implementirana su pravila \textbf{A7-1-8}, \textbf{A8-5-3}, \textbf{A8-5-2}, \te
 \subsection{Pravilo A7-1-8}
 \begin{center}
 \begin{tcolorbox}
-         Pravilo A7-1-8 \\
          U deklaracijama specifikatori koji nisu vezani za tipove treba da stoje
          ispred tipskih specifikatora.
 \end{tcolorbox}
@@ -960,14 +959,13 @@ private:
 \begin{center}
 \includegraphics[scale=0.3]{A7-1-8.png}
 \end{center}
-\caption{Ispis alata za pravilo \textbf{A7-1-8} za kod sa listinga \ref{lst:label12}.}
+\caption{Ispis alata za pravilo \textbf{A7-1-8} za k\^{o}d sa listinga \ref{lst:label12}.}
 \label{fig:A7-1-8}
 \end{figure}
 
 \subsection{Pravilo A8-5-3}
 \begin{center}
 \begin{tcolorbox}
-Pravilo A8-5-3 \\
 Varijabla tipa \texttt{auto} ne sme biti inicijalizovana kori\v{s}\'{c}enjem
 inicijalizacijom viti\v{c}astih zagrada tipa \{\} ili =\{\}.
 \end{tcolorbox}
@@ -979,7 +977,7 @@ tipova, \textsc{autosar} standard nala\v{z}e da se ne koristi nijedna od naveden
 Na listingu \ref{lst:label13} prikazan je k\^{o}d nad kojim \'{c}e biti ilustrovana implementacija pravila \textbf{A8-5-3} u okviru alata \textit{AutoFix}. 
 Zaklju\v{c}en tip za promenljive \texttt{x2} (linija 7) i \texttt{x4} (linija 11) bi\'c{e} \texttt{std::initializer\_list<int>}, dok \'{c}e za promenljive \texttt{x1} (linija 5) i \texttt{x4} (linija 9) biti zaklju\v{c}en tip \texttt{int}. S obzirom da deklaracije promenljivih \texttt{x2} i \texttt{x4} koriste sintaksu
 viti\v{c}astih zagrada, ove deklaracije nisu napisane u skladu sa pravilom \textbf{A8-5-3}.
-Na slici \ref{fig:A8-5-3} prikazan je ispis alata \textit{AutoFix} za kod sa listinga \ref{lst:label13}. Alat u oba slu\v{c}aja predla\v{z}e
+Na slici \ref{fig:A8-5-3} prikazan je ispis alata \textit{AutoFix} za k\^{o}d sa listinga \ref{lst:label13}. Alat u oba slu\v{c}aja predla\v{z}e
 da promenljiva bude deklarisana koriste\'{c}i simbol \texttt{=}.
 
 \begin{lstlisting}[style=customc, caption={K\^{o}d nad kojim je demonstrirana podr\v{s}ka pravila \textbf{A8-5-3} u okviru alata \textit{AutoFix} za . Ispis alata \textit{AutoFix} nakon pokretanja nad ovim kodom prikazan je na slici \ref{fig:A8-5-3}.}, label=lst:label13]
@@ -1002,14 +1000,13 @@ void fn() {
 \begin{center}
 \includegraphics[scale=0.3]{A8-5-3.png}
 \end{center}
-\caption{Ispis alata za pravilo \textbf{A8-5-3} za kod sa listinga \ref{lst:label13}.}
+\caption{Ispis alata za pravilo \textbf{A8-5-3} za k\^{o}d sa listinga \ref{lst:label13}.}
 \label{fig:A8-5-3}
 \end{figure}
 
 \subsection{Pravilo A8-5-2}
 \begin{center}
 \begin{tcolorbox}
-Pravilo A8-5-2 \\
 Inicijalizacija viti\v{c}astim zagradama bez simbola jednako (\texttt{=}) treba biti kori\v{s}\'{c}ena za inicijalizaciju promenljive.
 \end{tcolorbox}
 \end{center}
@@ -1041,14 +1038,13 @@ void f1() {
 \begin{center}
 \includegraphics[scale=0.3]{A8-5-2.png}
 \end{center}
-\caption{Ispis alata za pravilo \textbf{A8-5-2} za kod sa listinga \ref{lst:label14}.}
+\caption{Ispis alata za pravilo \textbf{A8-5-2} za k\^{o}d sa listinga \ref{lst:label14}.}
 \label{fig:A8-5-2}
 \end{figure}
 
 \subsection{Pravilo A7-1-6}
 \begin{center}
 \begin{tcolorbox}
-Pravilo A7-1-6 \\
 Ne treba koristiti specifikator \texttt{typedef}. 
 \end{tcolorbox}
 \end{center}
@@ -1081,7 +1077,6 @@ typedef int int_t, *intp_t;
 \subsection{Pravilo A7-2-3}
 \begin{center}
 \begin{tcolorbox}
-Pravilo A7-2-3 \\
 Nabrajanja (eng.~\textit{enumerators}) treba deklarisati kao nabrajanja sa opsegom odnosno treba koristiti sintaksu \texttt{enum class}.
 \end{tcolorbox}
 \end{center}
@@ -1115,41 +1110,78 @@ Alat \textit{AutoFix} implementiran je u okviru projekta \texttt{clang-tools-ext
 Alat \textit{AutoFix} je podeljen na \v{c}etiri jedinice prevođenja: \texttt{AutoFix.cpp}, \texttt{AutoFix\-Matchers.cpp}, \texttt{AutoFixDiagnosticConsumer.cpp} i \texttt{AutoFixHelper.cpp}.
 
 \subsection{AutoFixMatchers.cpp}
-Alat \textit{AutoFix} koristi biblioteku \texttt{LibAstMatchers} za analizu i obradu apstraktnog sintaksnog stabla kompajlera \textit{Clang}. Svakom pravilu koje alat \textit{AutoFix} podr\v{z}ava odgovara jedan upariva\v{c}. \textit{AutoFix} defini\v{s}e jednostavne upariva\v{c}e za uparivanje osnovnih konstrukta na koje se pravilo odnosi. Na primer, ukoliko je pravilo vezano za enumeratore (nabrajanja), upariva\v{c} koji odgovara ovom pravilu \'{c}e upariti sve deklaracije enumeratora iz apstraktnog sintaksnog stabla. Za svaki od upariva\v{c}a implementirana je i klasa povratnog poziva u okviru koje se vr\v{s}i analiza uparenih konstrukta, konstrukcija predloga izmena koda i prijavljivanje upozorenja ukoliko je analizom utvrdjeno da k\^{o}d nije napisan u skladu sa pravilom na koje se upariva\v{c} odnosi. Biblioteka \texttt{LibAstMatchers} detaljno je opisana u sekciji \ref{sec:matchers}.
+Alat \textit{AutoFix} koristi biblioteku \texttt{LibAstMatchers} za analizu i obradu apstraktnog sintaksnog stabla kompajlera \textit{Clang}. Svakom pravilu koje alat \textit{AutoFix} podr\v{z}ava odgovara jedan upariva\v{c}. \textit{AutoFix} defini\v{s}e jednostavne upariva\v{c}e za uparivanje osnovnih konstrukta na koje se pravilo odnosi. Na primer, ukoliko je pravilo vezano za enumeratore (nabrajanja), upariva\v{c} koji odgovara ovom pravilu \'{c}e upariti sve deklaracije enumeratora iz apstraktnog sintaksnog stabla. Za svaki od upariva\v{c}a implementirana je i klasa povratnog poziva u okviru koje se vr\v{s}i analiza uparenih konstrukta, konstrukcija predloga izmena koda i prijavljivanje upozorenja ukoliko je analizom utvrđeno da k\^{o}d nije napisan u skladu sa pravilom na koje se upariva\v{c} odnosi. Biblioteka \texttt{LibAstMatchers} detaljno je opisana u sekciji \ref{sec:matchers}.
 \subsection{AutoFix.cpp}
-Ova jedica prevođenja predstavlja ulaznu ta\v{c}ku alata \textit{AutoFix}. U okviru nje, implementirane su klase \texttt{AutoFixConsumer} i \texttt{AutoFixAction} koje nasleđuju redom klase \texttt{ASTConsumer} i \texttt{ASTFrontendAction}. Osnovna uloga klase \texttt{AutoFixConsumer} jeste da obezbedi da se nad jedinicom prevođenja pokrenu odgovaraju\'{c}i upariva\v{c}i. To su upariva\v{c}i koji odgovaraju pravilima koje je korisnik zadao u okviru opcije komandne linije \texttt{-rules}. Parsiranje ove opcije i  pokretanje upariva\v{c}a nad apstraktnim sintaksnom stablom implementirano je u okviru metode \texttt{HandleTranslationUnit} klase \texttt{AutoFixConsumer}. Ova metoda bi\'{c}e pozvana tokom parsiranja na kraju izgradnje apstraktnog sintaksnog stabla za svaku jedinicu prevođenja nad kojom je pokrenut alat. Klase \texttt{ASTConsumer} i \texttt{ASTFrontendAction} detaljnije su opisane u sekciji \ref{sec:interfejsi} zajedno za ulogom koje imaju u okviru implementacije alata za stati\v{c}ku analizu. \par
-U okviru jedinice prevođenja \texttt{Autofix.cpp} takođe je implementirana \texttt{main} funkcija alata \textit{AutoFix}. U okviru nje vr\v{s}i se parsiranje opcija komandne linije, kreira se instanca alata, kreiranoj instanci se pridru\v{z}uje objekat klase \texttt{AutoFixDiagnosticConsumer} i alat se pokre\'{c}e nad zadatom jedinicom prevođenja.
+Ova jedica prevođenja predstavlja ulaznu ta\v{c}ku alata \textit{AutoFix}. U okviru nje, implementirane su klase \texttt{AutoFixConsumer} i \texttt{AutoFixAction} koje nasleđuju redom klase \texttt{ASTConsumer} i \texttt{ASTFrontendAction}. Osnovna uloga klase \texttt{AutoFixConsumer} jeste da obezbedi da se nad jedinicom prevođenja pokrenu odgovaraju\'{c}i upariva\v{c}i. To su upariva\v{c}i koji odgovaraju pravilima koje je korisnik zadao u okviru opcije komandne linije \texttt{-rules}. Parsiranje ove opcije i  pokretanje upariva\v{c}a nad apstraktnim sintaksnom stablom implementirano je u okviru metode \texttt{HandleTranslation\-Unit} klase \texttt{AutoFixConsumer}. Ova metoda bi\'{c}e pozvana tokom parsiranja na kraju izgradnje apstraktnog sintaksnog stabla za svaku jedinicu prevođenja nad kojom je pokrenut alat. Klasa AutoFixAction instancira objekat klase \texttt{AutoFixConsumer} u okviru metode \texttt{CreateASTConsumer}. Klase \texttt{ASTConsumer} i \texttt{ASTFrontendAction} detaljnije su opisane u sekciji \ref{sec:interfejsi} zajedno za ulogom koje imaju u okviru implementacije alata za stati\v{c}ku analizu. 
+Na slici \ref{fig:uml1} prikazan je odnos klasa \texttt{AutoFixConsumer}, \texttt{AutoFixAction}, \texttt{ASTConsumer} i \texttt{ASTFrontendAction}. \par
+U okviru jedinice prevođenja \texttt{Autofix.cpp} takođe je implementirana \texttt{main} funkcija alata \textit{AutoFix}. U okviru nje vr\v{s}i se parsiranje opcija komandne linije, kreira se instanca alata, kreiranoj instanci se pridru\v{z}uje objekat klase \texttt{AutoFix\-DiagnosticConsumer} i alat se pokre\'{c}e nad zadatom jedinicom prevođenja. 
 
+\begin{figure}
+\begin{tikzpicture}
+  \begin{class}[text width=5cm]{ASTConsumer}{-9, 0}
+    \operation{\texttt{HandleTranslationUnit()}}
+    % \operation[0]{withdrawl(amount : Dollars)}
+  \end{class}
+  \begin{class}[text width=5cm]{AutoFixConsumer}{-9,-5}
+    \inherit{ASTConsumer}
+    \operation{\texttt{HandleTranslationUnit()}}
+  \end{class}
+
+  \begin{class}[text width=5cm]{ASTFrontendAction}{1, 0}
+    \operation{\texttt{CreateASTConsumer()}}
+    % \operation[0]{withdrawl(amount : Dollars)}
+  \end{class}
+  \begin{class}[text width=5cm]{AutoFixAction}{1, -5}
+    \inherit{ASTFrontendAction}
+    \operation{\texttt{CreateASTConsumer()}}
+  \end{class}
+    \draw[umlcd style dashed line ,->] (AutoFixAction) --node[above, sloped, black]{$ < <$ instantiate $ > >$} (AutoFixConsumer) ;
+\end{tikzpicture}
+  \caption{Klase u okviru jedinice prevođenja AutoFix.cpp i njihov odnos.}
+  \label{fig:uml1}
+
+\end{figure}
 \subsection{AutoFixDiagnosticConsumer.cpp}
 Interfejs \texttt{DiagnosticConsumer} u okviru kompajlera \textit{Clang} ima ulogu da obradi (konzumira) dijagnostiku prijavljenu
-za izvorni kod. Za alat \textit{AutoFix} najbitnije metode ove klase su \texttt{HandleDiagnostic} i \texttt{finish}. Metod \texttt{HandleDiagnostic} poziva se nakon prijavljivanja svakog upozorenja u okviru alata i slu\v{z}i za obradu tog upozorenja. Metod \texttt{finish} poziva se nakon \v{s}to su prijavljena i obradjena sva upozorenja u okviru alata i slu\v{z}i za dodatnu obradu celokupne dijagnostike. Vid obrade dijagnostike najrelevantniji za alat \textit{AutoFix} jeste njeno ispisivanje na standardni izlaz. U ovu 
+za izvorni kod. Za alat \textit{AutoFix} najbitnije metode ove klase su \texttt{HandleDiagnostic} i \texttt{finish}. Metod \texttt{HandleDiagnostic} poziva se nakon prijavljivanja svakog upozorenja u okviru alata i slu\v{z}i za obradu tog upozorenja. Metod \texttt{finish} poziva se nakon \v{s}to su prijavljena i obrađena sva upozorenja u okviru alata i slu\v{z}i za dodatnu obradu celokupne dijagnostike. Vid obrade dijagnostike najrelevantniji za alat \textit{AutoFix} jeste njeno ispisivanje na standardni izlaz. U ovu 
 svrhu \textit{AutoFix} koristi funkcionalnost postoje\'{c}e klase \texttt{TextDiagnosticPrinter}, potklase klase \texttt{DiagnosticConsumer}. Ispisivanje dijagnostike u okviru klase \texttt{TextDiagnosticPrinter} implementirano je u okviru predefinisane metode \texttt{HandleDiagnostic}. \par
-Pored ispisivanja poruka upozorenja i predloga izmena koda na standardni izlaz, alat \texttt{AutoFix} konzumira dijagnostiku tako \v{s}to predlo\v{z}ene izmene koda primenjuje na izvorni fajl ukoliko je prosledjena opcija komandne linije \texttt{--apply-fix}.
-Da bi se ovo postiglo u okviru alata \textit{AutoFix} implementirana je klasa \texttt{AutoFix\-DiagnosticConsumer}. Ova klasa nasledjuje
-klasu \texttt{TextDiagnosticPrinter} i time zadr\v{z}ava funkcionalnost ispisivanja dijagnostike na standardni izlaz koja je implementirana u okviru nje. \par Dodatno, klasa \texttt{AutoFixDiagnosticConsumer} predefini\v{s}e metod \texttt{HandleDiag\-nostic} i u okviru njega pored ispisivanja dijagnostike kreira objekat klase \texttt{Replace\-ment} za predlo\v{z}enu izmenu koda. Objekat klase \texttt{Replacement} \v{c}uva informacije o tome koje delove izvornog koda treba izmeniti sa predlogom izmene koda i sam predlog izmene.
+Pored ispisivanja poruka upozorenja i predloga izmena koda na standardni izlaz, alat \texttt{AutoFix} konzumira dijagnostiku tako \v{s}to predlo\v{z}ene izmene koda primenjuje na izvorni fajl ukoliko je prosleđena opcija komandne linije \texttt{--apply-fix}.
+Da bi se ovo postiglo u okviru alata \textit{AutoFix} implementirana je klasa \texttt{AutoFix\-DiagnosticConsumer}. Ova klasa nasleđuje
+klasu \texttt{TextDiagnosticPrinter} i time zadr\v{z}ava funkcionalnost ispisivanja dijagnostike na standardni izlaz koja je implementirana u okviru nje. \par Dodatno, klasa \texttt{AutoFixDiagnosticConsumer} predefini\v{s}e metod \texttt{HandleDiag\-nostic} i u okviru njega pored ispisivanja dijagnostike kreira objekat klase \texttt{Replace\-ment} za predlo\v{z}enu izmenu koda. Objekat klase \texttt{Replacement} \v{c}uva informacije o tome koje delove izvornog koda treba zameniti sa predlogom izmene koda i sam predlog izmene.
 U okviru metode \texttt{finish} svi kreirani objekti klase \texttt{Replacement} se pridru\v{z}uju objektu klase \texttt{Rewrite}.
-Ova klasa omogu\'{c}ava primenjivanje predlozenih izmena koda na izvorni fajl. Predlo\v{z}ene izmene koda primenjuju se pozivom metoda \texttt{overwriteChangedFiles} klase \texttt{Rewriter}.
+Ova klasa omogu\'{c}ava primenjivanje predlozenih izmena koda na izvorni fajl. Predlo\v{z}ene izmene koda primenjuju se pozivom metoda \texttt{overwriteChangedFiles} klase \texttt{Rewriter}. Na slici \ref{fig:DiagnosticConsumer} prikazan je odnos klasa \texttt{DiagnosticConsumer}, \texttt{TextDiagnosticPrinter} i \texttt{AutoFixDiagnosticConsumer}.
+
+\begin{center}
+\begin{figure}
+\begin{tikzpicture}
+  \begin{class}[text width=5cm]{DiagnosticConsumer}{-9, 0}
+    \operation{\texttt{HandleDiagnostic()}}
+    \operation{\texttt{finish()}}
+  \end{class}
+  \begin{class}[text width=5cm]{TextDiagnosticPrinter}{-9, -3}
+    \inherit{DiagnosticConsumer}
+    \operation{\texttt{HandleDiagnostic()}}
+    \operation{\texttt{finish()}}
+  \end{class}
+
+  \begin{class}[text width=7cm]{AutoFixDiagnosticConsumer}{-9, -6}
+    \inherit{TextDiagnosticPrinter}
+    \operation{\texttt{HandleDiagnostic()}}
+    \operation{\texttt{finish()}}
+  \end{class}
+\end{tikzpicture}
+  \caption{Odnos klasa \texttt{DiagnosticConsumer}, \texttt{TextDiagnosticPrinter} i \texttt{AutoFixDiagnosticConsumer}.}
+  \label{fig:DiagnosticConsumer}
+
+\end{figure}
+\end{center}
 
 \subsection{AutoFixDiagnosticHelper.cpp}
 
-U okviru ove jedinice prevodjenja implementirane se pomo\'{c}ne funkcije kori\v{s}\'{c}ene u okviru alata \textit{AutoFix}.
-Implementirane su funkcije za parsiranje stringova prosledjenih u okviru opcija komandne linije, kreiranja stringova od 
-od objekata klasa od kojih je izgradjen AST, dohvatanje koda izmedju dve lokacije iz izvornog fajla, itd.
+U okviru ove jedinice prevođenja implementirane se pomo\'{c}ne funkcije kori\v{s}\'{c}ene u okviru alata \textit{AutoFix}.
+Implementirane su funkcije za parsiranje stringova prosleđenih u okviru opcija komandne linije, kreiranja stringova od 
+od objekata klasa od kojih je izgrađen AST, dohvatanje koda između dve lokacije iz izvornog fajla, itd.
 
-\begin{tikzpicture}
-  \begin{class}[text width=5cm]{BankAccount}{0,0}
-    \attribute{owner : String}
-    \attribute{balance : Dollars = 0}
-    \operation{deposit(amount : Dollars }
-    \operation[0]{withdrawl(amount : Dollars)}
-  \end{class}
-  \begin{class}[text width=7cm]{Checking Account}{-5,-5}
-    \inherit{BankAccount}
-    \attribute{insufficientFundsFee : Dollars}
-    \operation{processCheck(checkToProcess : Check)}
-    \operation{withdrawal(amount : Dollars)}
-  \end{class}
-\end{tikzpicture}
 
 
 % ------------------------------------------------------------------------------
