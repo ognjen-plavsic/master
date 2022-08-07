@@ -514,17 +514,13 @@ public:
     : Context(Context) {}
 
   bool VisitCXXRecordDecl(CXXRecordDecl *Declaration) {
-
     if (Declaration->getQualifiedNameAsString() == "matematika::geometrija::Trougao") {
-
       FullSourceLoc FullLocation = Context->getFullLoc(Declaration->getBeginLoc());
-
       if (FullLocation.isValid())
         llvm::outs() << "Nadjena deklaracija na "
                      << FullLocation.getSpellingLineNumber() << ":"
                      << FullLocation.getSpellingColumnNumber() << "\n";
     }
-
     return true;
   }
 
@@ -711,9 +707,11 @@ Na listingu \ref{lst:ASTAction} prikazana je implementacija klase \texttt{AutoFi
 class AutoFixAction : public clang::ASTFrontendAction {
 public:
   virtual std::unique_ptr<clang::ASTConsumer>
-  CreateASTConsumer(clang::CompilerInstance &Compiler, llvm::StringRef InFile) {
-    return std::make_unique<AutoFixConsumer>(&Compiler.getASTContext(),
-                                             Compiler.getSourceManager());
+  CreateASTConsumer(clang::CompilerInstance &Compiler, 
+                    llvm::StringRef InFile) {
+    return std::make_unique<AutoFixConsumer>(
+                &Compiler.getASTContext(),
+                Compiler.getSourceManager());
   }
 };
 \end{lstlisting}
@@ -782,42 +780,13 @@ Uopsteno, \texttt{LibTooling} treba koristiti kada:
 \end{itemize}
 \end{itemize}
 
-Na listingu \ref{lst:label9} prikazana je implementacija jednostavnog alata kori\v{s}\'{c}enjem opisanih interfejsa \texttt{ASTConsumer} i \texttt{ASTFrontendAction}. Ovaj alat koristi \texttt{LibTooling} biblioteku za pokretanje definisane \texttt{ASTFrontendAction} akcije nad izvornim kodom koji je prosleđen kao argument komandne linije. U ovu svrhu koristi se funkcija \texttt{runToolOnCode} (linija 67) biblioteke \texttt{LibTooling}. Alat pronalazi sve enumeratore koji nisu deklarisani koriste\'{c}i specifikator \texttt{class} i za ove deklaracije se prijavljuje upozorenje zajedno sa predlogom izmene koda. Alat koristi upariva\v{c} sa listinga \ref{lst:MatcherList}.
+Na listingu \ref{lst:label9} prikazana je implementacija jednostavnog alata kori\v{s}\'{c}enjem opisanih interfejsa \texttt{ASTConsumer} i \texttt{ASTFrontendAction}. Ovaj alat koristi \texttt{LibTooling} biblioteku za pokretanje definisane \texttt{ASTFrontendAction} akcije nad izvornim kodom koji je prosleđen kao argument komandne linije. U ovu svrhu koristi se funkcija \texttt{runToolOnCode} (linija 67) biblioteke \texttt{LibTooling}. Alat pronalazi sve enumeratore koji nisu deklarisani koriste\'{c}i specifikator \texttt{class} i za ove deklaracije se prijavljuje upozorenje zajedno sa predlogom izmene koda. Alat koristi upariva\v{c} sa listinga \ref{lst:MatcherList} implementiran u okviru zaglavlja \texttt{AutoFixMatchers.h} i klasu \texttt{AutoFixFrontendAction} sa listinga \ref{lst:ASTAction} implementiranu u okviru zaglavlja \texttt{ASTFrontendAction.h}.
 \\
 \begin{lstlisting}[style=customc,  caption={Primer implementacije jednostavnog alata upotrebom interfejsa \texttt{ASTConsumer}, \texttt{ASTFrontendAction} i bibliotekom \texttt{libtooling}.}, label=lst:label9]
 #include "clang/AST/ASTConsumer.h"
-#include "clang/ASTMatchers/ASTMatchFinder.h"
-#include "clang/ASTMatchers/ASTMatchers.h"
-#include "clang/Frontend/CompilerInstance.h"
-#include "clang/Frontend/FrontendAction.h"
 #include "clang/Tooling/Tooling.h"
-
-using namespace clang;
-
-// CallBack class for matcher.
-class A7_2_3 : public MatchFinder::MatchCallback {
-public:
-  A7_2_3(ASTContext &ASTCtx) : ASTCtx(ASTCtx) {}
-  virtual void run(const MatchFinder::MatchResult &Result) {
-    if (auto ED = Result.Nodes.getNodeAs<clang::EnumDecl>("A7_2_3_Matcher")) {
-      // Check if enum is defined using 'class' tag.
-      if (!ED->isScopedUsingClassTag()) {
-      // Create warning message.
-      std::string msg =
-          "Enumerations shall be declared as scoped enum classes.";
-      std::string insStr = "class ";
-      // Call function for emitting warnings with fixit hints using diagnostics engine.
-      emitWarningWithHintInsertion(
-          ASTCtx.getDiagnostics(), msg, insStr,
-          ED->getSourceRange().getBegin().getLocWithOffset(5),
-          ED->getLocation());
-      }
-    }
-  }
-
-private:
-  ASTContext &ASTCtx;
-};
+#include "AutoFixMatchers.h"
+#include "ASTFrontendAction.h"
 
 class AutoFixConsumer : public clang::ASTConsumer {
 public:
@@ -826,11 +795,11 @@ public:
   virtual void HandleTranslationUnit(clang::ASTContext &Context) {
     MatchFinder Finder;
     // Create matcher.
-    Matcher<Decl> Matcher =
+    internal::Matcher<Decl> Matcher =
         enumDecl(isExpansionInMainFile()).bind("A7_2_3_Matcher");
 
     // Create CallBack class object.
-    MatchCallback *Callback = new A7_2_3(Context);
+    MatchFinder::MatchCallback *Callback = new A7_2_3_3(Context);
 
     // Register matcher for running over AST.
     Finder.addMatcher(Matcher, Callback);
@@ -838,21 +807,14 @@ public:
     // Run matcher over AST for translation unit.
     Finder.matchAST(Context);
   }
-};
-
-class AutoFixAction : public clang::ASTFrontendAction {
-public:
-  virtual std::unique_ptr<clang::ASTConsumer>
-  CreateASTConsumer(clang::CompilerInstance &Compiler, llvm::StringRef InFile) {
-    return std::make_unique<AutoFixConsumer>(&Compiler.getASTContext(),
-                                             Compiler.getSourceManager());
-  }
+  ASTContext *Context;
 };
 
 int main(int argc, char **argv) {
   if (argc > 1) {
-    clang::tooling::runToolOnCode(std::make_unique<FindNamedClassAction>(),
-                                  argv[1]);
+    clang::tooling::runToolOnCode(
+                    std::make_unique<FindNamedClassAction>(),
+                    argv[1]);
   }
 }
 \end{lstlisting}
@@ -1238,8 +1200,8 @@ U daljem razvoju alat se mo\v{z}e unaprediti na nekoliko na\v{c}ina.
 Stati\v{c}ka analiza u okviru alata mogla bi se unaprediti upotrebom naprednijih tehnika kao \v{s}to je simboli\v{c}ko izvr\v{s}avanje programa. Ovakva analiza
 omogu\'{c}ila bi i podr\v{s}ku zna\v{c}ajno \v{s}ireg skupa pravila. U ovu svrhu u okviru alata \textit{AutoFix} mogao bi se integrisati stati\v{c}ki analizator kompajlera \textit{Clang} koji omogu\'{c}ava ovakav tip analize. Alat bi se mogao unaprediti i implementiranjem dodatnih opcija komandne linije koje bi omogu\'{c}ile korisniku ve\'{c}u
 kontrolu nad samim alatom. Na primer, mogla bi se dodati opcija koja omogu\'{c}ava korisniku da isklju\v{c}i analizu u zadatim delovima koda.
-Alat \textit{AutoFix} je testiran upotrebom \texttt{FileCheck} alata iz kompajlerske infrastrukture LLVM.
-
+Detaljnim testiranjem upotrebom alata \textit{lit} i \textit{FileCheck} iz kompajlerske infrastrukture LLVM obezbedjen je i visok
+kvalitet razvijenog alata.
 
 % ------------------------------------------------------------------------------
 % Literatura
@@ -1255,13 +1217,12 @@ Alat \textit{AutoFix} je testiran upotrebom \texttt{FileCheck} alata iz kompajle
 % Biografija kandidata
 \begin{biografija}
   \textbf{Ognjen Plavšić} rođen je 14.06.1995. u Leskovcu. Zavr\v{s}io je Gimnaziju u Leskovcu, Matemati\v{c}ki smer, 2014. godine
-  i iste godine upisao Matemati\v{c}ki fakultet u Beogradu. 2019. godine je zavr\v{s}io osnovne studije Matemati\v{c}kog fakulteta sa prosekom 9.14 i iste
+  i iste godine upisao Matemati\v{c}ki fakultet u Beogradu. 2019. godine je zavr\v{s}io osnovne studije Matemati\v{c}kog fakulteta sa prose\v{c}nom ocenom 9.14 i iste
   godine upisao master studije. Marta 2019. godine kre\'{c}e na praksu u Nau\v{c}no-istra\v{z}iva\v{c}kom centru RT-RK (kasnije Syrmia), gde
   se oktobra iste godine zapo\v{s}ljava na poziciji softverskog in\v{z}enjera. Radio je na projektu \v{c}iji je cilj bio kreiranje alata za stati\v{c}ku analizu u okviru kompajlerske infrastrukture
   LLVM. Jula 2021. godine prelazi u kompaniju HTEC Group gde i danas
   radi kao softverski in\v{z}enjer. Trenutno se bavi kompajlerima za ma\v{s}insko u\v{c}enje
-  (eng.~\textit{machine learning (ML) compilers}). U okviru ovih kompajlera radi na generisanju i optimizaciji koda od modela ma\v{s}inskog u\v{c}enja predstavljenim u nekom od formata poznatih okru\v{z}enja ma\v{s}inskog u\v{c}enja (eng. machine learning frameworks). Vezano za temu master teze, ima objavljen rad na konferenciji \textit{ZINC}. \par
-  Radovi:
+  (eng.~\textit{machine learning (ML) compilers}). U okviru ovih kompajlera radi na generisanju i optimizaciji koda od modela ma\v{s}inskog u\v{c}enja predstavljenim u nekom od formata poznatih okru\v{z}enja ma\v{s}inskog u\v{c}enja (eng.~\textit{machine learning frameworks}). Vezano za temu master teze, ima objavljen rad na medjunarodnoj konferenciji \textit{ZINC}: \par
   \begin{enumerate}
     \item{\textit{Milena Vujo\v{s}evi\'{c} Jani\v{c}i\'{c}, Ognjen Plav\v{s}i\'{c}, Mirko Brku\v{s}anin, Petar Jovanovi\'{c}: AUTOCHECK: A Tool For Checking Compliance With Automotive Coding Standards, 2021 Zooming Innovation in Consumer Electronics International Conference (ZINC), (Novi Sad, Serbia)}
     }
