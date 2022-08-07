@@ -1183,6 +1183,38 @@ Implementirane su funkcije za parsiranje stringova prosleđenih u okviru opcija 
 od objekata klasa od kojih je izgrađen AST, dohvatanje koda između dve lokacije iz izvornog fajla, itd.
 
 
+\section{Opis testiranja}
+
+Alat \textit{AutoFix} testiran je upotrebom alata \textit{lit} i \textit{FileCheck}. 
+Alat \textit{lit} slu\v{z}i za izvr\v{s}avanje testova i testnih paketa (eng.~\textit{test suites}) u okviru kompajlerske infrastrukture LLVM. Alat takodje sumira rezultate i generi\v{s}e informacije o gre\v{s}kama u okviru testova. Testovi implementirani u okviru alate \textit{AutoFix}
+mogu se pokrenuti komandom \\
+\texttt{llvm-lit PUTANJA}
+\\
+gde putanja mo\v{z}e biti do direktorijuma sa testovima, u kom slu\v{c}aju \'{c}e se pokrenuti svi testovi u okviru direktorijuma ili do testa, u kom slu\v{c}aju \'{c}e se izvr\v{s}iti pokretanje pojedina\v{c}nog testa. \par
+Svaki test koji se pokre\'{c}e upotrebom alata \textit{lit} mora po\v{c}injati \texttt{RUN} linijom. \texttt{RUN} linije predstavljaju komentar u okviru testa formata \texttt{RUN: KOMANDA}. \texttt{KOMANDA} \'{c}e biti izvr\v{s}ena alatom \textit{lit}.
+Ukoliko ne postoji \texttt{RUN} linija, \textit{lit} \'{c}e prijaviti gre\v{s}ku prilikom pokretanja testa. \par
+Na listingu \ref{lst:test} prikazan je pojednostavljeni primer testa za pravilo \textbf{A7-1-6} u okviru alata \textit{AutoFix}. Test
+verifikuje da se pokretanjem alata \texttt{AutoFix} ispisuje adekvatno upozorenje zajedno sa predlogom izmene koda. U okviru \texttt{RUN} linije (linija 1) pokre\'{c}e se alat \textit{AutoFix} komandom \texttt{auto-fix -rules="A7\_1\_6" \%s 2>\&1 --}. Simbol \texttt{\%s}  \'{c}e prilikom pokretanja biti zamenjen putanjom do testa u kome se ova komanda nalazi (testa koji \textit{lit} pokre\'{c}e). \texttt{2>\&1} preusmerava standardni izlaz za gre\v{s}ke (STDERR) na standardni izlaz (STDOUT). Drugi deo komande \texttt{| FileCheck \%s} prosledjuje izlaz iz alata \textit{AutoFix} na standardni ulaz alata \textit{FileCheck} i pokre\'{c}e alat \textit{FileCheck} nad testom. Putanja do testa prosledjena je simbolom \texttt{\%s} \cite{LIT}.
+
+Alat \textit{FileCheck} dobija kao ulaz dva fajla, jedan sa standardnog ulaza i jedan naveden u komandnoj liniji i zatim koristi jedan da verifikuje drugi. Ovaj alat je koristan za kreiranje testova u okviru kojih je potrebno verifikovati da li izlaz nekog alata sadr\v{z}i o\v{c}ekivane informacije \cite{FileCheck}. \par U okviru listinga \ref{lst:test} koriste se tri direktive alata \textit{FileCheck}, \texttt{CHECK: TEKST} (linija 6), \texttt{CHECK-NEXT: TEKST} (linije 8-11) i \texttt{CHECK-NOT: TEKST} (linije 5 i 12). Direktiva \texttt{CHECK: TEKST} proverava da li se \texttt{TEKST} nalazi u fajlu prosledjenom alatu \textit{FileCheck} putem standardnog ulaza.
+U okviru teksta mogu se koristiti i regularni izrazi.
+Regularnim izrazom se smatra sve \v{s}to se nalazi u okviru dvostrukih viti\v{c}astih zagrada \texttt{\{\{\}\}}. Na listingu \ref{lst:test} koriste se regularni izrazi za putanju na operativnom sistemu Linuks (eng.~\textit{Linux}), za po\v{c}etak i kraj linije. Redom, ovo su regularni izrazi \lstinline[style=custombash]{(/|/[a-zA-Z0-9_-]+)+}, \lstinline[style=custombash]{^} i \lstinline[style=custombash]{$}. Direktiva \texttt{CHECK-NOT: TEKST} verifikjue da se \texttt{TEKST} ne nalazi pre prvog uparivanja (linija 5), izmedju dva uparivanja ili nakon poslednjeg uparivanja (linija 11) direktiva \texttt{CHECK} ili \texttt{CHECK-NEXT}. Na listingu \ref{lst:test} ova direktiva ima ulogu da verifikuje da se u fajlu prosledjenom alatu \textit{FileCheck} nalazi samo tekst naveden u okviru direktiva \texttt{CHECK} i \texttt{CHECK-NEXT} i ni\v{s}ta vi\v{s}e. S obzirom da je alat pokrenut samo za pravilo \textbf{A7-1-6} ne o\v{c}ekuje se ispis upozorenja koja se odnose na ostala pravila. Direktivom
+\texttt{CHECK-NEXT: TEKST} verifikuje se da je \texttt{TEKST} pronadjen na prvoj liniji nakon teksta koji je uparen direktivom \texttt{CHECK}.
+
+
+\begin{lstlisting}[style=customc, caption={Pojednostavljeni primer testa za pravilo \textbf{A7-1-6} u okviru alata \textit{AutoFix}.},label={lst:test}]
+// RUN: auto-fix -rules="A7_1_6" %s 2>&1 -- | FileCheck %s
+
+typedef unsigned long ulong;
+
+// CHECK-NOT: {{.+}}
+// CHECK: {{^((/|/[a-zA-Z0-9_-]+)+)}}/auto-fix-A7-1-6.cpp:3:23: warning: The typedef specifier shall not be used.{{$}}
+// CHECK-NEXT: {{^}}typedef unsigned long ulong;{{$}}
+// CHECK-NEXT: {{^}}~~~~~~~~~~~~~~~~~~~~~~^~~~~{{$}}
+// CHECK-NEXT: {{^}}using ulong = unsigned long{{$}}
+// CHECK-NEXT: {{^}}1 warning generated.{{$}}
+// CHECK-NOT: {{.+}}
+\end{lstlisting}
 
 % ------------------------------------------------------------------------------
 
