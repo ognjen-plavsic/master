@@ -1,10 +1,10 @@
-// RUN: auto-fix -rules="A8_5_2" %s 2>&1 -- | FileCheck -dump-input-filter=all -color %s
+// RUN: auto-fix -rules="A8_5_2" %s 2>&1 -- -Wno-everything | FileCheck -dump-input-filter=all -color %s
 
 #include <cstdint>
 #include <initializer_list>
 void f1() noexcept {
-  std::int32_t x1 =
-      7.9; // Non-compliant - x1 becomes 7 without compilation error
+  std::int32_t x1 = 7.9; // Non-compliant - x1 becomes 7 without compilation error
+
   // std::int32_t y {7.9}; // Compliant - compilation error, narrowing
   std::int8_t x2{50};
   // Compliant
@@ -48,8 +48,8 @@ void f2() noexcept {
 
   C c1{2, 2};   // Compliant - C(std::initializer_list<std::int32_t>)
                 // constructor is  called
-  C c2(2, 2);   // Compliant by exception - this is the only way to call
-                // C(std::int32_t, std::int32_t) constructor
+  C c2(2, 2);   // Non-compliant 
+
   C c3{{}};     // Compliant - C(std::initializer_list<std::int32_t>) constructor is
                 // called with an empty initializer_list
   C c4({2, 2}); // Compliant by exception -
@@ -67,47 +67,56 @@ void f1(T t, U u) noexcept(false) {
 void f3() noexcept {
   f1(0, "abcd"); // Compile-time error, cast from const char* to int
 }
-// CHECK: auto-fix-A8-5-2.cpp:6:16: warning: Braced-initialization {}, without equals sign, shall be used for variable initialization
-// CHECK-NEXT: std::int32_t x1 =
-// CHECK-NEXT: ~~~~~~~~~~~~~^~~~
-// CHECK-NEXT: std::int32_t x1{7.9000000000000004}
 
-// CHECK: auto-fix-A8-5-2.cpp:11:15: warning: Braced-initialization {}, without equals sign, shall be used for variable initialization
-// CHECK-NEXT: std::int8_t x3 = {50}
-// CHECK-NEXT: ~~~~~~~~~~~~^~~~
-// CHECK-NEXT: std::int8_t x3{50}
+// CHECK-NOT: {{.+}}
+// CHECK: {{^((/|/[a-zA-Z0-9_-]+)+)}}/auto-fix-A8-5-2.cpp:6:16: warning: Braced-initialization {}, without equals sign, shall be used for variable initialization{{$}}
+// CHECK-NEXT: {{^}} std::int32_t x1 = 7.9; // Non-compliant - x1 becomes 7 without compilation error{{$}}
+// CHECK-NEXT: {{^}} ~~~~~~~~~~~~~^~~~~~~~{{$}}
+// CHECK-NEXT: {{^}} std::int32_t x1{7.9000000000000004}{{$}}
 
-// CHECK: auto-fix-A8-5-2.cpp:15:15: warning: Braced-initialization {}, without equals sign, shall be used for variable initialization
-// CHECK-NEXT: std::int8_t x5 = 300;
-// CHECK-NEXT: ~~~~~~~~~~~~^~~~~~~~
-// CHECK-NEXT: std::int8_t x5{300}
+// CHECK: {{^((/|/[a-zA-Z0-9_-]+)+)}}auto-fix-A8-5-2.cpp:11:15: warning: Braced-initialization {}, without equals sign, shall be used for variable initialization
+// CHECK-NEXT: {{^}} std::int8_t x3 = {50}
+// CHECK-NEXT: {{^}} ~~~~~~~~~~~~^~~~
+// CHECK-NEXT: {{^}} std::int8_t x3{50}{{$}}
 
-// CHECK: auto-fix-A8-5-2.cpp:42:5: warning: Braced-initialization {}, without equals sign, shall be used for variable initialization
-// CHECK-NEXT: A a2 = {1, 5};
-// CHECK-NEXT: ~~^~~~~~~~~~~
-// CHECK-NEXT: A a2{1, 5}
+// CHECK: {{^((/|/[a-zA-Z0-9_-]+)+)}}auto-fix-A8-5-2.cpp:13:15: warning: Braced-initialization {}, without equals sign, shall be used for variable initialization
+// CHECK-NEXT: {{^}} std::int8_t x4 =
+// CHECK-NEXT: {{^}} ~~~~~~~~~~~~^~~~{{$}}
+// CHECK-NEXT: {{^}} std::int8_t x4{1.}{{$}}
 
-// CHECK: auto-fix-A8-5-2.cpp:45:5: warning: Braced-initialization {}, without equals sign, shall be used for variable initialization
-// CHECK-NEXT: A a3(1, 5);
-// CHECK-NEXT: ~~^~~~~~~~
-// CHECK-NEXT: A a3{1, 5}
+// CHECK: {{^((/|/[a-zA-Z0-9_-]+)+)}}auto-fix-A8-5-2.cpp:15:15: warning: Braced-initialization {}, without equals sign, shall be used for variable initialization
+// CHECK-NEXT: {{^}} std::int8_t x5 = 300;
+// CHECK-NEXT: {{^}} ~~~~~~~~~~~~^~~~~~~~{{$}}
+// CHECK-NEXT: {{^}} std::int8_t x5{300}{{$}}
 
-// CHECK: auto-fix-A8-5-2.cpp:51:5: warning: Braced-initialization {}, without equals sign, shall be used for variable initialization
-// CHECK-NEXT: C c2(2, 2);
-// CHECK-NEXT: ~~^~~~~~~~
-// CHECK-NEXT: C c2{2, 2}
+// CHECK: {{^((/|/[a-zA-Z0-9_-]+)+)}}auto-fix-A8-5-2.cpp:16:15: warning: Braced-initialization {}, without equals sign, shall be used for variable initialization
+// CHECK-NEXT: {{^}} std::int8_t x6(x5);
+// CHECK-NEXT: {{^}} ~~~~~~~~~~~~^~~~~{{$}}
+// CHECK-NEXT: {{^}} std::int8_t x6{x5}
 
-// CHECK: auto-fix-A8-5-2.cpp:61:16: warning: Braced-initialization {}, without equals sign, shall be used for variable initialization
-// CHECK-NEXT: std::int32_t x = 0;
-// CHECK-NEXT: ~~~~~~~~~~~~~^~~~~
-// CHECK-NEXT: std::int32_t x{0}
+// CHECK: {{^((/|/[a-zA-Z0-9_-]+)+)}}auto-fix-A8-5-2.cpp:42:5: warning: Braced-initialization {}, without equals sign, shall be used for variable initialization
+// CHECK-NEXT: {{^}} A a2 = {1, 5};
+// CHECK-NEXT: {{^}} ~~^~~~~~~~~~~{{$}}
+// CHECK-NEXT: {{^}} A a2{1, 5}{{$}}
 
-// CHECK: auto-fix-A8-5-2.cpp:62:5: warning: Braced-initialization {}, without equals sign, shall be used for variable initialization
-// CHECK-NEXT: T v1(x);
-// CHECK-NEXT: ~~^~~~
-// CHECK-NEXT: T v1{(x)}
+// CHECK: {{^((/|/[a-zA-Z0-9_-]+)+)}}auto-fix-A8-5-2.cpp:45:5: warning: Braced-initialization {}, without equals sign, shall be used for variable initialization
+// CHECK-NEXT: {{^}} A a3(1, 5);
+// CHECK-NEXT: {{^}} ~~^~~~~~~~{{$}}
+// CHECK-NEXT: {{^}} A a3{1, 5}{{$}}
 
-// CHECK: auto-fix-A8-5-2.cpp:62:5: warning: Braced-initialization {}, without equals sign, shall be used for variable initialization
-// CHECK-NEXT: T v1(x);
-// CHECK-NEXT: ~~^~~~
-// CHECK-NEXT: int v1{x}
+// CHECK: {{^((/|/[a-zA-Z0-9_-]+)+)}}auto-fix-A8-5-2.cpp:51:5: warning: Braced-initialization {}, without equals sign, shall be used for variable initialization
+// CHECK-NEXT: {{^}} C c2(2, 2);
+// CHECK-NEXT: {{^}} ~~^~~~~~~~{{$}}
+// CHECK-NEXT: {{^}} C c2{2, 2}{{$}}
+
+// CHECK: {{^((/|/[a-zA-Z0-9_-]+)+)}}auto-fix-A8-5-2.cpp:61:16: warning: Braced-initialization {}, without equals sign, shall be used for variable initialization
+// CHECK-NEXT: {{^}} std::int32_t x = 0;
+// CHECK-NEXT: {{^}} ~~~~~~~~~~~~~^~~~~{{$}}
+// CHECK-NEXT: {{^}} std::int32_t x{0}{{$}}
+
+// CHECK: {{^((/|/[a-zA-Z0-9_-]+)+)}}auto-fix-A8-5-2.cpp:62:5: warning: Braced-initialization {}, without equals sign, shall be used for variable initialization
+// CHECK-NEXT: {{^}} T v1(x);
+// CHECK-NEXT: {{^}} ~~^~~~
+// CHECK-NEXT: {{^}} T v1{(x)}
+// CHECK-NEXT: {{^}}11 warnings generated.
+// CHECK-NOT: {{.+}}

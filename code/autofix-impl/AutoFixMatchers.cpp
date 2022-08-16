@@ -1,4 +1,5 @@
 #include "AutoFixMatchers.hpp"
+#include "AutoFixHelper.hpp"
 #include <iostream>
 #include <set>
 
@@ -27,17 +28,18 @@ void A8_5_3::run(const MatchFinder::MatchResult &Result) {
   }
 }
 
-bool A8_5_3::warnAutoTypeBracedInit(const VarDecl *VD) {
+void A8_5_3::warnAutoTypeBracedInit(const VarDecl *VD) {
   if (auto dty = llvm::dyn_cast<clang::AutoType>(VD->getType().getTypePtr())) {
     if (!dty->isDecltypeAuto()) {
       if (VD->getInitStyle() == VarDecl::ListInit ||
           VD->getInitStyle() == VarDecl::CInit) {
         auto listInitExpr = getChildOfType<InitListExpr>(VD->getInit());
         if (!listInitExpr) {
-          return false;
+          return;
         }
-        std::string exprStr = getExprStr(listInitExpr, ASTCtx);
-        exprStr = exprStr.substr(1, exprStr.size() - 2);
+        std::string exprStr = getExprStr(listInitExpr, ASTCtx, PP);
+        trim(exprStr);
+        trimBraces(exprStr);
         exprStr = " = " + exprStr;
 
         std::string replacementStr = "auto " + VD->getNameAsString() + exprStr;
@@ -47,11 +49,10 @@ bool A8_5_3::warnAutoTypeBracedInit(const VarDecl *VD) {
         emitWarningWithHintReplacement(ASTCtx.getDiagnostics(), msg,
                                        replacementStr, VD->getSourceRange(),
                                        VD->getLocation());
-        return true;
+        return;
       }
     }
   }
-  return false;
 }
 
 void A8_5_2::run(const MatchFinder::MatchResult &Result) {
@@ -61,34 +62,20 @@ void A8_5_2::run(const MatchFinder::MatchResult &Result) {
   }
 }
 
-bool A8_5_2::warnNonAutoTypeBracedInit(const VarDecl *VD) {
+void A8_5_2::warnNonAutoTypeBracedInit(const VarDecl *VD) {
   if (VD->getInitStyle() == VarDecl::ListInit) {
-    return false;
+    return;
   }
-  std::string typeStr = VD->getType().getAsString();
+  std::string typeStr = VD->getType().getAsString(PP);
   stripTypeString(typeStr);
-  auto initListExpr = getChildOfType<InitListExpr>(VD->getInit());
-  auto cxxConstructExpr = getChildOfType<CXXConstructExpr>(VD->getInit());
-  std::string exprStr;
-  if (initListExpr) {
-    exprStr = getExprStr(initListExpr, ASTCtx);
-    exprStr = exprStr.substr(1, exprStr.size() - 2);
-  } else if (cxxConstructExpr) {
-    exprStr = getExprStr(cxxConstructExpr, ASTCtx);
-    if (exprStr[0] == '{' && exprStr[exprStr.size() - 1] == '}') {
-      exprStr = exprStr.substr(1, exprStr.size() - 2);
-    }
-  } else {
-    exprStr = getExprStr(VD->getInit(), ASTCtx);
-  }
-
+  std::string exprStr = getExprStr(VD->getInit(), ASTCtx, PP);
+  trimBraces(exprStr);
   exprStr = "{" + exprStr + "}";
   std::string replacementStr = typeStr + " " + VD->getNameAsString() + exprStr;
   std::string msg = "Braced-initialization {}, without equals sign, shall be "
                     "used for variable initialization";
   emitWarningWithHintReplacement(ASTCtx.getDiagnostics(), msg, replacementStr,
                                  VD->getSourceRange(), VD->getLocation());
-  return true;
 }
 
 void A7_2_3::run(const MatchFinder::MatchResult &Result) {
@@ -151,13 +138,13 @@ void A7_1_8::warnWrongPlacedSpecifiers(const Decl *D) {
   std::string typeStr;
   if (const ValueDecl *VD = llvm::dyn_cast<clang::ValueDecl>(D)) {
     declString = getSourceString(SM, VD->getBeginLoc(), VD->getEndLoc());
-    typeStr = VD->getType().getAsString();
+    typeStr = VD->getType().getAsString(PP);
     checkWrongPlacedSpecifiers(typeStr, declString, D);
   } else if (const TypedefDecl *TD = llvm::dyn_cast<clang::TypedefDecl>(D)) {
     auto name = TD->getName().str();
     declString =
         getSourceString(SM, TD->getBeginLoc(), TD->getEndLoc(), name.length());
-    typeStr = TD->getUnderlyingType().getAsString();
+    typeStr = TD->getUnderlyingType().getAsString(PP);
     checkWrongPlacedSpecifiers(typeStr, declString, D);
   }
 }
@@ -165,7 +152,7 @@ void A7_1_8::warnWrongPlacedSpecifiers(const Decl *D) {
 void A7_1_6::run(const MatchFinder::MatchResult &Result) {
   auto TD = Result.Nodes.getNodeAs<clang::TypedefDecl>("A7_1_6_Matcher");
 
-  auto TypeStr = TD->getUnderlyingType().getAsString();
+  auto TypeStr = TD->getUnderlyingType().getAsString(PP);
   std::string ReplacementStr = "using " + TD->getName().str() + " = " + TypeStr;
 
   std::string Msg = "The typedef specifier shall not be used.";

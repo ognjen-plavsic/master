@@ -10,7 +10,7 @@
 using namespace llvm;
 using namespace clang;
 
-std::string getExprStr(const Expr *expr, const ASTContext &Context);
+std::string getExprStr(const Expr *expr, const ASTContext &Context, PrintingPolicy &PP);
 void stripTypeString(std::string &typeStr);
 std::string getSourceString(SourceManager &SM, SourceLocation beginLoc,
                             SourceLocation endLoc, int offset = 0);
@@ -26,6 +26,9 @@ template <typename T> const T *getChildOfType(const Stmt *S) {
   }
   return nullptr;
 }
+
+void trim(std::string &s);
+void trimBraces(std::string &s);
 
 llvm::SmallSet<std::string, 20> parseComaSeparatedWords(std::string Str);
 

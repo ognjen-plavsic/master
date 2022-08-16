@@ -9,39 +9,42 @@ using namespace clang::ast_matchers;
 
 class A8_5_3 : public MatchFinder::MatchCallback {
 public:
-  A8_5_3(ASTContext &ASTCtx, SourceManager &SM) : ASTCtx(ASTCtx), SM(SM) {}
+  A8_5_3(ASTContext &ASTCtx, SourceManager &SM, PrintingPolicy &PP) : ASTCtx(ASTCtx), SM(SM), PP{PP} {}
   virtual void run(const MatchFinder::MatchResult &Result);
-  bool warnAutoTypeBracedInit(const VarDecl *VD);
+  void warnAutoTypeBracedInit(const VarDecl *VD);
 
 private:
   ASTContext &ASTCtx;
   SourceManager &SM;
+  PrintingPolicy &PP;
 };
 
 class A8_5_2 : public MatchFinder::MatchCallback {
 public:
-  A8_5_2(ASTContext &ASTCtx, SourceManager &SM) : ASTCtx(ASTCtx), SM(SM) {}
+  A8_5_2(ASTContext &ASTCtx, SourceManager &SM, PrintingPolicy &PP) : ASTCtx(ASTCtx), SM(SM), PP{PP} {}
   virtual void run(const MatchFinder::MatchResult &Result);
-  bool warnNonAutoTypeBracedInit(const VarDecl *VD);
+  void warnNonAutoTypeBracedInit(const VarDecl *VD);
 
 private:
   ASTContext &ASTCtx;
   SourceManager &SM;
+  PrintingPolicy &PP;
 };
 
 class A7_1_6 : public MatchFinder::MatchCallback {
 public:
-  A7_1_6(ASTContext &ASTCtx, SourceManager &SM) : ASTCtx(ASTCtx), SM(SM) {}
+  A7_1_6(ASTContext &ASTCtx, SourceManager &SM, PrintingPolicy &PP) : ASTCtx(ASTCtx), SM(SM), PP{PP} {}
   virtual void run(const MatchFinder::MatchResult &Result);
 
 private:
   ASTContext &ASTCtx;
   SourceManager &SM;
+  PrintingPolicy &PP;
 };
 
 class A7_1_8 : public MatchFinder::MatchCallback {
 public:
-  A7_1_8(ASTContext &ASTCtx, SourceManager &SM) : ASTCtx(ASTCtx), SM(SM) {}
+  A7_1_8(ASTContext &ASTCtx, SourceManager &SM, PrintingPolicy &PP) : ASTCtx(ASTCtx), SM(SM), PP{PP} {}
   virtual void run(const MatchFinder::MatchResult &Result);
   void warnWrongPlacedSpecifiers(const Decl *D);
   void checkWrongPlacedSpecifiers(std::string &typeStr, std::string &declString,
@@ -50,16 +53,18 @@ public:
 private:
   ASTContext &ASTCtx;
   SourceManager &SM;
+  PrintingPolicy &PP;
 };
 
 class A7_2_3 : public MatchFinder::MatchCallback {
 public:
-  A7_2_3(ASTContext &ASTCtx, SourceManager &SM) : ASTCtx(ASTCtx), SM(SM) {}
+  A7_2_3(ASTContext &ASTCtx, SourceManager &SM, PrintingPolicy &PP) : ASTCtx(ASTCtx), SM(SM), PP{PP} {}
   virtual void run(const MatchFinder::MatchResult &Result);
 
 private:
   ASTContext &ASTCtx;
   SourceManager &SM;
+  PrintingPolicy &PP;
 };
 
 #endif // AUTOFIX_MATCHERS_H

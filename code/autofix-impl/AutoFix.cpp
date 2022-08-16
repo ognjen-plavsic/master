@@ -45,39 +45,52 @@ static cl::extrahelp MoreHelp("\nMore help text...\n");
 
 MatchFinder::MatchCallback *printerFactory(const std::string &MatcherName,
                                            ASTContext &Context,
-                                           SourceManager &SM) {
+                                           SourceManager &SM, PrintingPolicy &PP) {
   if (MatcherName == "A7_1_6") {
-    return new A7_1_6(Context, SM);
+    return new A7_1_6(Context, SM, PP);
   } else if (MatcherName == "A7_1_8") {
-    return new A7_1_8(Context, SM);
+    return new A7_1_8(Context, SM, PP);
   } else if (MatcherName == "A7_2_3") {
-    return new A7_2_3(Context, SM);
+    return new A7_2_3(Context, SM, PP);
   } else if (MatcherName == "A8_5_2") {
-    return new A8_5_2(Context, SM);
+    return new A8_5_2(Context, SM, PP);
   } else if (MatcherName == "A8_5_3") {
-    return new A8_5_3(Context, SM);
+    return new A8_5_3(Context, SM, PP);
   } else {
     llvm::errs() << "Unsuported rule " + MatcherName + ".\n";
     std::exit(1);
   }
 }
 
+
+
 internal::Matcher<Decl> *matcherFactory(const std::string &MatcherName) {
   if (MatcherName == "A7_1_6") {
     return new internal::Matcher<Decl>{
-        typedefDecl(isExpansionInMainFile()).bind("A7_1_6_Matcher")};
+        typedefDecl(isExpansionInMainFile(), unless(isImplicit()))
+            .bind("A7_1_6_Matcher")};
   } else if (MatcherName == "A7_1_8") {
     return new internal::Matcher<Decl>{
-        decl(isExpansionInMainFile()).bind("A7_1_8_Matcher")};
+        decl(isExpansionInMainFile(), unless(isImplicit()))
+            .bind("A7_1_8_Matcher")};
   } else if (MatcherName == "A7_2_3") {
     return new internal::Matcher<Decl>{
-        enumDecl(isExpansionInMainFile()).bind("A7_2_3_Matcher")};
+        enumDecl(isExpansionInMainFile(), unless(isImplicit()))
+            .bind("A7_2_3_Matcher")};
   } else if (MatcherName == "A8_5_2") {
     return new internal::Matcher<Decl>{
-        varDecl(isExpansionInMainFile()).bind("A8_5_2_Matcher")};
+        varDecl(
+            allOf(isExpansionInMainFile(),
+                  unless(hasParent(declStmt(hasParent(cxxForRangeStmt()))))),
+            unless(isInstantiated()), unless(isImplicit()))
+            .bind("A8_5_2_Matcher")};
   } else if (MatcherName == "A8_5_3") {
     return new internal::Matcher<Decl>{
-        varDecl(isExpansionInMainFile()).bind("A8_5_3_Matcher")};
+        varDecl(
+            allOf(isExpansionInMainFile(),
+                  unless(hasParent(declStmt(hasParent(cxxForRangeStmt()))))),
+            unless(isInstantiated()), unless(isImplicit()))
+            .bind("A8_5_3_Matcher")};
   } else {
     llvm::errs() << "Unsuported rule " + MatcherName + ".\n";
     std::exit(1);
@@ -95,6 +108,19 @@ public:
 
     SmallSet<std::string, 20> RulesMap = parseComaSeparatedWords(Rules);
 
+    PrintingPolicy PP(Context.getLangOpts());
+    PP.adjustForCPlusPlus();
+    PP.SuppressTagKeyword = true;
+    PP.SuppressUnwrittenScope = true;
+    PP.SuppressInitializers = true;
+    PP.ConstantArraySizeAsWritten = true;
+    PP.AnonymousTagLocations = false;
+    PP.Nullptr = true;
+    PP.Restrict = true;
+    PP.Alignof = true;
+    PP.ConstantsAsWritten = true;
+    PP.PrintCanonicalTypes = false;
+
     if (RulesMap.count("all")) {
       RulesMap.erase("all");
       for (const auto &Rule : SupportedRulesVec) {
@@ -107,8 +133,10 @@ public:
     std::vector<MatchFinder::MatchCallback *> PrinterVec;
     for (const auto &MatcherName : RulesMap) {
       internal::Matcher<Decl> *Matcher = matcherFactory(MatcherName);
+      auto b = decl(isExpansionInMainFile()).bind("A7_1_8_Matcher");
+
       MatchFinder::MatchCallback *Printer =
-          printerFactory(MatcherName, Context, SM);
+          printerFactory(MatcherName, Context, SM, PP);
 
       MatcherVec.push_back(Matcher);
       PrinterVec.push_back(Printer);

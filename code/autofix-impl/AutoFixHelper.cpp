@@ -7,16 +7,12 @@
 #include <string>
 #include <cctype>
 #include <locale>
+#include <algorithm>
 
-std::string getExprStr(const Expr *expr, const ASTContext &Context) {
-  static PrintingPolicy print_policy(Context.getLangOpts());
-  print_policy.FullyQualifiedName = 1;
-  print_policy.SuppressScope = 0;
-  print_policy.PrintCanonicalTypes = 1;
-
+std::string getExprStr(const Expr *expr, const ASTContext &Context, PrintingPolicy &PP) {
   std::string expr_string;
   llvm::raw_string_ostream stream(expr_string);
-  expr->printPretty(stream, nullptr, print_policy);
+  expr->printPretty(stream, nullptr, PP);
   stream.flush();
   return expr_string;
 }
@@ -36,7 +32,11 @@ std::string getSourceString(SourceManager &SM, SourceLocation beginLoc,
                             SourceLocation endLoc, int offset) {
   auto beginPtr = SM.getCharacterData(beginLoc);
   auto endPtr = SM.getCharacterData(endLoc);
-  return std::string(beginPtr, (endPtr - beginPtr) + 1 + offset);
+  unsigned ptrDif = endPtr - beginPtr;
+  // Some declarations can be large. If declaration is larger than 100
+  // characters, ignore the rest.
+  auto len = std::min(ptrDif + 1 + offset, (unsigned)100);
+  return std::string(beginPtr, len);
 }
 
 std::vector<std::string> getWordsFromString(std::string &str) {
@@ -50,24 +50,43 @@ std::vector<std::string> getWordsFromString(std::string &str) {
 }
 
 // trim from start (in place)
-static inline void ltrim(std::string &s) {
+void ltrim(std::string &s) {
     s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) {
         return !std::isspace(ch);
     }));
 }
 
 // trim from end (in place)
-static inline void rtrim(std::string &s) {
+void rtrim(std::string &s) {
     s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) {
         return !std::isspace(ch);
     }).base(), s.end());
 }
 
 // trim from both ends (in place)
-static inline void trim(std::string &s) {
+void trim(std::string &s) {
     ltrim(s);
     rtrim(s);
 }
+
+void ltrimBraces(std::string &s) {
+    s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) {
+        return !(ch == '{');
+    }));
+}
+
+// trim from end (in place)
+void rtrimBraces(std::string &s) {
+    s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) {
+        return !(ch == '}');
+    }).base(), s.end());
+}
+
+void trimBraces(std::string &s) {
+    ltrimBraces(s);
+    rtrimBraces(s);
+}
+
 
 llvm::SmallSet<std::string, 20> parseComaSeparatedWords(std::string Str){
   llvm::SmallSet<std::string, 20> Words;

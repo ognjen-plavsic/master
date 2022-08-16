@@ -1,4 +1,4 @@
-// RUN: auto-fix -rules="A8_5_3" %s 2>&1 -- | FileCheck -dump-input-filter=all -color %s
+// RUN: auto-fix -rules="A8_5_3" %s 2>&1 -- -Wno-everything | FileCheck %s
 
 #include <cstdint>
 #include <initializer_list>
@@ -17,13 +17,17 @@ void fn() noexcept {
   std::int8_t x5{10}; // Compliant
 }
 
-// CHECK: auto-fix-A8-5-3.cpp:9:8: warning: A variable of type auto shall not be initialized using {} or ={} braced initialization
-// CHECK-NEXT: auto x2{10};
-// CHECK-NEXT: ~~~~~^~~~~~
-// CHECK-NEXT: auto x2 = 10
+// CHECK-NOT: {{.+}}
+// CHECK: {{^((/|/[a-zA-Z0-9_-]+)+)}}auto-fix-A8-5-3.cpp:9:8: warning: A variable of type auto shall not be initialized using {} or ={} braced initialization
+// CHECK-NEXT: {{^}} auto x2{10};
+// CHECK-NEXT: {{^}} ~~~~~^~~~~~
+// CHECK-NEXT: {{^}} auto x2 = 10
+// CHECK-NOT: {{.+}}
 
-// CHECK: auto-fix-A8-5-3.cpp:15:8: warning: A variable of type auto shall not be initialized using {} or ={} braced initialization
-// CHECK-NEXT: auto x4 = {10};
-// CHECK-NEXT: ~~~~~^~~~~~~~~
-// CHECK-NEXT: auto x4 = 10
+// CHECK: {{^((/|/[a-zA-Z0-9_-]+)+)}}auto-fix-A8-5-3.cpp:15:8: warning: A variable of type auto shall not be initialized using {} or ={} braced initialization
+// CHECK-NEXT: {{^}} auto x4 = {10};
+// CHECK-NEXT: {{^}} ~~~~~^~~~~~~~~
+// CHECK-NEXT: {{^}} auto x4 = 10
+// CHECK-NEXT: {{^}}2 warnings generated.{{$}}
+// CHECK-NOT: {{.+}}
 
