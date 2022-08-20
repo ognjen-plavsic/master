@@ -1158,6 +1158,44 @@ typedef unsigned long ulong;
 // CHECK-NOT: {{.+}}
 \end{lstlisting}
 
+\section{Rezultati rada alata}
+
+U svrhu verifikacije robusnosti i kvaliteta alata \textit{AutoFix}, izvr\v{s}ena je analiza nad delovima projekta \textit{AGL}. Projekat \textit{AGL}
+je izabran na osnovu svoje relevantnosti u automobilskoj industriji. \par
+
+\textit{Automotive Grade Linux (AGL)} je zajedni\v{c}ki projekat otvorenog koda koji okuplja proizvodja\v{c}e automobila, dobavlja\v{c}e i tehnolo\v{s}ke kompanije kako bi ubrzao razvoj i usvajanje potpuno otvorenog softverskog paketa (eng.~\textit{software stack}) za povezane automobile (eng.~\textit{connected cars}). Sa operativnim sistemom Linuks u svojoj osnovi, AGL razvija platformu koja mo\v{z}e slu\v{z}iti kao osnovni standard u industriji \v{c}ime bi se omogu\'{c}io brz razvoj novih funkcija i tehnologija \cite{AGL}.
+\par
+Alat \textit{AutoFix} pokretan je nad podprojektima projekta \textit{AGL}. Projekti su izabrani nasumi\v{c}no osim kriterijuma
+da opseg projekta bude relativno mali kako bi se smanjila verovatno\'{c}a gre\v{s}ke pri obradi rezultata. Alat je pokretan skriptom koja rekurzivno 
+obilazi direktorijume u okviru projekta i pokre\'{c}e alat \textit{AutoFix} nad  svim
+svim fajlovima sa ekstenzijom \texttt{.cpp} i \texttt{.cc}. Nad svakim fajlom, alat je pokrenut komandom \\
+\texttt{./auto-fix  --rules="all"  putanja\_do\_fajla  --}.
+
+\subsection{Projekat re2c}
+
+Projekat \textit{re2c} nad kojim je pokretan alat \textit{AutoFix} nalazi su u okviru \textit{AGL} projekta na lokaciji \texttt{build/tmp/work/x86\_64-linux/re2c-native}. Projkat sadr\v{z}i 84 fajlova sa ekstenzom \texttt{.cc}. \par
+Na slici \ref{fig:re2c} prikazana je tabela koja prikazuje broj prijavljenih upozorenja za svako od pravila prilikom pokretanja alata \textit{AutoFix}.
+Za svako od upozorenja ispisan je i odgovaraju\'{c}i predlog izmene koda. Upozorenje za pravilo \textbf{A8-5-3} nije prijavljeno nijednom. Pretragom
+alatom \textit{grep} kroz svaki od fajlova ustanovljeno je da konstrukti na koje se odnosi pravilo \textbf{A8-5-3} zaista nisu kori\v{s}\'{c}eni u okviru koda i da se ne radi o gre\v{s}ci u alatu \textit{AutoFix}. Ovaj rezultat sla\v{z}e se sa \v{c}injenicom da je najve\'{c}i broj upozorenja prijavljen za pravilo \textbf{A8-5-2}. Pravilo \textbf{A8-5-2} predla\v{z}e upotrebu inicijalizacije viti\v{c}astim zagradama pri inicijalizaciji promenljive dok pravilo \textbf{A8-5-3} zabranjuje upotrebu inicijalizacije viti\v{c}astim zagradama prilikom deklaracije promenljivih sa tipom \texttt{auto}. S obzirom na veliki broj upozorenja za pravilo \textbf{A8-5-2} i \v{c}injenice da za pravilo \textbf{A8-5-3} nije prijavljeno nijedno upozorenje, zaklju\v{c}eno je da prilikom inicijalizacije promenljivih nije kori\v{s}\'{c}ena sintaksa viti\v{c}astih zagrada ne vezano da li je promenljiva
+tipa \texttt{auto} ili ne. U kombinaciji sa \v{c}injenicom da je prijavljen veliki broj upozorenja za pravila \textbf{A7-1-6} i \textbf{A8-5-2} zaklju\v{c}eno je da k\^{o}d u okviru projekta \textit{re2c} nije pisan po standardu \textsc{autosar} C++14. \par
+Skripta za pokretanje alata \textit{AutoFix} nad projektom \textit{re2c} pokrenuta je deset puta sa prose\v{c}nim vremenom izvr\v{s}avanja od 39.602 sekunde. Vreme je izmereno programom \texttt{time} u okviru operativnog sistema Linux. Izra\v{c}unato prose\v{c}no vreme se odnosi na komponentu \texttt{real} u okviru rezultata programa \texttt{time}.
+\begin{figure}
+\begin{center}
+\begin{tabular}{ |p{3cm}||p{2cm}|p{2cm}|p{2cm}|p{2cm}|  }
+ \hline
+ \multicolumn{5}{|c|}{Broj prijavljenih upozorenja po pravilu} \\
+ \hline
+ Ime projekta & Pravilo A7-1-6 & Pravilo A7-2-3 & Pravilo A8-5-2 & Pravilo A8-5-3\\
+ \hline
+ \textit{re2c}   & 1329            & 714             & 2561            & 0\\
+ \hline
+\end{tabular}
+\caption{Broj prijavljenih upozorenja po pravilu za projekat \textit{re2c}.}
+\label{fig:re2c}
+\end{center}
+\end{figure}
+
+
 % ------------------------------------------------------------------------------
 
 % \pangrami
