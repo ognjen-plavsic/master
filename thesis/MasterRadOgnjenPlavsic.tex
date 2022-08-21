@@ -860,7 +860,8 @@ Navedeni arumenti podrazumevaju sledeće:
   \begin{enumerate}
     \item \texttt{--apply-fix}: Ovom opcijom se predlo\v{z}ene izmene mogu primeniti na k\^{o}d, menjaju\'{c}i izvorni fajl nad kojim je pokrenuta analiza.
     Predlo\v{z}ene izmene bi\'{c}e primenjene na k\^{o}d ukoliko među njima ne postoji konflikt, odnosno ukoliko se razli\v{c}iti predlozi ne odnose na isti deo koda.
-    \item \texttt{--exclude-headers}: Omogu\'{c}ava da se upozorenja ne prijavljuju za k\^{o}d iz heder fajlova.
+    \item \texttt{--exclude-headers}: Omogu\'{c}ava da se upozorenja ne prijavljuju za k\^{o}d iz heder fajlova. Ova opcija se ne odnosi na sistemske
+      heder fajlove koje alat \textit{AutoFix} ignori\v{s}e i bez navođenja ove opcije.
     \item \texttt{--list-rules}: Ispisuje sva podr\v{z}ana pravila u okviru alata u formatu \texttt{oznaka - tekst\_pravila} gde je \texttt{oznaka} jedinstvena oznaka pravila iz \textsc{autosar} dokumenta, a \texttt{tekst\_pravila} prestavlja kratak opis pravila iz \textsc{autosar} dokumenta koji se ujedno ispisuje prilikom prijavljivanja upozorenja vezanih za to pravilo. Primer: \\ \\
   \texttt{A7-1-8 - A non-type specifier shall be placed before a type \\ specifier in a declaration.} \\
     \item \texttt{--rules=<string>}: Omogu\'{c}ava navođenje podskupa implementiranih pravila za koje \'{c}e alat izvr\v{s}iti analizu. Pravila u okviru ove opcije
@@ -1163,7 +1164,7 @@ typedef unsigned long ulong;
 U svrhu verifikacije robusnosti i kvaliteta alata \textit{AutoFix}, izvr\v{s}ena je analiza nad delovima projekta \textit{AGL}. Projekat \textit{AGL}
 je izabran na osnovu svoje relevantnosti u automobilskoj industriji. \par
 
-\textit{Automotive Grade Linux (AGL)} je zajedni\v{c}ki projekat otvorenog koda koji okuplja proizvodja\v{c}e automobila, dobavlja\v{c}e i tehnolo\v{s}ke kompanije kako bi ubrzao razvoj i usvajanje potpuno otvorenog softverskog paketa (eng.~\textit{software stack}) za povezane automobile (eng.~\textit{connected cars}). Sa operativnim sistemom Linuks u svojoj osnovi, AGL razvija platformu koja mo\v{z}e slu\v{z}iti kao osnovni standard u industriji \v{c}ime bi se omogu\'{c}io brz razvoj novih funkcija i tehnologija \cite{AGL}.
+\textit{Automotive Grade Linux (AGL)} je zajedni\v{c}ki projekat otvorenog koda koji okuplja proizvođa\v{c}e automobila, dobavlja\v{c}e i tehnolo\v{s}ke kompanije kako bi ubrzao razvoj i usvajanje potpuno otvorenog softverskog paketa (eng.~\textit{software stack}) za povezane automobile (eng.~\textit{connected cars}). Sa operativnim sistemom Linuks u svojoj osnovi, AGL razvija platformu koja mo\v{z}e slu\v{z}iti kao osnovni standard u industriji \v{c}ime bi se omogu\'{c}io brz razvoj novih funkcija i tehnologija \cite{AGL}.
 \par
 Alat \textit{AutoFix} pokretan je nad podprojektima projekta \textit{AGL}. Projekti su izabrani nasumi\v{c}no osim kriterijuma
 da opseg projekta bude relativno mali kako bi se smanjila verovatno\'{c}a gre\v{s}ke pri obradi rezultata. Alat je pokretan skriptom koja rekurzivno 
@@ -1171,7 +1172,7 @@ obilazi direktorijume u okviru projekta i pokre\'{c}e alat \textit{AutoFix} nad 
 svim fajlovima sa ekstenzijom \texttt{.cpp} i \texttt{.cc}. Nad svakim fajlom, alat je pokrenut komandom \\
 \texttt{./auto-fix  --rules="all"  putanja\_do\_fajla  --}.
 
-\subsection{Projekat re2c}
+\subsection{Projekat \textit{re2c}}
 
 Projekat \textit{re2c} nad kojim je pokretan alat \textit{AutoFix} nalazi su u okviru \textit{AGL} projekta na lokaciji \texttt{build/tmp/work/x86\_64-linux/re2c-native}. Projkat sadr\v{z}i 84 fajlova sa ekstenzom \texttt{.cc}. \par
 Na slici \ref{fig:re2c} prikazana je tabela koja prikazuje broj prijavljenih upozorenja za svako od pravila prilikom pokretanja alata \textit{AutoFix}.
@@ -1195,6 +1196,28 @@ Skripta za pokretanje alata \textit{AutoFix} nad projektom \textit{re2c} pokrenu
 \end{center}
 \end{figure}
 
+\subsection{Projekat \textit{ninja}}
+
+Projekat \textit{ninja} nad kojim je pokretan alat \textit{AutoFix} nalazi su u okviru \textit{AGL} projekta na lokaciji \texttt{build/tmp/work/x86\_64-linux/ninja-native}. U okviru ovog direktorijuma, alat \textit{AutoFix} je pokrenut rekurzivno nad 55 fajlova sa ekstenzijom \texttt{.cc}. \par
+Na slici \ref{fig:ninja} prikazana je tabela koja prikazuje broj prijavljenih upozorenja za svako od pravila prilikom pokretanja alata \textit{AutoFix}.
+Na osnovu rezultata sa slike prime\'{c}eno je da je odnos broja prijavljenih upozorenja po pravilu sli\v{c}an rezultatima prikazanim na slici \ref{fig:re2c} dobijenim pri pokretanju alata \textit{AutoFix} nad projektom \textit{re2c}. Na osnovu ovoga, zaklju\v{c}ci izvedeni tokom diskusije rezultata nad projektom \textit{re2c} va\v{z}e i za rezultate projekta \textit{ninja}. Skripta za pokretanje alata \textit{AutoFix} nad projektom \textit{re2c} pokrenuta je deset puta sa prose\v{c}nim vremenom izvr\v{s}avanja od 18.002 sekunde.\par
+Alat se uspe\v{s}no izvr\v{s}io prilikom pokretanja nad svakim fajlom sa ekstenzijom \texttt{.cc} u okviru projekata \textit{re2c} i \textit{ninja}. Na osnovu ovoga zaklju\v{c}eno je da u implementaciji alata ne postoji veliki broj gre\v{s}aka.
+\begin{figure}
+\begin{center}
+\begin{tabular}{ |p{3cm}||p{2cm}|p{2cm}|p{2cm}|p{2cm}|  }
+ \hline
+ \multicolumn{5}{|c|}{Broj prijavljenih upozorenja po pravilu} \\
+ \hline
+ Ime projekta & Pravilo A7-1-6 & Pravilo A7-2-3 & Pravilo A8-5-2 & Pravilo A8-5-3\\
+ \hline
+ \textit{ninja}   & 334            & 188             & 1007            & 0\\
+ \hline
+\end{tabular}
+\caption{Broj prijavljenih upozorenja po pravilu za projekat \textit{ninja}.}
+\label{fig:ninja}
+\end{center}
+\end{figure}
+
 
 % ------------------------------------------------------------------------------
 
@@ -1211,7 +1234,7 @@ tokom razvoja softvera pove\'{c}ava kvalitet softvera time \v{s}to smanjuje vero
 najzastupljeniji standard za pravilno pisanje koda u jeziku C++14 je standard \textsc{autosar} C++14.
 \par
 Ru\v{c}no proveravanje da li je k\^{o}d napisan u skladu sa standardom predstavlja mukotrpan i neefikasan proces. U svrhu automatizovanja ovog procesa
-koriste se alati za stati\v{c}ku analizu koda, koji bez pokretanja programa detektuju k\^{o}d koji nije napisan u skladu sa standardom. Alat \textit{AutoFix}, koji je razvijen u ovom radu, ispisuje upozorenja vezana za k\^{o}d koji nije napisan u skladu sa podskupom pravila iz standarda \textsc{autosar} C++14 koja se odnose na deklaracije u programskom jeziku C++14 i predla\v{z}e kako izmeniti k\^{o}d da bi bio u skladu sa standardom. \textit{AutoFix} podr\v{z}ava i opciju komandne linije kojom se predlo\v{z}ene izmene mogu primeniti na izvorni k\^{o}d. Alat je razvijen kori\v{s}\'{c}enjem biblioteka koje pru\v{z}a kompajlerska infrastruktura LLVM. Pravila standarda \textsc{autosar} C++14 podr\v{z}ana u okviru alata \textit{AutoFix} su \textbf{A7-1-8}, \textbf{A8-5-3}, \textbf{A8-5-2}, \textbf{A7-1-6}, \textbf{A7-2-3}. Detaljnim testiranjem upotrebom alata \textit{lit} i \textit{FileCheck} iz kompajlerske infrastrukture LLVM obezbeđen je i visok kvalitet razvijenog alata.
+koriste se alati za stati\v{c}ku analizu koda, koji bez pokretanja programa detektuju k\^{o}d koji nije napisan u skladu sa standardom. Alat \textit{AutoFix}, koji je razvijen u ovom radu, ispisuje upozorenja vezana za k\^{o}d koji nije napisan u skladu sa podskupom pravila iz standarda \textsc{autosar} C++14 koja se odnose na deklaracije u programskom jeziku C++14 i predla\v{z}e kako izmeniti k\^{o}d da bi bio u skladu sa standardom. \textit{AutoFix} podr\v{z}ava i opciju komandne linije kojom se predlo\v{z}ene izmene mogu primeniti na izvorni k\^{o}d. Alat je razvijen kori\v{s}\'{c}enjem biblioteka koje pru\v{z}a kompajlerska infrastruktura LLVM. Pravila standarda \textsc{autosar} C++14 podr\v{z}ana u okviru alata \textit{AutoFix} su \textbf{A7-1-8}, \textbf{A8-5-3}, \textbf{A8-5-2}, \textbf{A7-1-6}, \textbf{A7-2-3}. Detaljnim testiranjem upotrebom alata \textit{lit} i \textit{FileCheck} iz kompajlerske infrastrukture LLVM obezbeđen je i visok kvalitet razvijenog alata. Analizom rezultata dobijenim pokretanjem alata \textit{AutoFix} nad podprojektima projekta \textit{AGL} zaklju\v{c}eno je da u okviru podprojekta \textit{re2c} i \textit{ninja} k\^{o}d nije napisan po standardu \textsc{autosar} C++14.
 
 \par
 U daljem razvoju alat se mo\v{z}e unaprediti na nekoliko na\v{c}ina. 
