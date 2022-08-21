@@ -15,16 +15,15 @@ using namespace clang::tooling;
 
 static std::string SupportedRules = 
   "A7-1-6 - The typedef specifier shall not be used.\n"
-  "A7-1-8 - A non-type specifier shall be placed before a type specifier in a declaration.\n"
   "A7-2-3 - Enumerations shall be declared as scoped enum classes.\n"
   "A8-5-2 - Braced-initialization {}, without equals sign, shall be used for variable initialization.\n"
   "A8-5-3 - A variable of type auto shall not be initialized using {} or ={} braced initialization.\n";
 
-static std::vector<std::string> SupportedRulesVec = {"A7_1_6", "A7_1_8", "A7_2_3", "A8_5_2", "A8_5_3"};
+static std::vector<std::string> SupportedRulesVec = {"A7_1_6", "A7_2_3", "A8_5_2", "A8_5_3"};
 
 static llvm::cl::OptionCategory AutoFixCategory("auto-fix options");
 
-cl::opt<bool> ApplyFix("apply-fix", cl::desc(R"(Apply suggested fixes. )"),
+static cl::opt<bool> ApplyFix("apply-fix", cl::desc(R"(Apply suggested fixes. )"),
                        cl::init(false), cl::cat(AutoFixCategory));
 
 static cl::opt<std::string> Rules(
@@ -38,18 +37,18 @@ static cl::opt<bool>
               cl::desc(R"(List all of the AutFix supported rules.)"),
               cl::init(false), cl::cat(AutoFixCategory));
 
-static cl::extrahelp CommonHelp(CommonOptionsParser::HelpMessage);
+static cl::opt<bool>
+    ExcludeHeaders("exclude-headers",
+              cl::desc(R"(Exclude header files from analysis)"),
+              cl::init(false), cl::cat(AutoFixCategory));
 
-// A help message for this specific tool can be added afterwards.
-static cl::extrahelp MoreHelp("\nMore help text...\n");
+static cl::extrahelp CommonHelp(CommonOptionsParser::HelpMessage);
 
 MatchFinder::MatchCallback *printerFactory(const std::string &MatcherName,
                                            ASTContext &Context,
                                            SourceManager &SM, PrintingPolicy &PP) {
   if (MatcherName == "A7_1_6") {
     return new A7_1_6(Context, SM, PP);
-  } else if (MatcherName == "A7_1_8") {
-    return new A7_1_8(Context, SM, PP);
   } else if (MatcherName == "A7_2_3") {
     return new A7_2_3(Context, SM, PP);
   } else if (MatcherName == "A8_5_2") {
@@ -62,41 +61,27 @@ MatchFinder::MatchCallback *printerFactory(const std::string &MatcherName,
   }
 }
 
-
-
 internal::Matcher<Decl> *matcherFactory(const std::string &MatcherName) {
-  if (MatcherName == "A7_1_6") {
-    return new internal::Matcher<Decl>{
-        typedefDecl(isExpansionInMainFile(), unless(isImplicit()))
-            .bind("A7_1_6_Matcher")};
-  } else if (MatcherName == "A7_1_8") {
-    return new internal::Matcher<Decl>{
-        decl(isExpansionInMainFile(), unless(isImplicit()))
-            .bind("A7_1_8_Matcher")};
-  } else if (MatcherName == "A7_2_3") {
-    return new internal::Matcher<Decl>{
-        enumDecl(isExpansionInMainFile(), unless(isImplicit()))
-            .bind("A7_2_3_Matcher")};
-  } else if (MatcherName == "A8_5_2") {
-    return new internal::Matcher<Decl>{
-        varDecl(
-            allOf(isExpansionInMainFile(),
-                  unless(hasParent(declStmt(hasParent(cxxForRangeStmt()))))),
-            unless(isInstantiated()), unless(isImplicit()))
-            .bind("A8_5_2_Matcher")};
-  } else if (MatcherName == "A8_5_3") {
-    return new internal::Matcher<Decl>{
-        varDecl(
-            allOf(isExpansionInMainFile(),
-                  unless(hasParent(declStmt(hasParent(cxxForRangeStmt()))))),
-            unless(isInstantiated()), unless(isImplicit()))
-            .bind("A8_5_3_Matcher")};
+  if (ExcludeHeaders) {
+    return matcherFactoryOnlyMainFile(MatcherName);
   } else {
-    llvm::errs() << "Unsuported rule " + MatcherName + ".\n";
-    std::exit(1);
+    return matcherFactoryAllFiles(MatcherName);
   }
 }
 
+void setPrintingPolicy(PrintingPolicy &PP){
+    PP.adjustForCPlusPlus();
+    PP.SuppressTagKeyword = true;
+    PP.SuppressUnwrittenScope = true;
+    PP.SuppressInitializers = true;
+    PP.ConstantArraySizeAsWritten = true;
+    PP.AnonymousTagLocations = false;
+    PP.Nullptr = true;
+    PP.Restrict = true;
+    PP.Alignof = true;
+    PP.ConstantsAsWritten = true;
+    PP.PrintCanonicalTypes = false;
+}
 class AutoFixConsumer : public clang::ASTConsumer {
 public:
   explicit AutoFixConsumer(ASTContext *Context, SourceManager &SM) : SM(SM) {}
@@ -109,17 +94,7 @@ public:
     SmallSet<std::string, 20> RulesMap = parseComaSeparatedWords(Rules);
 
     PrintingPolicy PP(Context.getLangOpts());
-    PP.adjustForCPlusPlus();
-    PP.SuppressTagKeyword = true;
-    PP.SuppressUnwrittenScope = true;
-    PP.SuppressInitializers = true;
-    PP.ConstantArraySizeAsWritten = true;
-    PP.AnonymousTagLocations = false;
-    PP.Nullptr = true;
-    PP.Restrict = true;
-    PP.Alignof = true;
-    PP.ConstantsAsWritten = true;
-    PP.PrintCanonicalTypes = false;
+    setPrintingPolicy(PP);
 
     if (RulesMap.count("all")) {
       RulesMap.erase("all");
@@ -133,7 +108,6 @@ public:
     std::vector<MatchFinder::MatchCallback *> PrinterVec;
     for (const auto &MatcherName : RulesMap) {
       internal::Matcher<Decl> *Matcher = matcherFactory(MatcherName);
-      auto b = decl(isExpansionInMainFile()).bind("A7_1_8_Matcher");
 
       MatchFinder::MatchCallback *Printer =
           printerFactory(MatcherName, Context, SM, PP);
@@ -181,8 +155,12 @@ public:
 };
 
 int main(int argc, const char **argv) {
+  cl::HideUnrelatedOptions(AutoFixCategory);
+
   auto ExpectedParser =
-      CommonOptionsParser::create(argc, argv, AutoFixCategory);
+      CommonOptionsParser::create(argc, argv, AutoFixCategory, cl::ZeroOrMore);
+
+
   if (!ExpectedParser) {
     // Fail gracefully for unsupported options.
     llvm::errs() << ExpectedParser.takeError();
@@ -195,18 +173,17 @@ int main(int argc, const char **argv) {
 
   if(ListRules){
     llvm::outs() << SupportedRules;
-  }
-  // Debug why this scope is needed for tests to work properly.
-  // Probably a namespace issue.
-  // TODO: Use VerifyDiagnosticConsumer for tests instead of FileCheck
-  {
-    auto *DO = new DiagnosticOptions();
-    DO->ShowColors = true;
-    Rewriter Rewrite;
-    AutoFixDiagnosticConsumer DiagConsumer(llvm::outs(), &*DO, Rewrite);
-    Tool.setDiagnosticConsumer(&DiagConsumer);
+    std::exit(0);
   }
 
   AutoFixActionFactory actionFactory;
+  if(ApplyFix){
+    auto *DO = new DiagnosticOptions();
+    DO->ShowColors = true;
+    Rewriter Rewrite;
+    AutoFixDiagnosticConsumer DiagConsumer(llvm::errs(), &*DO, Rewrite);
+    Tool.setDiagnosticConsumer(&DiagConsumer);
+    return Tool.run(&actionFactory);
+  }
   return Tool.run(&actionFactory);
 }

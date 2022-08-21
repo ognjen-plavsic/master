@@ -3,6 +3,72 @@
 #include <iostream>
 #include <set>
 
+internal::Matcher<Decl> *
+matcherFactoryAllFiles(const std::string &MatcherName) {
+  if (MatcherName == "A7_1_6") {
+    return new internal::Matcher<Decl>{
+        typedefDecl(unless(isExpansionInSystemHeader()), unless(isImplicit()))
+            .bind("A7_1_6_Matcher")};
+  } else if (MatcherName == "A7_1_8") {
+    return new internal::Matcher<Decl>{
+        decl(unless(isExpansionInSystemHeader()), unless(isImplicit()))
+            .bind("A7_1_8_Matcher")};
+  } else if (MatcherName == "A7_2_3") {
+    return new internal::Matcher<Decl>{
+        enumDecl(unless(isImplicit()), unless(isExpansionInSystemHeader()))
+            .bind("A7_2_3_Matcher")};
+  } else if (MatcherName == "A8_5_2") {
+    return new internal::Matcher<Decl>{
+        varDecl(unless(isExpansionInSystemHeader()),
+                unless(hasParent(declStmt(hasParent(cxxForRangeStmt())))),
+                unless(isInstantiated()), unless(isImplicit()))
+            .bind("A8_5_2_Matcher")};
+  } else if (MatcherName == "A8_5_3") {
+    return new internal::Matcher<Decl>{
+        varDecl(unless(isExpansionInSystemHeader()),
+                unless(hasParent(declStmt(hasParent(cxxForRangeStmt())))),
+                unless(isInstantiated()), unless(isImplicit()))
+            .bind("A8_5_3_Matcher")};
+  } else {
+    llvm::errs() << "Unsuported rule " + MatcherName + ".\n";
+    std::exit(1);
+  }
+}
+
+internal::Matcher<Decl> *
+matcherFactoryOnlyMainFile(const std::string &MatcherName) {
+  if (MatcherName == "A7_1_6") {
+    return new internal::Matcher<Decl>{
+        typedefDecl(isExpansionInMainFile(), unless(isImplicit()))
+            .bind("A7_1_6_Matcher")};
+  } else if (MatcherName == "A7_1_8") {
+    return new internal::Matcher<Decl>{
+        decl(isExpansionInMainFile(), unless(isImplicit()))
+            .bind("A7_1_8_Matcher")};
+  } else if (MatcherName == "A7_2_3") {
+    return new internal::Matcher<Decl>{
+        enumDecl(isExpansionInMainFile(), unless(isImplicit()))
+            .bind("A7_2_3_Matcher")};
+  } else if (MatcherName == "A8_5_2") {
+    return new internal::Matcher<Decl>{
+        varDecl(
+            allOf(isExpansionInMainFile(),
+                  unless(hasParent(declStmt(hasParent(cxxForRangeStmt()))))),
+            unless(isInstantiated()), unless(isImplicit()))
+            .bind("A8_5_2_Matcher")};
+  } else if (MatcherName == "A8_5_3") {
+    return new internal::Matcher<Decl>{
+        varDecl(
+            allOf(isExpansionInMainFile(),
+                  unless(hasParent(declStmt(hasParent(cxxForRangeStmt()))))),
+            unless(isInstantiated()), unless(isImplicit()))
+            .bind("A8_5_3_Matcher")};
+  } else {
+    llvm::errs() << "Unsuported rule " + MatcherName + ".\n";
+    std::exit(1);
+  }
+}
+
 void emitWarningWithHintReplacement(DiagnosticsEngine &DE, std::string &msg,
                                     std::string &replacementStr, SourceRange SR,
                                     SourceLocation SL) {
@@ -40,15 +106,18 @@ void A8_5_3::warnAutoTypeBracedInit(const VarDecl *VD) {
         std::string exprStr = getExprStr(listInitExpr, ASTCtx, PP);
         trim(exprStr);
         trimBraces(exprStr);
+        auto DeclarationTypeLoc =
+            VD->getCanonicalDecl()->getTypeSourceInfo()->getTypeLoc();
         exprStr = " = " + exprStr;
-
-        std::string replacementStr = "auto " + VD->getNameAsString() + exprStr;
+        std::string typeStr =
+            getSourceString(SM, DeclarationTypeLoc.getBeginLoc(),
+                            DeclarationTypeLoc.getEndLoc());
         std::string msg =
             "A variable of type auto shall not be initialized using {} "
             "or ={} braced initialization";
-        emitWarningWithHintReplacement(ASTCtx.getDiagnostics(), msg,
-                                       replacementStr, VD->getSourceRange(),
-                                       VD->getLocation());
+        emitWarningWithHintReplacement(ASTCtx.getDiagnostics(), msg, exprStr,
+                                       listInitExpr->getSourceRange(),
+                                       listInitExpr->getLBraceLoc());
         return;
       }
     }
@@ -66,16 +135,43 @@ void A8_5_2::warnNonAutoTypeBracedInit(const VarDecl *VD) {
   if (VD->getInitStyle() == VarDecl::ListInit) {
     return;
   }
+
   std::string typeStr = VD->getType().getAsString(PP);
   stripTypeString(typeStr);
   std::string exprStr = getExprStr(VD->getInit(), ASTCtx, PP);
+
   trimBraces(exprStr);
+  std::cout << exprStr << std::endl;
   exprStr = "{" + exprStr + "}";
-  std::string replacementStr = typeStr + " " + VD->getNameAsString() + exprStr;
+  
+  std::string replacementStr;
   std::string msg = "Braced-initialization {}, without equals sign, shall be "
                     "used for variable initialization";
-  emitWarningWithHintReplacement(ASTCtx.getDiagnostics(), msg, replacementStr,
-                                 VD->getSourceRange(), VD->getLocation());
+
+  if (auto dty = llvm::dyn_cast<clang::AutoType>(VD->getType().getTypePtr())) {
+    if (dty->isDecltypeAuto()) {
+      return;
+    }
+    std::string typeStr = VD->getType().getAsString(PP);
+    stripTypeString(typeStr);
+
+    replacementStr = typeStr + " " + VD->getNameAsString() + exprStr;
+    emitWarningWithHintReplacement(ASTCtx.getDiagnostics(), msg, replacementStr,
+                                   VD->getSourceRange(), VD->getLocation());
+  } else {
+
+    replacementStr = exprStr;
+    unsigned offset = VD->getIdentifier()->getLength();
+    SourceLocation beginLoc(VD->getLocation().getLocWithOffset(offset));
+    SourceRange SR(beginLoc, VD->getInit()->getSourceRange().getEnd());
+
+    if (VD->getType()->isArrayType()) {
+      replacementStr = "[]" + replacementStr;
+    }
+
+    emitWarningWithHintReplacement(ASTCtx.getDiagnostics(), msg, replacementStr,
+                                   SR, beginLoc);
+  }
 }
 
 void A7_2_3::run(const MatchFinder::MatchResult &Result) {
@@ -86,66 +182,6 @@ void A7_2_3::run(const MatchFinder::MatchResult &Result) {
     emitWarningWithHintInsertion(
         ASTCtx.getDiagnostics(), msg, insStr,
         ED->getSourceRange().getBegin().getLocWithOffset(5), ED->getLocation());
-  }
-}
-
-void A7_1_8::run(const MatchFinder::MatchResult &Result) {
-  auto D = Result.Nodes.getNodeAs<clang::Decl>("A7_1_8_Matcher");
-  warnWrongPlacedSpecifiers(D);
-}
-
-void A7_1_8::checkWrongPlacedSpecifiers(std::string &typeStr,
-                                        std::string &declString,
-                                        const Decl *D) {
-  std::vector<std::string> nonTypeSpecifiers{
-      "typedef",      "friend",  "constexpr", "register", "static",  "extern",
-      "thread_local", "mutable", "inline",    "virtual",  "explicit"};
-
-  std::vector<std::string> typeIdsVec = getWordsFromString(typeStr);
-  std::vector<std::string> declWordsVec = getWordsFromString(declString);
-  for (auto nonTypeWord : nonTypeSpecifiers) {
-    auto NTSIt =
-        std::find(declWordsVec.begin(), declWordsVec.end(), nonTypeWord);
-    if (NTSIt != declWordsVec.end()) {
-      for (auto typeId : typeIdsVec) {
-        auto TSIt = std::find(declWordsVec.begin(), declWordsVec.end(), typeId);
-        if (TSIt != declWordsVec.end() && TSIt < NTSIt) {
-          std::iter_swap(NTSIt, TSIt);
-          // Update iterator for non-type specifier since its place in vector
-          // changed.
-          NTSIt =
-              std::find(declWordsVec.begin(), declWordsVec.end(), nonTypeWord);
-
-          // create replacement string by concatenating words from vector
-          std::string replacementStr = declWordsVec[0];
-          for (unsigned i = 1; i < declWordsVec.size(); i++) {
-            replacementStr += " " + declWordsVec[i];
-          }
-          std::string warningMsg =
-              "A non-type specifier shall be placed before a "
-              "type specifier in a declaration";
-          emitWarningWithHintReplacement(ASTCtx.getDiagnostics(), warningMsg,
-                                         replacementStr, D->getSourceRange(),
-                                         D->getLocation());
-        }
-      }
-    }
-  }
-}
-
-void A7_1_8::warnWrongPlacedSpecifiers(const Decl *D) {
-  std::string declString;
-  std::string typeStr;
-  if (const ValueDecl *VD = llvm::dyn_cast<clang::ValueDecl>(D)) {
-    declString = getSourceString(SM, VD->getBeginLoc(), VD->getEndLoc());
-    typeStr = VD->getType().getAsString(PP);
-    checkWrongPlacedSpecifiers(typeStr, declString, D);
-  } else if (const TypedefDecl *TD = llvm::dyn_cast<clang::TypedefDecl>(D)) {
-    auto name = TD->getName().str();
-    declString =
-        getSourceString(SM, TD->getBeginLoc(), TD->getEndLoc(), name.length());
-    typeStr = TD->getUnderlyingType().getAsString(PP);
-    checkWrongPlacedSpecifiers(typeStr, declString, D);
   }
 }
 

@@ -7,6 +7,9 @@
 
 using namespace clang::ast_matchers;
 
+internal::Matcher<Decl> *matcherFactoryAllFiles(const std::string &MatcherName);
+internal::Matcher<Decl> *matcherFactoryOnlyMainFile(const std::string &MatcherName);
+
 class A8_5_3 : public MatchFinder::MatchCallback {
 public:
   A8_5_3(ASTContext &ASTCtx, SourceManager &SM, PrintingPolicy &PP) : ASTCtx(ASTCtx), SM(SM), PP{PP} {}
@@ -35,20 +38,6 @@ class A7_1_6 : public MatchFinder::MatchCallback {
 public:
   A7_1_6(ASTContext &ASTCtx, SourceManager &SM, PrintingPolicy &PP) : ASTCtx(ASTCtx), SM(SM), PP{PP} {}
   virtual void run(const MatchFinder::MatchResult &Result);
-
-private:
-  ASTContext &ASTCtx;
-  SourceManager &SM;
-  PrintingPolicy &PP;
-};
-
-class A7_1_8 : public MatchFinder::MatchCallback {
-public:
-  A7_1_8(ASTContext &ASTCtx, SourceManager &SM, PrintingPolicy &PP) : ASTCtx(ASTCtx), SM(SM), PP{PP} {}
-  virtual void run(const MatchFinder::MatchResult &Result);
-  void warnWrongPlacedSpecifiers(const Decl *D);
-  void checkWrongPlacedSpecifiers(std::string &typeStr, std::string &declString,
-                                  const Decl *D);
 
 private:
   ASTContext &ASTCtx;

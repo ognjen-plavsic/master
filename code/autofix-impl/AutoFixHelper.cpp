@@ -33,9 +33,9 @@ std::string getSourceString(SourceManager &SM, SourceLocation beginLoc,
   auto beginPtr = SM.getCharacterData(beginLoc);
   auto endPtr = SM.getCharacterData(endLoc);
   unsigned ptrDif = endPtr - beginPtr;
-  // Some declarations can be large. If declaration is larger than 100
+  // Some declarations can be large. If declaration is larger than 10000
   // characters, ignore the rest.
-  auto len = std::min(ptrDif + 1 + offset, (unsigned)100);
+  auto len = std::min(ptrDif + 1 + offset, (unsigned)1000);
   return std::string(beginPtr, len);
 }
 
