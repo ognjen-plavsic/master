@@ -637,10 +637,11 @@ U okviru njega, nad asptraktnim sintaksnim stablom, mo\v{z}e se pozvati AST-upar
 
 \par
 Na listingu \ref{lst:labelConsumer} prikazana je implementacije klase \texttt{AutoFixConsumer}. Ova klasa, u okviru alata \textit{AutoFix}, slu\v{z}i za pokretanje 
-upariva\v{c}a nad apstraktnim sintaksnim stablom. U okviru opisanog metoda \texttt{HandleTranslationUnit} parsiraju se pravila koje je korisnik zadao kao argumente komandne linije (linija 9). Za svako
-od pravila u petlji (linija 23) se kreira po jedan upariva\v{c} (u okviru funkcije \texttt{matcherFactory}) i jedan objekat povratnog poziva (u okviru funkcije \texttt{printerFactory}).
-Ukoliko je prosleđen string \texttt{"all"}, kreira\'{c}e se svi upariva\v{c}i koje alat \textit{AutoFix} podr\v{z}ava (linija 13).
-Upariva\v{c}i i povratni pozivi se zatim registruju za obilazak apstraktnog sintaksnog stabla koji izvr\v{s}ava objekat klase \texttt{MatchFinder} (linija 33). Nakon registrovanja poziva se metod \texttt{matchAST} kojim se registrovani upariva\v{c}i pokre\'{c}u nad asptraktnim sintaksnim stablom (linija 37).
+upariva\v{c}a nad apstraktnim sintaksnim stablom. U okviru opisanog metoda \texttt{HandleTranslationUnit} parsiraju se pravila koje je korisnik zadao kao argumente komandne linije (linija 9). U funkciji \texttt{setPrintingPolicy} (linija 13) pode\v{s}avaju se specifi\v{c}nosti vezane
+za ispis konstrukta iz apstraktnog sintaksnog stabla na standardni izlaz. Nakon toga, Za svako
+od pravila u petlji (linija 27) se kreira po jedan upariva\v{c} (u okviru funkcije \texttt{matcherFactory}) i jedan objekat povratnog poziva (u okviru funkcije \texttt{printerFactory}).
+Ukoliko je prosleđen string \texttt{"all"}, kreira\'{c}e se svi upariva\v{c}i koje alat \textit{AutoFix} podr\v{z}ava (linija 17).
+Upariva\v{c}i i povratni pozivi se zatim registruju za obilazak apstraktnog sintaksnog stabla koji izvr\v{s}ava objekat klase \texttt{MatchFinder} (linija 37). Nakon registrovanja poziva se metod \texttt{matchAST} kojim se registrovani upariva\v{c}i pokre\'{c}u nad asptraktnim sintaksnim stablom (linija 41).
 
 \begin{lstlisting}[style=customc,  caption={Implementacija klase \texttt{AutoFixConsumer} u okviru alata \textit{AutoFix}.}, label=lst:labelConsumer]
 class AutoFixConsumer : public clang::ASTConsumer {
@@ -652,6 +653,10 @@ public:
 
     // Parse rules added as a part of command line option --rules.
     SmallSet<std::string, 20> RulesMap = parseComaSeparatedWords(Rules);
+
+    // Customize printing.
+    PrintingPolicy PP(Context.getLangOpts());
+    setPrintingPolicy(PP);
 
     // If string "all" is passed to --rules option, add rule strings
     // for all supported rules within Autofix tool.
@@ -670,7 +675,7 @@ public:
       internal::Matcher<Decl> *Matcher = matcherFactory(MatcherName);
       // Create printer (MatcherCallBack object) from rule string.
       MatchFinder::MatchCallback *Printer =
-          printerFactory(MatcherName, Context, SM);
+          printerFactory(MatcherName, Context, SM, PP);
 
       MatcherVec.push_back(Matcher);
       PrinterVec.push_back(Printer);
