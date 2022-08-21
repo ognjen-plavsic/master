@@ -891,7 +891,7 @@ Sva implementirana pravila u okviru alata \textit{AutoFix} spadaju, prema klasif
   \item{Automatizovana, prema klasifikaciji po primenjivosti statičke analize.}
   \item{Implementaciona, prema klasifikaciji po cilju primene.}
 \end{enumerate}
-Pravila razmatrana u okviru ovog rada birana su tako da se k\^{o}d koji nije u saglasnosti sa pravilom mo\v{z}e detektovati analizom apstraktnog sintaksnog stabla kompajlera \textit{Clang} i da se za taj kod mogu kreirati razumne alternative koje su u skladu sa standardom \textsc{autosar} C++14.
+Pravila razmatrana u okviru ovog rada birana su tako da se k\^{o}d koji nije u saglasnosti sa pravilom mo\v{z}e detektovati analizom apstraktnog sintaksnog stabla kompajlera \textit{Clang} i da se za taj k\^{o}d mogu kreirati razumne alternative koje su u skladu sa standardom \textsc{autosar} C++14.
 Implementirana su pravila \textbf{A8-5-3}, \textbf{A8-5-2}, \textbf{A7-1-6}, \textbf{A7-2-3}.
 
 \subsection{Pravilo A8-5-3}
@@ -999,7 +999,7 @@ typedef int int_t, *intp_t;
 \begin{center}
 \includegraphics[scale=0.3]{A7_1_6.png}
 \end{center}
-\caption{Ispis alata za pravilo A7-1-6}
+\caption{Ispis alata za pravilo A7-1-6. }
 \label{fig:A7-1-6}
 \end{figure}
 
@@ -1078,7 +1078,7 @@ U okviru jedinice prevođenja \texttt{Autofix.cpp} takođe je implementirana \te
 \end{figure}
 \subsection{AutoFixDiagnosticConsumer.cpp}
 Interfejs \texttt{DiagnosticConsumer} u okviru kompajlera \textit{Clang} ima ulogu da obradi (konzumira) dijagnostiku prijavljenu
-za izvorni kod. Za alat \textit{AutoFix} najbitnije metode ove klase su \texttt{HandleDiagnostic} i \texttt{finish}. Metod \texttt{HandleDiagnostic} poziva se nakon prijavljivanja svakog upozorenja u okviru alata i slu\v{z}i za obradu tog upozorenja. Metod \texttt{finish} poziva se nakon \v{s}to su prijavljena i obrađena sva upozorenja u okviru alata i slu\v{z}i za dodatnu obradu celokupne dijagnostike. Vid obrade dijagnostike najrelevantniji za alat \textit{AutoFix} jeste njeno ispisivanje na standardni izlaz. U ovu 
+za izvorni k\^{o}d. Za alat \textit{AutoFix} najbitnije metode ove klase su \texttt{HandleDiagnostic} i \texttt{finish}. Metod \texttt{HandleDiagnostic} poziva se nakon prijavljivanja svakog upozorenja u okviru alata i slu\v{z}i za obradu tog upozorenja. Metod \texttt{finish} poziva se nakon \v{s}to su prijavljena i obrađena sva upozorenja u okviru alata i slu\v{z}i za dodatnu obradu celokupne dijagnostike. Vid obrade dijagnostike najrelevantniji za alat \textit{AutoFix} jeste njeno ispisivanje na standardni izlaz. U ovu 
 svrhu \textit{AutoFix} koristi funkcionalnost postoje\'{c}e klase \texttt{TextDiagnosticPrinter}, potklase klase \texttt{DiagnosticConsumer}. Ispisivanje dijagnostike u okviru klase \texttt{TextDiagnosticPrinter} implementirano je u okviru predefinisane metode \texttt{HandleDiagnostic}. \par
 Pored ispisivanja poruka upozorenja i predloga izmena koda na standardni izlaz, alat \texttt{AutoFix} konzumira dijagnostiku tako \v{s}to predlo\v{z}ene izmene koda primenjuje na izvorni fajl ukoliko je prosleđena opcija komandne linije \texttt{--apply-fix}.
 Da bi se ovo postiglo u okviru alata \textit{AutoFix} implementirana je klasa \texttt{AutoFix\-DiagnosticConsumer}. Ova klasa nasleđuje
@@ -1124,7 +1124,7 @@ Ova klasa omogu\'{c}ava primenjivanje predlozenih izmena koda na izvorni fajl. P
 
 \subsection{AutoFixDiagnosticHelper.cpp}
 
-U okviru jedinice prevođenja \texttt{AutoFixDiagnosticHelper.cpp} implementirane se pomo\'{c}ne funkcije kori\v{s}\'{c}ene u okviru alata \textit{AutoFix}. U nastavku su ukratko opisane funkcije iz ove jedinice prevođenja.
+U okviru jedinice prevođenja \texttt{AutoFixDiagnosticHelper.cpp} implementirane su pomo\'{c}ne funkcije kori\v{s}\'{c}ene u okviru alata \textit{AutoFix}. U nastavku su ukratko opisane funkcije iz ove jedinice prevođenja.
 \begin{itemize}
   \item \texttt{getWordsFromString} - kreira niz re\v{c}i od stringa prosleđenog u okviru opcija komandne linije.
   \item \texttt{getExprStr} - kreira string od \v{c}vorova apstraktnog sintaksnog stabla tipa \texttt{Expr}.
@@ -1164,12 +1164,11 @@ typedef unsigned long ulong;
 U svrhu verifikacije robusnosti i kvaliteta alata \textit{AutoFix}, izvr\v{s}ena je analiza nad delovima projekta \textit{AGL}. Projekat \textit{AGL}
 je izabran na osnovu svoje relevantnosti u automobilskoj industriji. \par
 
-\textit{Automotive Grade Linux (AGL)} je zajedni\v{c}ki projekat otvorenog koda koji okuplja proizvođa\v{c}e automobila, dobavlja\v{c}e i tehnolo\v{s}ke kompanije kako bi ubrzao razvoj i usvajanje potpuno otvorenog softverskog paketa (eng.~\textit{software stack}) za povezane automobile (eng.~\textit{connected cars}). Sa operativnim sistemom Linuks u svojoj osnovi, AGL razvija platformu koja mo\v{z}e slu\v{z}iti kao osnovni standard u industriji \v{c}ime bi se omogu\'{c}io brz razvoj novih funkcija i tehnologija \cite{AGL}.
+\textit{Automotive Grade Linux (AGL)} je zajedni\v{c}ki projekat otvorenog koda koji okuplja proizvođa\v{c}e automobila, dobavlja\v{c}e i tehnolo\v{s}ke kompanije kako bi ubrzao razvoj i usvajanje potpuno otvorenog softverskog paketa (eng.~\textit{software stack}) za povezane automobile (eng.~\textit{connected cars}). Sa operativnim sistemom Linuks u svojoj osnovi, AGL razvija platformu koja mo\v{z}e slu\v{z}iti kao \textit{de facto} standard u industriji \v{c}ime bi se omogu\'{c}io brz razvoj novih funkcija i tehnologija \cite{AGL}.
 \par
 Alat \textit{AutoFix} pokretan je nad podprojektima projekta \textit{AGL}. Projekti su izabrani nasumi\v{c}no osim kriterijuma
 da opseg projekta bude relativno mali kako bi se smanjila verovatno\'{c}a gre\v{s}ke pri obradi rezultata. Alat je pokretan skriptom koja rekurzivno 
-obilazi direktorijume u okviru projekta i pokre\'{c}e alat \textit{AutoFix} nad  svim
-svim fajlovima sa ekstenzijom \texttt{.cpp} i \texttt{.cc}. Nad svakim fajlom, alat je pokrenut komandom \\
+obilazi direktorijume u okviru projekta i pokre\'{c}e alat \textit{AutoFix} nad  svim fajlovima sa ekstenzijom \texttt{.cpp} i \texttt{.cc}. Nad svakim fajlom, alat je pokrenut komandom \\
 \texttt{./auto-fix  --rules="all"  putanja\_do\_fajla  --}.
 
 \subsection{Projekat \textit{re2c}}
@@ -1200,7 +1199,7 @@ Skripta za pokretanje alata \textit{AutoFix} nad projektom \textit{re2c} pokrenu
 
 Projekat \textit{ninja} nad kojim je pokretan alat \textit{AutoFix} nalazi su u okviru \textit{AGL} projekta na lokaciji \texttt{build/tmp/work/x86\_64-linux/ninja-native}. U okviru ovog direktorijuma, alat \textit{AutoFix} je pokrenut rekurzivno nad 55 fajlova sa ekstenzijom \texttt{.cc}. \par
 Na slici \ref{fig:ninja} prikazana je tabela koja prikazuje broj prijavljenih upozorenja za svako od pravila prilikom pokretanja alata \textit{AutoFix}.
-Na osnovu rezultata sa slike prime\'{c}eno je da je odnos broja prijavljenih upozorenja po pravilu sli\v{c}an rezultatima prikazanim na slici \ref{fig:re2c} dobijenim pri pokretanju alata \textit{AutoFix} nad projektom \textit{re2c}. Na osnovu ovoga, zaklju\v{c}ci izvedeni tokom diskusije rezultata nad projektom \textit{re2c} va\v{z}e i za rezultate projekta \textit{ninja}. Skripta za pokretanje alata \textit{AutoFix} nad projektom \textit{re2c} pokrenuta je deset puta sa prose\v{c}nim vremenom izvr\v{s}avanja od 18.002 sekunde.\par
+Na osnovu rezultata sa slike prime\'{c}eno je da je odnos broja prijavljenih upozorenja po pravilu sli\v{c}an rezultatima prikazanim na slici \ref{fig:re2c} dobijenim pri pokretanju alata \textit{AutoFix} nad projektom \textit{re2c}. Na osnovu ovoga, zaklju\v{c}ci izvedeni tokom diskusije rezultata nad projektom \textit{re2c} va\v{z}e i za rezultate projekta \textit{ninja}. Skripta za pokretanje alata \textit{AutoFix} nad projektom \textit{ninja} pokrenuta je deset puta sa prose\v{c}nim vremenom izvr\v{s}avanja od 18.002 sekunde.\par
 Alat se uspe\v{s}no izvr\v{s}io prilikom pokretanja nad svakim fajlom sa ekstenzijom \texttt{.cc} u okviru projekata \textit{re2c} i \textit{ninja}. Na osnovu ovoga zaklju\v{c}eno je da u implementaciji alata ne postoji veliki broj gre\v{s}aka.
 \begin{figure}
 \begin{center}
