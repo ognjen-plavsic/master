@@ -834,10 +834,13 @@ Testovi se pokre\'{c}u komandom \\
 \texttt{llvm-lit PUTANJA}
 \\
 gde \texttt{PUTANJA} mo\v{z}e biti do direktorijuma sa testovima, u kom slu\v{c}aju \'{c}e se pokrenuti svi testovi u okviru direktorijuma, ili do testa, u kom slu\v{c}aju \'{c}e se izvr\v{s}iti pokretanje pojedina\v{c}nog testa.
-Svaki test koji se pokre\'{c}e upotrebom alata \textit{lit} mora po\v{c}injati \texttt{RUN} linijom. \texttt{RUN} linije predstavljaju komentar u okviru testa formata \texttt{RUN: KOMANDA}. \texttt{KOMANDA} \'{c}e biti izvr\v{s}ena alatom \textit{lit}.
-Ukoliko ne postoji \texttt{RUN} linija, \textit{lit} \'{c}e prijaviti gre\v{s}ku prilikom pokretanja testa. \par
-  \item[Alat \textit{FileCheck}] slu\v{z}i za poređenje sadr\v{z}aja fajlova. Kao ulaz dobija dva fajla, jedan sa standardnog ulaza i jedan naveden u komandnoj liniji i zatim koristi jedan da verifikuje drugi. Ovaj alat je koristan za kreiranje testova u okviru kojih je potrebno verifikovati da li izlaz nekog alata sadr\v{z}i o\v{c}ekivane informacije \cite{FileCheck}. 
-Ukoliko je u fajlu proslednjenom putem komandne linije navedena direktiva \texttt{CHECK: TEKST}, alat \textit{FileCheck} \'{c}e proveriti da li se \texttt{TEKST} nalazi u fajlu sa standardnog ulaza i prijaviti gre\v{s}ku u slu\v{c}aju da \texttt{TEKST} nije nađen.
+Svaki test koji se pokre\'{c}e upotrebom alata \textit{lit} mora sadr\v{z}ati \texttt{RUN} liniju. \texttt{RUN} linije su linije formata \texttt{RUN: KOMANDA}. Ove linije treba koristiti u okviru komentara u testu. Na primer, za C++ testove, \texttt{RUN} linija mo\v{z}e izgledati ovako: \texttt{// RUN: KOMANDA}. \\ \texttt{KOMANDA} \'{c}e biti izvr\v{s}ena alatom \textit{lit}. Na primer, ukoliko je navedena \texttt{RUN} linija \\
+\texttt{// RUN: echo "Hello World!"} \\
+alat \textit{lit} \'{c}e pokrenuti program \texttt{echo} sa argumentom \texttt{"Hello World!"}
+
+Ukoliko u okviru testa ne postoji \texttt{RUN} linija, \textit{lit} \'{c}e prijaviti gre\v{s}ku prilikom pokretanja testa \cite{LIT}. \par
+  \item[Alat \textit{FileCheck}] slu\v{z}i za poređenje sadr\v{z}aja fajlova. Kao ulaz dobija dva fajla, jedan sa standardnog ulaza i jedan naveden kao argument komandne linije i zatim koristi jedan da verifikuje drugi. Ovaj alat je koristan za kreiranje testova u okviru kojih je potrebno verifikovati da li izlaz nekog alata sadr\v{z}i o\v{c}ekivane informacije \cite{FileCheck}. 
+Ukoliko je u fajlu prosleđenom putem komandne linije navedena direktiva \texttt{CHECK: TEKST}, alat \textit{FileCheck} \'{c}e proveriti da li se \texttt{TEKST} nalazi u fajlu koji mu je prosleđen putem standardnog ulaza i prijaviti gre\v{s}ku u slu\v{c}aju da \texttt{TEKST} nije nađen.
 Direktivom \texttt{CHECK-NEXT: TEKST} verifikuje se da je \texttt{TEKST} pronađen na prvoj liniji nakon teksta koji je uparen poslednjom direktivom \texttt{CHECK}. U zavisnosti od toga da li je postavljena pre prve, između dve ili nakon poslednje direktive, direktiva \texttt{CHECK-NOT: TEKST} verifikjue da se \texttt{TEKST} ne nalazi pre prvog uparivanja, između dva uparivanja ili nakon poslednjeg uparivanja direktiva \texttt{CHECK} ili \texttt{CHECK-NEXT}. U okviru teksta mogu se koristiti i regularni izrazi. Regularnim izrazom se smatra sve \v{s}to se nalazi u okviru dvostrukih viti\v{c}astih zagrada \texttt{\{\{\}\}}.
 \end{description}
 
