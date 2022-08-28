@@ -497,7 +497,7 @@ ne mo\v{z}e pozvati metode iz grupe \texttt{Traverse}. Metode iz grupe \texttt{T
 Drugim re\v{c}ima, u definisanom poretku grupa metoda \texttt{Visit} nije direktno ispod grupe metoda \texttt{Traverse}.
 
 \par
-Da bi se izvršila analiza izvornog koda pomoću AST-posetioca dovoljno je naslediti klasu 
+Da bi se izvršila analiza izvornog koda pomoću AST-posetioca potrebno je naslediti klasu 
  \texttt{RecursiveASTVisitor<Derived>} i predefinisati željene \texttt{Visit} metode u okviru nje. Ukoliko je \texttt{Visit} metodama pronađen nepravilan konstrukt izvornog koda mo\v{z}e se prijaviti upozorenje. Primer posetioca prikazan je na listingu \ref{lst:visitor}. Metod \texttt{VisitEnumDecl} (linija 6) \'c{e} biti pozvan nad svim objektima klase \texttt{EnumDecl} u apstraktnom sintaksnom stablu. U okviru nje, proverava se da li deklaracija koristi \texttt{enum class} sintaksu, odnosno da li su konstante u okviru nabrajanja definisane u svom unutra\v{s}njem opsegu. Ukoliko sintaksa \texttt{enum class} nije kori\v{s}\'{c}ena pri deklaraciji, lokacija ove deklaracije, ukoliko je validna, ispisuje se na standardni izlaz (linija 13).
 
 \begin{lstlisting}[style=customc,  caption={Primer posetioca koji pose\'{c}uje sve deklaracije nabrajanja i ispisuje lokaciju onih koji nisu deklarisani sintaksom \texttt{enum class}.},label=lst:visitor]
@@ -604,13 +604,13 @@ void matchASTExample(ASTContext *Context){
 \section{Interfejsi za akcije nad prednjim delom kompajlera}
 \label{sec:interfejsi}
 
-Akcije nad prednjim delom kompajlera omogu\'{c}avaju analizu i upotrebu rezultata i informacija koje pru\v{z}a prednji deo kompajlera. Ove informacije mogu biti korisne za kreiranje alata za refaktorisanje koda, stati\v{c}ku analizu, prikupljanje statistike, grafi\v{c}ko prezentovanje rezultata kompajlera ali igraju i klju\v{c}nu ulogu u samoj kompilaciji koda i deo su osnovnog sistema (eng.~\textit{pipeline}) u infrastrukturi LLVM-a.
+Akcije nad prednjim delom kompajlera omogu\'{c}avaju analizu i upotrebu rezultata i informacija koje pru\v{z}a prednji deo kompajlera. Ove informacije mogu biti korisne za kreiranje alata za refaktorisanje koda, stati\v{c}ku analizu, prikupljanje statistike i grafi\v{c}ko prezentovanje rezultata kompajlera. Takodje, igraju i klju\v{c}nu ulogu u samoj kompilaciji koda i deo su osnovnog sistema (eng.~\textit{pipeline}) u infrastrukturi LLVM-a.
 Ova funkcionalnost je efikasno i sistemati\v{c}no implementirana u okviru klasa \texttt{ASTConsumer}, \texttt{ASTFrontendAction} i njihovih potklasa.
 
 \subsection{Klasa ASTConsumer}
 
 \texttt{ASTConsumer} je apstraktna klasa koja omogu\'{c}ava izvr\v{s}avanje razli\v{c}itih akcija nad apstraktnim sintaksnim stablom nezavisno od toga kako je apstraktno sintaksno stablo kreirano.
-Akcije se mogu izvr\v{s}avati u razli\v{c}itim fazama tokom kreiranja apstraktnog sintaksnog stabla \cite{ASTToolTutorial}. Na primer, metod \\ \texttt{virtual void  HandleInlineFunctionDefinition (FunctionDecl *D)} \\ bi\'{c}e pozvan svaki put kada se zavr\v{s}i kreiranje umetnutih (eng.~\textit{inline}) funkcija prilikom kreiranja apstraktnog sintaksnog stabla. \texttt{ASTConsumer} defini\v{s}e niz sli\v{c}nih virtuelnih metoda koje mogu biti predefinisane od strane klasa koje je nasleđuju. 
+Akcije se mogu izvr\v{s}avati u razli\v{c}itim fazama tokom kreiranja apstraktnog sintaksnog stabla \cite{ASTToolTutorial}. Na primer, metod \\ \texttt{virtual void  HandleInlineFunctionDefinition (FunctionDecl *D)} \\ bi\'{c}e pozvan svaki put kada se zavr\v{s}i kreiranje umetnutih (eng.~\textit{inline}) funkcija prilikom kreiranja apstraktnog sintaksnog stabla. \texttt{ASTConsumer} defini\v{s}e niz sli\v{c}nih virtuelnih metoda koje mogu biti predefinisane od strane klasa koje je nasleđuju. \par
 Na slici \ref{fig:inhDiagram} prikazane su klase u okviru kompajlera \textit{Clang} koje nasleđuju klasu \texttt{ASTConsumer}. Klasa \texttt{CodeGenerator}, prikazana na slici,
 generi\v{s}e LLVM međukod od apstraktnog sintaksnog stabla i predstavlja jedan od osnovnih delova u infrastrukturi LLVM-a, \v{s}to demonstrira zna\v{c}aj klase \texttt{ASTConsumer}. 
 
@@ -623,71 +623,40 @@ generi\v{s}e LLVM međukod od apstraktnog sintaksnog stabla i predstavlja jedan 
 \label{fig:inhDiagram}
 \end{figure}
 
-Ova klasa korisna je i za kreiranje samostalnih alata za stati\v{c}ku analizu koji se baziraju na analizi apstraktnog sintaksnog stabla. U ovu svrhu mo\v{z}e se koristiti kombinacija upotrebe klase \texttt{ASTConsumer} sa mehanizmima za obilazak i obradu apstraktnog sintaksnog stabla kao \v{s}to su AST-posetioci i AST-upariva\v{c}i. \par
+Ova klasa korisna je i za kreiranje samostalnih alata za stati\v{c}ku analizu koji se zasnivaju na analizi apstraktnog sintaksnog stabla. U ovu svrhu mo\v{z}e se koristiti kombinacija upotrebe klase \texttt{ASTConsumer} sa mehanizmima za obilazak i obradu apstraktnog sintaksnog stabla kao \v{s}to su AST-posetioci i AST-upariva\v{c}i. \par
 Za implementaciju specifi\v{c}ne akcije nad apstraktnim sintaksnim stablom
-dovoljno je implementirati potkasu klase \texttt{ASTConsumer} i u okviru nje predefinisati metod \\ \texttt{virtual void  HandleTranslationUnit(ASTContext \&Ctx)}.\\
+potrebno je implementirati potkasu klase \texttt{ASTConsumer} i u okviru nje predefinisati metod \\ \texttt{virtual void  HandleTranslationUnit(ASTContext \&Ctx)}.\\
 Ovaj metod bi\'{c}e pozvan nakon \v{s}to je kreirano apstraktno sintaksno stablo za jedinicu prevođenja, odnosno u trenutku kada je celokupno apstraktno sintaksno stablo za jedinicu prevođenja dostupano.
 U okviru njega, nad asptraktnim sintaksnim stablom, mo\v{z}e se pozvati AST-upariva\v{c} koji \'{c}e izvr\v{s}iti obilazak i analizu apstraktnog sintaksnog stabla \cite{ASTConsumer}.
 
-\par
-Na listingu \ref{lst:labelConsumer} prikazana je implementacije klase \texttt{AutoFixConsumer}. Ova klasa, u okviru alata \textit{AutoFix}, slu\v{z}i za pokretanje 
-upariva\v{c}a nad apstraktnim sintaksnim stablom. U okviru opisanog metoda \texttt{HandleTranslationUnit} parsiraju se pravila koje je korisnik zadao kao argumente komandne linije (linija 9). U funkciji \texttt{setPrintingPolicy} (linija 13) pode\v{s}avaju se specifi\v{c}nosti vezane
-za ispis konstrukta iz apstraktnog sintaksnog stabla na standardni izlaz. Nakon toga, Za svako
-od pravila u petlji (linija 27) se kreira po jedan upariva\v{c} (u okviru funkcije \texttt{matcherFactory}) i jedan objekat povratnog poziva (u okviru funkcije \texttt{printerFactory}).
-Ukoliko je prosleđen string \texttt{"all"}, kreira\'{c}e se svi upariva\v{c}i koje alat \textit{AutoFix} podr\v{z}ava (linija 17).
-Upariva\v{c}i i povratni pozivi se zatim registruju za obilazak apstraktnog sintaksnog stabla koji izvr\v{s}ava objekat klase \texttt{MatchFinder} (linija 37). Nakon registrovanja poziva se metod \texttt{matchAST} kojim se registrovani upariva\v{c}i pokre\'{c}u nad asptraktnim sintaksnim stablom (linija 41).
+\subsection{Primer upotrebe klase \texttt{ASTConsumer}}
+Na listingu \ref{lst:labelConsumer} prikazana je implementacija klase \texttt{AutoFixConsumer}. U okviru ove klase kreiran je upariva\v{c} 
+\texttt{A7\_2\_3\_Matcher} (linija 11) i objekat klase povratnog poziva (linija 15). Kori\v{s}\'{c}ena klasa povratnog poziva \texttt{A7\_2\_3} prikazana je na listingu \ref{lst:MatcherList} i dostupna je kroz zaglavlje \texttt{AutoFixMatchers.h}. Upariva\v{c} i objekat klase povratnog poziva se zatim registruju za obilazak apstraktnog sintaksnog stabla koji izvr\v{s}ava objekat klase \texttt{MatchFinder} (linija 18). Nakon registrovanja poziva se metod \texttt{matchAST} kojim se registrovani upariva\v{c} pokre\'{c}e nad asptraktnim sintaksnim stablom (linija 21).
 
-\begin{lstlisting}[style=customc,  caption={Implementacija klase \texttt{AutoFixConsumer} u okviru alata \textit{AutoFix}.}, label=lst:labelConsumer]
+\begin{lstlisting}[style=customc,  caption={Implementacija klase \texttt{AutoFixConsumer}.}, label=lst:labelConsumer]
+#include "clang/AST/ASTConsumer.h"
+#include "AutoFixMatchers.h"
+
 class AutoFixConsumer : public clang::ASTConsumer {
 public:
-  explicit AutoFixConsumer(ASTContext *Context, SourceManager &SM) : SM(SM) {}
+  explicit AutoFixConsumer(ASTContext *Context) : Context(Context) {}
 
   virtual void HandleTranslationUnit(clang::ASTContext &Context) {
-    auto &DE = Context.getDiagnostics();
-
-    // Parse rules added as a part of command line option --rules.
-    SmallSet<std::string, 20> RulesMap = parseComaSeparatedWords(Rules);
-
-    // Customize printing.
-    PrintingPolicy PP(Context.getLangOpts());
-    setPrintingPolicy(PP);
-
-    // If string "all" is passed to --rules option, add rule strings
-    // for all supported rules within Autofix tool.
-    if (RulesMap.count("all")) {
-      RulesMap.erase("all");
-      for (const auto &Rule : SupportedRulesVec) {
-        RulesMap.insert(Rule);
-      }
-    }
-
     MatchFinder Finder;
-    std::vector<internal::Matcher<Decl> *> MatcherVec;
-    std::vector<MatchFinder::MatchCallback *> PrinterVec;
-    for (const auto &MatcherName : RulesMap) {
-      // Create matcher from rule string.
-      internal::Matcher<Decl> *Matcher = matcherFactory(MatcherName);
-      // Create printer (MatcherCallBack object) from rule string.
-      MatchFinder::MatchCallback *Printer =
-          printerFactory(MatcherName, Context, SM, PP);
+    // Create matcher.
+    internal::Matcher<Decl> Matcher =
+        enumDecl(isExpansionInMainFile()).bind("A7_2_3_Matcher");
 
-      MatcherVec.push_back(Matcher);
-      PrinterVec.push_back(Printer);
-      // Register matchers.
-      Finder.addMatcher(*Matcher, Printer);
-    }
+    // Create CallBack class object.
+    MatchFinder::MatchCallback *Callback = new A7_2_3(Context);
 
-    // Run matchers over AST for translation unit.
+    // Register matcher for running over AST.
+    Finder.addMatcher(Matcher, Callback);
+
+    // Run matcher over AST for translation unit.
     Finder.matchAST(Context);
-
-    for (auto *Matcher : MatcherVec) {
-      delete Matcher;
-    }
-    for (auto *Printer : PrinterVec) {
-      delete Printer;
-    }
   }
-  SourceManager &SM;
+  ASTContext *Context;
 };
 \end{lstlisting}
 
@@ -696,13 +665,18 @@ public:
 \texttt{FrontendAction} je apstraktna klasa za akcije koje mogu biti izvr\v{s}ene od strane prednjeg dela kompajlera (eng.~\textit{frontend}).
 Klasa \texttt{FrontendAction} ima raznolike upotrebe, odnosno specijalizacije. Primer specijalizacija ove klase su \texttt{DumpCompiler\-OptionsAction}
 koja omogu\'{c}ava ispisivanje opcija koje se mogu zadati kompajleru i \texttt{PreprocessorFrontendAction} koja omogu\'{c}ava izvr\v{s}avanje akcija vezanih za pretprocesiranje izvornog koda. Međutim, naj\v{c}es\'{c}a upotreba ove klase vezana je za akcije koje se izvr\v{s}avaju nad apstraktnim sintaksnom stablom. U ovu svrhu koristi se apstarktna klasa \texttt{ASTFrontendAction} koja je direktna potklasa klase \texttt{FrontendAction}. \par
-\texttt{ASTFrontendAction} predefini\v{s}e metod \texttt{executeAction} klase \texttt{FrontendAction}. U okviru ove metode pozivaju se funkcije za semanti\v{c}ku analizu i kreiranje apstraktnog sintaksnog stabla. Nad ovim apstraktnim sintaksnim stablom izvr\v{s}i\'{c}e se akcije implementirane u \texttt{ASTConsumer} objektu pridru\v{z}enom ovoj klasi.
+\texttt{ASTFrontendAction} predefini\v{s}e metod \texttt{executeAction} klase \texttt{FrontendAction}. U okviru ove metode pozivaju se funkcije za semanti\v{c}ku analizu i kreiranje apstraktnog sintaksnog stabla. Nad ovim apstraktnim sintaksnim stablom izvr\v{s}i\'{c}e se akcije implementirane u objektu \texttt{ASTConsumer} pridru\v{z}enom ovoj klasi.
 Na slici \ref{fig:ASTAction} prikazane su klase u okviru kompajlera \textit{Clang} koje nasleđuju klasu \texttt{ASTFrontendAction}. Slika demonstrira raznolikost upotrebe ove klase. \par
-Da bi se implementirala specifi\v{c}na akcija nad apstraktnim sintaksnim stablom, dovoljno je implementirati klasu koja nasleđuje klasu \texttt{ASTFronendAction} i dodeliti joj \texttt{ASTConsumer} objekat koji implementira \v{z}eljenu akciju. Objekat se kreira i dodeljuje predefinisanjem metode \\ \texttt{unique\_ptr<ASTConsumer> CreateASTConsumer(CompilerInstance \&Compiler, StringRef InFile)} \\ 
-Ova metoda za argumente dobiija instancu kompajlera \texttt{Clang} i ime fajla za koji se kreira AST. Povratna vrednost metode je pokaziva\v{c} na kreirani objekat klase \texttt{ASTConsumer}.
-Na listingu \ref{lst:ASTAction} prikazana je implementacija klase \texttt{AutoFixAction} koja izvr\v{s}ava akcije nad apstraktnim sintaksnom stablom implementirane u okviru alata \textit{AutoFix}.
+Da bi se implementirala specifi\v{c}na akcija nad apstraktnim sintaksnim stablom, potrebno je implementirati klasu koja nasleđuje klasu \texttt{ASTFronendAction} i dodeliti joj \texttt{ASTConsumer} objekat koji implementira \v{z}eljenu akciju. Objekat se kreira i dodeljuje predefinisanjem metode \\ 
+\texttt{unique\_ptr<ASTConsumer> CreateASTConsumer(CompilerInstance Compiler,} \\
+\hspace*{9cm} \texttt{StringRef InFile)} \\ 
+Ova metoda kao argumente dobiija instancu kompajlera \textit{Clang} i ime fajla za koji se kreira apstraktno sintaksno stablo. Povratna vrednost metode je pokaziva\v{c} na kreirani objekat klase \texttt{ASTConsumer}.
+Na listingu \ref{lst:ASTAction} prikazana je implementacija klase \texttt{AutoFixAction} koja izvr\v{s}ava akcije nad apstraktnim sintaksnom stablom.
+Klasa \texttt{AutoFixAction} koristi klasu \texttt{AutoFixConstumer} sa listinga \ref{lst:labelConsumer} dostupnu kroz zaglavlje \texttt{AutoFixConsumer.h}
 
-\begin{lstlisting}[style=customc,  caption={Implementacija klase AutoFixAction kori\v{s}\'{c}ene u okviru alata \textit{AutoFix}.}, label=lst:ASTAction]
+\begin{lstlisting}[style=customc,  caption={Implementacija klase \texttt{AutoFixAction}.}, label=lst:ASTAction]
+#include "AutoFixConsumer.h"
+
 class AutoFixAction : public clang::ASTFrontendAction {
 public:
   virtual std::unique_ptr<clang::ASTConsumer>
@@ -783,40 +757,18 @@ Uop\v{s}teno, \texttt{LibTooling} treba koristiti kada:
 Da bi se implementirao kvalitetan alat za stati\v{c}ku analizu neophodna je puna kontrola nad apstraktnim sintaksnim stablom kako bi se omogu\'{c}ila \v{s}to preciznija analiza izvornog koda. Fleksibilni alati za stati\v{c}ku analizu se ne moraju nu\v{z}no pokretati u okviru sistema za prevođenje i podr\v{z}avaju mogu\'{c}nost analize fajlova nezavnisnih od sistema za prevođenje. Takođe, mogu\'{c}nost dodavanja opcija komandne linije olak\v{s}ava korisniku upotrebu alata i omogu\'{c}ava korisniku ve\'{c}u kontrolu nad radom alata. Na osnovu ovoga je zaklju\v{c}eno da je biblioteka \texttt{LibTooling} najbolji izbor za izradu kvalitetnog alata za stati\v{c}ku analizu u okviru kompajlerske infrastrukture LLVM.
 
 \subsection{Primer kreiranja alata upotrebom biblioteke LibTooling}
-Na listingu \ref{lst:label9} prikazana je implementacija jednostavnog alata kori\v{s}\'{c}enjem opisanih klasa \texttt{ASTConsumer} i \texttt{ASTFrontendAction}. Ovaj alat koristi biblioteku \texttt{LibTooling} za pokretanje definisane \texttt{ASTFrontendAction} akcije nad izvornim kodom koji je prosleđen kao argument komandne linije. U ovu svrhu koristi se funkcija \texttt{runToolOnCode} (linija 30) biblioteke \texttt{LibTooling}. Alat pronalazi sve enumeratore koji nisu deklarisani sintaksom \texttt{enum class} i za ove deklaracije se prijavljuje upozorenje zajedno sa predlogom izmene koda. Alat koristi upariva\v{c} sa listinga \ref{lst:MatcherList} dostupnim kroz zaglavlje \texttt{AutoFixMatchers.h} i klasu \texttt{AutoFixFrontendAction} sa listinga \ref{lst:ASTAction} dostupnom kroz zaglavlje \texttt{ASTFrontendAction.h}.
-\\
-\begin{lstlisting}[style=customc,  caption={Primer implementacije jednostavnog alata upotrebom klasa \texttt{ASTConsumer}, \texttt{ASTFrontendAction} i biblioteke \texttt{LibTooling}.}, label=lst:label9]
-#include "clang/AST/ASTConsumer.h"
+% Na listingu \ref{lst:label9} prikazana je implementacija jednostavnog alata kori\v{s}\'{c}enjem opisanih klasa \texttt{ASTConsumer} i \texttt{ASTFrontendAction}. Ovaj alat koristi biblioteku \texttt{LibTooling} za pokretanje definisane \texttt{ASTFrontendAction} akcije nad izvornim kodom koji je prosleđen kao argument komandne linije. U ovu svrhu koristi se funkcija \texttt{runToolOnCode} (linija 30) biblioteke \texttt{LibTooling}. Alat pronalazi sve enumeratore koji nisu deklarisani sintaksom \texttt{enum class} i za ove deklaracije se prijavljuje upozorenje zajedno sa predlogom izmene koda. Alat koristi upariva\v{c} sa listinga \ref{lst:MatcherList} dostupnim kroz zaglavlje \texttt{AutoFixMatchers.h} i klasu \texttt{AutoFixAction} sa listinga \ref{lst:ASTAction} dostupnom kroz zaglavlje \texttt{ASTFrontendAction.h}.
+
+Na listingu \ref{lst:label9} prikazana je implementacija jednostavnog alata kori\v{s}\'{c}enjem biblioteke \texttt{LibTooling}. Ovaj alat pokre\'{c}e definisanu akciju \texttt{AutoFixAction} nad izvornim kodom koji je prosleđen kao argument komandne linije. U ovu svrhu koristi se funkcija \texttt{runToolOnCode} (linija 6) biblioteke \texttt{LibTooling}. Alat pronalazi sve enumeratore koji nisu deklarisani sintaksom \texttt{enum class} i za ove deklaracije se prijavljuje upozorenje zajedno sa predlogom izmene koda. Alat koristi klasu \texttt{AutoFixAction} sa listinga \ref{lst:ASTAction} dostupnom kroz zaglavlje \texttt{ASTFrontendAction.h}.
+
+\begin{lstlisting}[style=customc,  caption={Primer implementacije jednostavnog alata upotrebom biblioteke \texttt{LibTooling}.}, label=lst:label9]
 #include "clang/Tooling/Tooling.h"
-#include "AutoFixMatchers.h"
 #include "ASTFrontendAction.h"
-
-class AutoFixConsumer : public clang::ASTConsumer {
-public:
-  explicit AutoFixConsumer(ASTContext *Context) : Context(Context) {}
-
-  virtual void HandleTranslationUnit(clang::ASTContext &Context) {
-    MatchFinder Finder;
-    // Create matcher.
-    internal::Matcher<Decl> Matcher =
-        enumDecl(isExpansionInMainFile()).bind("A7_2_3_Matcher");
-
-    // Create CallBack class object.
-    MatchFinder::MatchCallback *Callback = new A7_2_3_3(Context);
-
-    // Register matcher for running over AST.
-    Finder.addMatcher(Matcher, Callback);
-
-    // Run matcher over AST for translation unit.
-    Finder.matchAST(Context);
-  }
-  ASTContext *Context;
-};
 
 int main(int argc, char **argv) {
   if (argc > 1) {
     clang::tooling::runToolOnCode(
-                    std::make_unique<FindNamedClassAction>(),
+                    std::make_unique<AutoFixAction>(),
                     argv[1]);
   }
 }
