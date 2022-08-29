@@ -14,6 +14,9 @@
 
 
 \usepackage{listings}
+\usepackage{float}
+\floatstyle{plaintop}
+\restylefloat{table}
 
 \newtheorem{primer}{Primer}[section]
 
@@ -1163,7 +1166,8 @@ obilazi direktorijume u okviru projekta i pokre\'{c}e alat \textit{AutoFix} nad 
 
 \subsection{Projekat \textit{re2c}}
 
-Projekat \textit{re2c} nad kojim je pokretan alat \textit{AutoFix} nalazi su u okviru \textit{AGL} projekta na lokaciji \texttt{build/tmp/work/x86\_64-linux/re2c-native}. Projkat sadr\v{z}i 84 fajlova sa ekstenzom \texttt{.cc}. \par
+Projekat \textit{re2c} nad kojim je pokretan alat \textit{AutoFix} nalazi su u okviru \textit{AGL} projekta na lokaciji \texttt{build/tmp/work/x86\_64-linux/re2c-native}. Projkat sadr\v{z}i 79 fajlova sa ekstenzom \texttt{.cc} \v{c}iji ukupan broj linija koda iznosi 21021. U okviru projekta
+nalazi se 77 zaglavlja \v{c}iji ukupan broj linija koda iznosi 3910. \par
 Tabela \ref{fig:re2c} prikazuje broj prijavljenih upozorenja za svako od pravila prilikom pokretanja alata \textit{AutoFix}.
 Za svako od upozorenja ispisan je i odgovaraju\'{c}i predlog izmene koda. Upozorenje za pravilo \textbf{A8-5-3} nije prijavljeno nijednom. Pretragom
 alatom \textit{grep} kroz svaki od fajlova ustanovljeno je da konstrukti na koje se odnosi pravilo \textbf{A8-5-3} zaista nisu kori\v{s}\'{c}eni u okviru koda i da se ne radi o gre\v{s}ci u alatu \textit{AutoFix}. Ovaj rezultat sla\v{z}e se sa \v{c}injenicom da je najve\'{c}i broj upozorenja prijavljen za pravilo \textbf{A8-5-2}. Pravilo \textbf{A8-5-2} predla\v{z}e upotrebu inicijalizacije viti\v{c}astim zagradama pri inicijalizaciji promenljive dok pravilo \textbf{A8-5-3} zabranjuje upotrebu inicijalizacije viti\v{c}astim zagradama prilikom deklaracije promenljivih sa tipom \texttt{auto}. S obzirom na veliki broj upozorenja za pravilo \textbf{A8-5-2} i \v{c}injenice da za pravilo \textbf{A8-5-3} nije prijavljeno nijedno upozorenje, zaklju\v{c}eno je da prilikom inicijalizacije promenljivih nije kori\v{s}\'{c}ena sintaksa viti\v{c}astih zagrada ne vezano da li je promenljiva
@@ -1187,7 +1191,8 @@ Skript za pokretanje alata \textit{AutoFix} nad projektom \textit{re2c} pokrenut
 
 \subsection{Projekat \textit{ninja}}
 
-Projekat \textit{ninja} nad kojim je pokretan alat \textit{AutoFix} nalazi su u okviru \textit{AGL} projekta na lokaciji \texttt{build/tmp/work/x86\_64-linux/ninja-native}. U okviru ovog direktorijuma, alat \textit{AutoFix} je pokrenut rekurzivno nad 55 fajlova sa ekstenzijom \texttt{.cc}. \par
+Projekat \textit{ninja} nad kojim je pokretan alat \textit{AutoFix} nalazi su u okviru \textit{AGL} projekta na lokaciji \texttt{build/tmp/work/x86\_64-linux/ninja-native}. Projkat sadr\v{z}i 55 fajlova sa ekstenzom \texttt{.cc} \v{c}iji ukupan broj linija koda iznosi 12587. U okviru projekta
+nalazi se 43 zaglavlja \v{c}iji ukupan broj linija koda iznosi 2291. \par
 Tabela \ref{fig:ninja} prikazuje broj prijavljenih upozorenja za svako od pravila prilikom pokretanja alata \textit{AutoFix}.
 Na osnovu rezultata sa slike prime\'{c}eno je da je odnos broja prijavljenih upozorenja po pravilu sli\v{c}an rezultatima prikazanim u tabeli \ref{fig:re2c} dobijenim pri pokretanju alata \textit{AutoFix} nad projektom \textit{re2c}. Na osnovu ovoga, zaklju\v{c}ci izvedeni tokom diskusije rezultata nad projektom \textit{re2c} va\v{z}e i za rezultate projekta \textit{ninja}. Skript za pokretanje alata \textit{AutoFix} nad projektom \textit{ninja} pokrenut je deset puta kako bi se izra\v{c}unalo prose\v{c}no vreme izvr\v{s}avanja alata, koje iznosi 18.002 sekunde.\par
 \begin{table}[!h]
