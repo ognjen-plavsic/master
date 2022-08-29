@@ -1,6 +1,6 @@
 set(LLVM_LINK_COMPONENTS support)
 
-add_clang_executable(auto-fix
+add_clang_tool(auto-fix
   AutoFix.cpp
   AutoFixMatchers.cpp
   AutoFixHelper.cpp

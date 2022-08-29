@@ -155,8 +155,6 @@ public:
 };
 
 int main(int argc, const char **argv) {
-  cl::HideUnrelatedOptions(AutoFixCategory);
-
   auto ExpectedParser =
       CommonOptionsParser::create(argc, argv, AutoFixCategory, cl::ZeroOrMore);
 
@@ -167,13 +165,19 @@ int main(int argc, const char **argv) {
     return 1;
   }
   CommonOptionsParser &OptionsParser = ExpectedParser.get();
+  auto pathList = OptionsParser.getSourcePathList();
 
-  ClangTool Tool(OptionsParser.getCompilations(),
-                 OptionsParser.getSourcePathList());
+  ClangTool Tool(OptionsParser.getCompilations(), pathList);
 
   if(ListRules){
     llvm::outs() << SupportedRules;
     std::exit(0);
+  }
+
+  if (pathList.empty()) {
+    llvm::errs() << "Error: no input files specified.\n";
+    llvm::cl::PrintHelpMessage(/*Hidden=*/false, /*Categorized=*/true);
+    return 1;
   }
 
   AutoFixActionFactory actionFactory;

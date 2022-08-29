@@ -1,5 +1,4 @@
-// RUN: auto-fix -rules="A7_1_6" %s 2>&1 --  | FileCheck -dump-input-filter=all -color %s
-
+// RUN: echo "Hello World!"
 #include <cstdint>
 
 typedef unsigned long ulong;

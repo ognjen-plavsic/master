@@ -141,7 +141,6 @@ void A8_5_2::warnNonAutoTypeBracedInit(const VarDecl *VD) {
   std::string exprStr = getExprStr(VD->getInit(), ASTCtx, PP);
 
   trimBraces(exprStr);
-  std::cout << exprStr << std::endl;
   exprStr = "{" + exprStr + "}";
   
   std::string replacementStr;
