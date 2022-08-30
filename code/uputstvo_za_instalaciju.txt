@@ -1,0 +1,6 @@
+git clone https://github.com/ognjen-plavsic/AUTOFIX
+cd AUTOFIX
+mkdir build 
+cd build
+cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra" ../llvm
+make install auto-fix
