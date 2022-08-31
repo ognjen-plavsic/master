@@ -108,7 +108,11 @@ void A8_5_3::warnAutoTypeBracedInit(const VarDecl *VD) {
         trimBraces(exprStr);
         auto DeclarationTypeLoc =
             VD->getCanonicalDecl()->getTypeSourceInfo()->getTypeLoc();
-        exprStr = " = " + exprStr;
+
+        if(VD->getInitStyle() == VarDecl::ListInit){
+          exprStr = " = " + exprStr;
+        }
+
         std::string typeStr =
             getSourceString(SM, DeclarationTypeLoc.getBeginLoc(),
                             DeclarationTypeLoc.getEndLoc());

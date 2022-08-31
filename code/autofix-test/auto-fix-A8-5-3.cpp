@@ -27,7 +27,7 @@ void fn() noexcept {
 // CHECK: {{^((/|/[a-zA-Z0-9_-]+)+)}}auto-fix-A8-5-3.cpp:15:13: warning: A variable of type auto shall not be initialized using {} or ={} braced initialization
 // CHECK-NEXT: {{^}} auto x4 = {10};
 // CHECK-NEXT: {{^}}           ^~~~
-// CHECK-NEXT: {{^}}            = 10
+// CHECK-NEXT: {{^}}           10
 // CHECK-NEXT: {{^}}2 warnings generated.{{$}}
 // CHECK-NOT: {{.+}}
 
