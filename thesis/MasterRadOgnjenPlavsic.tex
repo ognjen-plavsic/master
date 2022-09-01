@@ -244,7 +244,7 @@ Primer parcijalno automatizovanog pravila je:
 % [title=My heading line]
 
 \begin{tcolorbox}
- M5-8-1 (obvezno, implementaciono, parcijalno automatizovano) \\
+ M5-8-1 (obavezno, implementaciono, parcijalno automatizovano) \\
 Desni operand šift operacije treba biti manji za broj između nula i jedan
 od bitske širine tipa levog operanda.
 
@@ -289,13 +289,13 @@ int main(){
 
 \begin{center}
 \begin{tcolorbox}
-Pravilo A1-4-2 (obvezno, implementaciono, neautomatizovano) \\
+Pravilo A1-4-2 (obavezno, implementaciono, neautomatizovano) \\
 K\^{o}d treba da poštuje zadate granice metrika koda.
 \end{tcolorbox}
 \end{center}
 
   %  \\ \\
-  % \textit{Pravilo A1-4-2 (obvezno, implementaciono, neautomatizovano)
+  % \textit{Pravilo A1-4-2 (obavezno, implementaciono, neautomatizovano)
   %         Sav k\^{o}d  treba poštovati definisane granice metrika koda.} \\
 
   Kako bi se odredilo da li je k\^{o}d napisan u skladu sa ovim pravilom potrebno je poznavati koje metrike koda se koriste u okviru projekta i
@@ -317,7 +317,7 @@ Primer implementacionog pravila:
 
 \begin{center}
 \begin{tcolorbox}
-Pravilo A2-9-1 (obvezno, implementaciono, automatizovano) \\
+Pravilo A2-9-1 (obavezno, implementaciono, automatizovano) \\
 Ime zaglavlja mora biti identično imenu tipa deklarisanog u njemu ukoliko deklariše tip.
 \end{tcolorbox}
 \end{center}
@@ -328,7 +328,7 @@ Primer verifikacionog pravila:
 
 \begin{center}
 \begin{tcolorbox}
-Pravilo A15-0-6 (obvezno, verifikaciono, neautomatizovano) \\
+Pravilo A15-0-6 (obavezno, verifikaciono, neautomatizovano) \\
 Analiza treba biti izvršena kako bi se detektovalo loše rukovanje izuzecima. Treba analizirati slede\'ce slučajeve lošeg rukovanja izuzecima: \\
 (a) Najgore vreme izvršavanja ne postoji ili se ne može utvrditi, \\
 (b) Stek nije korektno raspakovan, \\
@@ -343,7 +343,7 @@ Primer pravila za alate koje je ujedno i infrastrukturno pravilo:
 
 \begin{center}
 \begin{tcolorbox}
-Pravilo A0-4-1 (obvezno, pravilo za infrastrukturu/alate, neautomatizovano) \\
+Pravilo A0-4-1 (obavezno, pravilo za infrastrukturu/alate, neautomatizovano) \\
 Implementacija brojeva u pokretnom zarezu treba da bude u skladu sa standardom IEEE 754.
 \end{tcolorbox}
 \end{center}
@@ -945,7 +945,7 @@ Ne treba koristiti specifikator \texttt{typedef}.
 \end{tcolorbox}
 \end{center}
 
-Specifikator \texttt{typedef} nije pogodan za kreiranje pseudionima (eng.~\textit{alias}) za \v{s}ablonske tipove i \v{c}ini k\^{o}d manje \v{c}itljivim.
+Specifikator \texttt{typedef} nije pogodan za kreiranje pseudonima (eng.~\textit{alias}) za \v{s}ablonske tipove i \v{c}ini k\^{o}d manje \v{c}itljivim.
 Oba nedostatka mogu se zaobi\'{c}i kori\v{s}\'{c}enjem specifikatora \texttt{using}.  Ispis alata \textit{AutoFix} kada se pokrene nad fajlom sa kodom iz listinga \ref{lst:typedef} prikazan je na slici \ref{fig:A7-1-6}. Alat \textit{AutoFix} od izraza za kreiranje pseudonima za tip kori\v{s}\'{c}enjem
 specifikatora \texttt{typedef} kreira i ispisuje analogni izraz koji koristi sintaksu sa specifikatorom \texttt{using}.
 
