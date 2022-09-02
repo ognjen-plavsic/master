@@ -547,15 +547,15 @@ Na slici \ref{fig:warning} prikazan je primer ispisa upozorenja na standardni iz
 
 \subsection{Predlozi za ispravljanje koda}
 
-Kompajler \textit{Clang} pod\v{z}ava mehanizam kojim se za neispravan k\^{o}d, na koji se odnosi dijagnostika, mogu ispisati predlozi za ispravljanje tog koda (eng.~\textit{fixit hint}). Ovaj mehanizam podr\v{z}an je kroz klasu \texttt{FixItHint}.
+Kompajler \textit{Clang} podr\v{z}ava mehanizam kojim se za neispravan k\^{o}d, na koji se odnosi dijagnostika, mogu ispisati predlozi za ispravljanje tog koda (eng.~\textit{fixit hint}). Ovaj mehanizam podr\v{z}an je kroz klasu \texttt{FixItHint}.
 \par
 Instance klase \texttt{FixItHint} dodaju se ve\'{c} kreiranoj dijagnostici. Objekti ove
 klase mogu biti kreirani jednim od slede\'{c}a tri konstruktora:
 
 \begin{itemize}
-\item \texttt{FixItHint::CreateInsertion(Loc, Code)} - Kreira objekat koji predla\v{z}e da se k\^{o}d (predstavljen stringom) \texttt{Code} umetne ispred lokacije \texttt{Loc}.
-\item \texttt{FixItHint::CreateRemoval(Range)} - Kreira objekat koji predla\v{z}e da se izbri\v{s}e k\^{o}d iz opsega \texttt{Range}.
-\item \texttt{FixItHint::CreateReplacement(Range, Code)} - Kreira objekat koji predla\v{z}e da se izbri\v{s}e k\^{o}d iz opsega \texttt{Range} i da se zameni sa kodom \texttt{Code}.
+\item \texttt{FixItHint::CreateInsertion(Loc, Code)} --- Kreira objekat koji predla\v{z}e da se k\^{o}d (predstavljen stringom) \texttt{Code} umetne ispred lokacije \texttt{Loc}.
+\item \texttt{FixItHint::CreateRemoval(Range)} --- Kreira objekat koji predla\v{z}e da se izbri\v{s}e k\^{o}d iz opsega \texttt{Range}.
+\item \texttt{FixItHint::CreateReplacement(Range, Code)} --- Kreira objekat koji predla\v{z}e da se izbri\v{s}e k\^{o}d iz opsega \texttt{Range} i da se zameni sa kodom \texttt{Code}.
 \end{itemize}
 
 Na slici \ref{fig:fixit} prikazan je ispis upozorenja sa predlogom za ispravljanje koda na standardni izlaz. Na slici je prikazana lokacija
@@ -581,8 +581,8 @@ Ovakav vid obrade dijagnostike vr\v{s}i klasa \texttt{VerifyDiagnosticConsumer},
 
 Klasa \texttt{DiagnosticConsumer} defini\v{s}e nekoliko metoda u svrhu obrade dijagnostike. U ovom radu kori\v{s}\'{c}ene su metode:
 \begin{itemize}
-\item \texttt{HandleDiagnostic} - poziva se nakon kreiranja svake dijagnostike u okviru kompajlera i slu\v{z}i za obradu te dijagnostike. 
-\item \texttt{finish} - poziva se nakon \v{s}to su kreirane i obrađene sve dijagnostike u okviru kompajlera i slu\v{z}i za dodatnu obradu celokupne dijagnostike.
+\item \texttt{HandleDiagnostic} --- poziva se nakon kreiranja svake dijagnostike u okviru kompajlera i slu\v{z}i za obradu te dijagnostike. 
+\item \texttt{finish} --- poziva se nakon \v{s}to su kreirane i obrađene sve dijagnostike u okviru kompajlera i slu\v{z}i za dodatnu obradu celokupne dijagnostike.
 \end{itemize}
 
 \subsection{Klasa \texttt{DiagnosticsEngine}}
@@ -598,7 +598,7 @@ dodatnih informacija prilikom kreiranja dijagnostike, kao \v{s}to su opsezi ili 
 
 Na listingu \ref{lst:dijagnostika} prikazana je funkcija \texttt{emitWarningWithHintInsertion} kojom se prijavljuje
 upozorenje zajedno sa predlogom za ispravljanje koda. Upozorenje se prijavljuje pozivom metode \texttt{Report} (linija 10). Ovaj metod kao argumente
-dobija lokaciju za koju treba prijaviti dijagnostiku (\texttt{diagLoc}) i jedinstveni identifikator (\texttt{ID}). Identifikator je kreiran, pozivom metode \texttt{getCustomDiagID(DiagnosticIDs\-::Warning, msg)}, za dijagnostiku sa nivoom ozbiljnosti upozorenja i poruku \texttt{msg} (linija 7). Metod \texttt{Report} na osnovu ovih informacija kreira i vra\'{c}a
+dobija lokaciju za koju treba prijaviti dijagnostiku (\texttt{diagLoc}) i jedinstveni identifikator (\texttt{ID}). Identifikator je kreiran, pozivom metode \texttt{getCustomDiagID(DiagnosticIDs\-::Warning, msg)}, za dijagnostiku sa nivoom ozbiljnosti upozorenja i porukom \texttt{msg} (linija 7). Metod \texttt{Report} na osnovu ovih informacija kreira i vra\'{c}a
 objekat klase \texttt{DiagnosticBui\-lder} kom se prosleđuje kreirani objekat klase \texttt{FixItHint} (linija 10). Upozorenje \'{c}e biti prosleđeno
 objektu klase \texttt{DiagnosticConsumer} odmah nakon dodavanja predloga za ispravljanje koda s obzirom da objekat klase \texttt{DiagnosticBuilder}
 nije vezan ni za jednu promenljivu i odmah \'{c}e biti uni\v{s}ten.
@@ -884,7 +884,7 @@ Direktiva \texttt{CHECK-NEXT: TEKST} proverava da li je \texttt{TEKST} pronađen
 \end{description}
 
 
-\chapter{Alat Autofix}
+\chapter{Alat AutoFix}
 \label{chp:autofix}
 
 Alat \textit{AutoFix} predstavlja alat za stati\v{c}ku analizu izvornog koda napisanog u jeziku C++14. Alat prijavljuje upozorenja
