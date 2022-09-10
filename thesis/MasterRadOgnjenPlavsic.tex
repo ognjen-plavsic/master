@@ -129,7 +129,7 @@
 \apstr{%
 Standardi za pravilno pisanje C++ koda sve su zastupljeniji u industrijama koje razvijaju sisteme sa ugrađenim ra\v{c}unarom (eng.~\textit{embedded systems}) i druge sisteme
 sa kriti\v{c}nom bezbedno\v{s}\'{c}u. Standard \textsc{autosar} C++14 jedan je od vode\'{c}ih standarda ovog tipa. Primarno se koristi u automobilskoj industriji, odnosno za
-razvoj softvera za automobile. \v{S}iroka upotreba ovih standarda izrodila je potrebu za alatima za stati\v{c}ku analizu koji bi automatizovali proces provere da li je k\^{o}d napisan u skladu sa standardom. Kompilatorska infrastruktura LLVM pru\v{z}a podr\v{s}ku za jednostavno razvijanje kvalitetnih alata ovog tipa. Cilj ovog rada je implementacija alata za stati\v{c}ku analizu \textit{AutoFix} koji proverava da li je k\^{o}d napisan u skladu sa podskupom pravila koja se odnose na deklaracije u okviru standarda \textsc{autosar} C++14. Alat ispisuje upozorenja za delove koda koji nisu u skladu sa nekim od pravila i predla\v{z}e izmene tog koda. 
+razvoj softvera za automobile. \v{S}iroka upotreba ovih standarda izrodila je potrebu za alatima za stati\v{c}ku analizu koji bi automatizovali proces provere da li je k\^{o}d napisan u skladu sa standardom. Kompilatorska infrastruktura LLVM pru\v{z}a podr\v{s}ku za jednostavno razvijanje kvalitetnih alata ovog tipa. Cilj ovog rada je implementacija alata za stati\v{c}ku analizu \textit{AutoHint} koji proverava da li je k\^{o}d napisan u skladu sa podskupom pravila koja se odnose na deklaracije u okviru standarda \textsc{autosar} C++14. Alat ispisuje upozorenja za delove koda koji nisu u skladu sa nekim od pravila i predla\v{z}e izmene tog koda. 
 }
 \usepackage{tcolorbox}
 % Ključne reči na srpskom jeziku (u odabranom pismu)
@@ -166,9 +166,9 @@ za kontrolisanje ko\v{c}nica automobila mogu imati fatalne posledice. Iz ovog ra
 i kako bi smanjili mogu\'{c}nost pojave gre\v{s}ke. \par
 Na\v{c}in da se smanji mogu\'{c}nost pojave gre\v{s}ke u kodu jeste definisanje strogog pravila kodiranja u izabranom programskom jeziku. Jedan takav standard za programski jezik C++14 (jezik C++ iz verzije standarda za 2014. godinu) predstavlja standard kodiranja \textsc{autosar} C++14. Ovaj standard primarno se primenjuje u automobilskoj industriji. S obzirom da industrije koje primenjuju ovaj standard \v{c}esto koriste jako kompleksne softvere, potrebno je automatizovati proces provere da li je k\^{o}d napisan u skladu sa standardom. U ovu svrhu koriste se alati za stati\v{c}ku analizu koda. \par Alati za stati\v{c}ku analizu proveravaju ispravnost programa bez njegovog izvr\v{s}avanja. Ovakvi alati se mogu implementirati na vi\v{s}e na\v{c}ina. Jednostavniji alati koriste informacije dobijene tokom kompilacije programa da utvrde da li k\^{o}d sadr\v{z}i gre\v{s}ku. Napredniji alati za stati\v{c}ku analizu vr\v{s}e i simboli\v{c}ko izvr\v{s}avanje programa, odnosno koriste razli\v{c}ite tehnike kojima simuliraju izvr\v{s}avanje programa, bez njegovog pokretanja \cite{Etran, AutoCheck}. \par
 Kompilatorska infrastruktura LLVM omogu\'{c}ava izradu alata za stati\v{c}ku analizu. Ova infrastruktura sadr\v{z}i niz biblioteka koje omogu\'{c}avaju analizu informacija dobijenih tokom kompilacije, ali sadr\v{z}i i biblioteke koje omogu\'{c}avaju izradu samostalnih alata. Cilj ovog rada je implementacija alata za stati\v{c}ku analizu
-\textit{AutoFix}. \textit{AutoFix} proverava da li je k\^{o}d napisan u skladu sa podskupom pravila iz standarda \textsc{autosar} C++14 koja se odnose na deklaracije u programskom jeziku C++14. Ukoliko k\^{o}d nije napisan u skladu sa nekim od tih pravila, alat prijavljuje upozorenje zajedno sa predlogom za ispravljanje koda. 
+\textit{AutoHint}. \textit{AutoHint} proverava da li je k\^{o}d napisan u skladu sa podskupom pravila iz standarda \textsc{autosar} C++14 koja se odnose na deklaracije u programskom jeziku C++14. Ukoliko k\^{o}d nije napisan u skladu sa nekim od tih pravila, alat prijavljuje upozorenje zajedno sa predlogom za ispravljanje koda. 
 
-U glavi \ref{chp:autosar} opisan je programski jezik C++ i standard kodiranja \textsc{autosar} C++14. Opisana je klasifikacija pravila u okviru standarda i navedeni su primeri pravila koja pripadaju svakoj od grupa u okviru klasifikacije. U glavi \ref{chp:llvm} opisani su delovi kompilatorske strukture LLVM koji su kori\v{s}\'{c}eni za izradu alata \textit{AutoFix}. U glavi 4 opisana je implementacija alata \textit{AutoFix} i na\v{c}in upotrebe alata. Takođe, opisano je i svako od pravila iz standarda \textsc{autosar} C++14 koje alat podr\v{z}ava. U zaklju\v{c}ku iznet je osvrt na ceo rad i predlo\v{z}en je dalji tok razvoja alata \textit{AutoFix}.
+U glavi \ref{chp:autosar} opisan je programski jezik C++ i standard kodiranja \textsc{autosar} C++14. Opisana je klasifikacija pravila u okviru standarda i navedeni su primeri pravila koja pripadaju svakoj od grupa u okviru klasifikacije. U glavi \ref{chp:llvm} opisani su delovi kompilatorske strukture LLVM koji su kori\v{s}\'{c}eni za izradu alata \textit{AutoHint}. U glavi 4 opisana je implementacija alata \textit{AutoHint} i na\v{c}in upotrebe alata. Takođe, opisano je i svako od pravila iz standarda \textsc{autosar} C++14 koje alat podr\v{z}ava. U zaklju\v{c}ku iznet je osvrt na ceo rad i predlo\v{z}en je dalji tok razvoja alata \textit{AutoHint}.
 \chapter{Standard kodiranja \textsc{AUTOSAR} C++14}
 \label{chp:autosar}
 
@@ -352,17 +352,17 @@ Implementacija brojeva u pokretnom zarezu treba da bude u skladu sa standardom I
 \chapter{Stati\v{c}ka analiza u okviru kompilatorske infrastrukture LLVM}
 \label{chp:llvm}
 
-U ovom poglavlju opisane su biblioteke i klase kompilatorske infrastrukture LLVM koje su kori\v{s}\'{c}ene za implementaciju alata za stati\v{c}ku analizu \textit{AutoFix}. Biblioteke su opisivane ukoliko su u celosti
+U ovom poglavlju opisane su biblioteke i klase kompilatorske infrastrukture LLVM koje su kori\v{s}\'{c}ene za implementaciju alata za stati\v{c}ku analizu \textit{AutoHint}. Biblioteke su opisivane ukoliko su u celosti
 bitne za implementaciju. Ukoliko nisu bitne u celosti, opisivane su samo klase tih biblioteka koje implementiraju funkcionalnosti koje alat koristi. \par 
-S obzirom na to da se alat \textit{AutoFix} zasniva na analizi apstraktnog sintaksi\v{c}kog stabla, u ovom poglavlju opisana je biblioteka \texttt{clangAST} koja implementira osnovne
+S obzirom na to da se alat \textit{AutoHint} zasniva na analizi apstraktnog sintaksi\v{c}kog stabla, u ovom poglavlju opisana je biblioteka \texttt{clangAST} koja implementira osnovne
 strukture i algoritme za konstrukciju stabla i njegov obilazak. U okviru ove biblioteke posebno je obja\v{s}njena klasa \texttt{RecursiveASTVisitor} koja omogu\'{c}ava obilazak stabla.
 Opisana je i biblioteka \texttt{LibASTMatchers} koja implementira jezik specijalne namene (eng.~\textit{domain specific language}) kojim se mogu prona\'{c}i i obraditi specifi\v{c}ne sintaksne strukture iz apstraktnog sintaksi\v{c}kog stabla.
 \par
-Apstraktne klase \texttt{ASTConsumer} i \texttt{FrontendAction} omogu\'{c}avaju interakciju alata sa prednjim delom kompilatora. Alat \textit{AutoFix} ih
+Apstraktne klase \texttt{ASTConsumer} i \texttt{FrontendAction} omogu\'{c}avaju interakciju alata sa prednjim delom kompilatora. Alat \textit{AutoHint} ih
 koristi u kontekstu kreiranja i izvr\v{s}avanja akcija nad apstraktnim sintaksnim
 stablom.
 \par
-Za kreiranje alata \textit{AutoFix} kori\v{s}\'{c}ena je i biblioteka \texttt{LibTooling} koja u okviru infrastrukture LLVM omogu\'{c}ava kreiranje samostalnih alata. Pored kori\v{s}\'{c}enja ove biblioteke, alati se mogu kreirati i upotrebom dodataka kompilatora \textit{Clang} (eng.~\textit{Clang Plugins}) ili upotrebom biblioteke \texttt{LibClang}. U okviru ovog poglavlja diskutovane su prednosti i mane upotrebe ovih metoda u svrhu kreiranja alata kao i razlozi zbog kojih je biblioteka \texttt{LibTooling} izabrana za implementaciju alata \textit{AutoFix}.
+Za kreiranje alata \textit{AutoHint} kori\v{s}\'{c}ena je i biblioteka \texttt{LibTooling} koja u okviru infrastrukture LLVM omogu\'{c}ava kreiranje samostalnih alata. Pored kori\v{s}\'{c}enja ove biblioteke, alati se mogu kreirati i upotrebom dodataka kompilatora \textit{Clang} (eng.~\textit{Clang Plugins}) ili upotrebom biblioteke \texttt{LibClang}. U okviru ovog poglavlja diskutovane su prednosti i mane upotrebe ovih metoda u svrhu kreiranja alata kao i razlozi zbog kojih je biblioteka \texttt{LibTooling} izabrana za implementaciju alata \textit{AutoHint}.
 
 \section{LLVM i Clang}
 
@@ -400,7 +400,7 @@ ugrubo je podeljena na tri dela: prednji (eng.~\textit{frontend}), srednji (eng.
         biblioteke \texttt{clangSema} kako bi ispitala semanti\v{c}ku validnost sintaksnih konstrukta (niza tokena) od kojih kreira \v{c}vorove apstraktnog sintaksi\v{c}kog stabla.
         Parser kompilatora \textit{Clang} je implementiran kao parser rekurzivnog spuštanja (eng.~\textit{recursive-descent parser}), odnosno analizira izvorni k\^{o}d od vrha ka dnu nizom rekurzivnih funkcija \cite{LLVMCoreLibraries}.
   \item[Biblioteka \texttt{clangAST}]
-        implementira algoritme i strukture podataka koje parser koristi za izgradnju apstraktnog sintaksi\v{c}kog stabla. Specifična je po strukturi čvorova koji podsećaju na izvorni C++ k\^{o}d što je čini pogodnom za kreiranje alata za refaktorisanje koda i statičku analizu. S obzirom da se ova biblioteka koristi u okviru alata \textit{AutoFix}, opisana je detaljnije u poglavlju \ref{sec:clangASTSec}.
+        implementira algoritme i strukture podataka koje parser koristi za izgradnju apstraktnog sintaksi\v{c}kog stabla. Specifična je po strukturi čvorova koji podsećaju na izvorni C++ k\^{o}d što je čini pogodnom za kreiranje alata za refaktorisanje koda i statičku analizu. S obzirom da se ova biblioteka koristi u okviru alata \textit{AutoHint}, opisana je detaljnije u poglavlju \ref{sec:clangASTSec}.
   \item[Biblioteka \texttt{clangSema}]
         vrši semantičku analizu programa tokom parsiranja. Ova biblioteka proverava da li je k\^{o}d napisan u skladu sa sistemom tipova koji standard jezika propisuje. Za razliku od uobi\v{c}ajenog na\v{c}ina implementacije provere tipova, obilaskom apstraktnog sintaksi\v{c}kog stabla nakon parsiranja, biblioteka \texttt{clangSema} implementira proveru tipova zajedno sa generisanjem \v{c}vorova apastraktong sintaksi\v{c}kog stabla \cite{LLVMCoreLibraries}. Ova biblioteka usko je povezana sa bibliotekama \texttt{clangParse} i \texttt{clangAST}.
   \item[Biblioteka \texttt{clangCodeGen}]
@@ -721,16 +721,16 @@ Ovaj metod bi\'{c}e pozvan nakon \v{s}to je kreirano apstraktno sintaksi\v{c}ko 
 U okviru njega, nad asptraktnim sintaksnim stablom, mo\v{z}e se pozvati AST-upariva\v{c} koji \'{c}e izvr\v{s}iti obilazak i analizu apstraktnog sintaksi\v{c}kog stabla \cite{ASTConsumer}.
 
 \subsection{Primer upotrebe klase \texttt{ASTConsumer}}
-Na listingu \ref{lst:labelConsumer} prikazana je implementacija klase \texttt{AutoFixConsumer}. U okviru metode \texttt{HandleTranslationUnit}
+Na listingu \ref{lst:labelConsumer} prikazana je implementacija klase \texttt{AutoHintConsumer}. U okviru metode \texttt{HandleTranslationUnit}
 poziva se funkcija za kreiranje i pokretanje upariva\v{c}a \texttt{matchASTExample} (linija 9). 
 
-\begin{lstlisting}[style=customc,  caption={Implementacija klase \texttt{AutoFixConsumer}. Funkcija \texttt{matchASTExample} prikazana je na listingu \ref{lst:MatcherList} i dostupna je kroz zaglavlje \texttt{AutoFixMatchers.h}.}, label=lst:labelConsumer]
+\begin{lstlisting}[style=customc,  caption={Implementacija klase \texttt{AutoHintConsumer}. Funkcija \texttt{matchASTExample} prikazana je na listingu \ref{lst:MatcherList} i dostupna je kroz zaglavlje \texttt{AutoHintMatchers.h}.}, label=lst:labelConsumer]
 #include "clang/AST/ASTConsumer.h"
-#include "AutoFixMatchers.h"
+#include "AutoHintMatchers.h"
 
-class AutoFixConsumer : public clang::ASTConsumer {
+class AutoHintConsumer : public clang::ASTConsumer {
 public:
-  explicit AutoFixConsumer(ASTContext *Context) : Context(Context) {}
+  explicit AutoHintConsumer(ASTContext *Context) : Context(Context) {}
 
   virtual void HandleTranslationUnit(clang::ASTContext &Context) {
     matchASTExample(Context);
@@ -752,18 +752,18 @@ Da bi se implementirala specifi\v{c}na akcija nad apstraktnim sintaksnim stablom
 \hspace*{9cm} \texttt{StringRef InFile)} \\ 
 Ova metoda kao argumente dobiija instancu kompilatora \textit{Clang} i ime fajla za koji se kreira apstraktno sintaksi\v{c}ko stablo. Povratna vrednost metode je pokaziva\v{c} na kreirani objekat klase \texttt{ASTConsumer}.
 \subsection{Primer upotrebe klase \texttt{ASTFrontendAction}}
-Na listingu \ref{lst:ASTAction} prikazana je implementacija klase \texttt{AutoFixAction} koja izvr\v{s}ava akcije nad apstraktnim sintaksnim stablom.
-Klasa \texttt{AutoFixAction} u okviru metode \texttt{CreateASTConsumer} (linija 6) kreira pokaziva\v{c} na objekat klase \texttt{AutoFixConsumer}.
+Na listingu \ref{lst:ASTAction} prikazana je implementacija klase \texttt{AutoHintAction} koja izvr\v{s}ava akcije nad apstraktnim sintaksnim stablom.
+Klasa \texttt{AutoHintAction} u okviru metode \texttt{CreateASTConsumer} (linija 6) kreira pokaziva\v{c} na objekat klase \texttt{AutoHintConsumer}.
 
-\begin{lstlisting}[style=customc,  caption={Implementacija klase \texttt{AutoFixAction}. Klasa \texttt{AutoFixConstumer} prikazana je na listingu \ref{lst:labelConsumer} i dostupna je kroz zaglavlje \texttt{AutoFixConsumer.h}.}, label=lst:ASTAction]
-#include "AutoFixConsumer.h"
+\begin{lstlisting}[style=customc,  caption={Implementacija klase \texttt{AutoHintAction}. Klasa \texttt{AutoHintConstumer} prikazana je na listingu \ref{lst:labelConsumer} i dostupna je kroz zaglavlje \texttt{AutoHintConsumer.h}.}, label=lst:ASTAction]
+#include "AutoHintConsumer.h"
 
-class AutoFixAction : public clang::ASTFrontendAction {
+class AutoHintAction : public clang::ASTFrontendAction {
 public:
   virtual std::unique_ptr<clang::ASTConsumer>
   CreateASTConsumer(clang::CompilerInstance &Compiler, 
                     llvm::StringRef InFile) {
-    return std::make_unique<AutoFixConsumer>(
+    return std::make_unique<AutoHintConsumer>(
                 &Compiler.getASTContext(),
                 Compiler.getSourceManager());
   }
@@ -839,16 +839,16 @@ Da bi se implementirao kvalitetan alat za stati\v{c}ku analizu neophodna je puna
 
 \subsection{Primer kreiranja alata upotrebom biblioteke LibTooling}
 
-Na listingu \ref{lst:label9} prikazana je implementacija jednostavnog alata kori\v{s}\'{c}enjem biblioteke \texttt{LibTooling}. Ovaj alat pokre\'{c}e definisanu akciju \texttt{AutoFixAction} nad izvornim kodom koji je prosleđen kao argument komandne linije. U ovu svrhu koristi se funkcija \texttt{runToolOnCode} (linija 6) biblioteke \texttt{LibTooling}. Alat pronalazi sve enumeratore koji nisu deklarisani sintaksom \texttt{enum class} i za ove deklaracije se prijavljuje upozorenje zajedno sa predlogom za ispravljanje koda. 
+Na listingu \ref{lst:label9} prikazana je implementacija jednostavnog alata kori\v{s}\'{c}enjem biblioteke \texttt{LibTooling}. Ovaj alat pokre\'{c}e definisanu akciju \texttt{AutoHintAction} nad izvornim kodom koji je prosleđen kao argument komandne linije. U ovu svrhu koristi se funkcija \texttt{runToolOnCode} (linija 6) biblioteke \texttt{LibTooling}. Alat pronalazi sve enumeratore koji nisu deklarisani sintaksom \texttt{enum class} i za ove deklaracije se prijavljuje upozorenje zajedno sa predlogom za ispravljanje koda. 
 
-\begin{lstlisting}[style=customc,  caption={Primer implementacije jednostavnog alata upotrebom biblioteke \texttt{LibTooling}. Alat koristi klasu \texttt{AutoFixAction} sa listinga \ref{lst:ASTAction} dostupnom kroz zaglavlje \texttt{ASTFrontendAction.h}.}, label=lst:label9]
+\begin{lstlisting}[style=customc,  caption={Primer implementacije jednostavnog alata upotrebom biblioteke \texttt{LibTooling}. Alat koristi klasu \texttt{AutoHintAction} sa listinga \ref{lst:ASTAction} dostupnom kroz zaglavlje \texttt{ASTFrontendAction.h}.}, label=lst:label9]
 #include "clang/Tooling/Tooling.h"
 #include "ASTFrontendAction.h"
 
 int main(int argc, char **argv) {
   if (argc > 1) {
     clang::tooling::runToolOnCode(
-                    std::make_unique<AutoFixAction>(),
+                    std::make_unique<AutoHintAction>(),
                     argv[1]);
   }
 }
@@ -865,8 +865,8 @@ podrazumeva se da su opcije neophodne za prevođenje fajla navedene prilikom pok
 
 \section{Alati za testiranje}
 
-Kompilatorska infrastruktura LLVM sadr\v{z}i alate koji se mogu koristiti u svrhu pisanja i pokretanja testova. U svrhu testiranja alata \textit{AutoFix}
-kori\v{s}\'{c}eni su alati \textit{lit} i \textit{FileCheck}. Ovi alati imaju raznoliku upotrebu i \v{s}irok spektar opcija. U nastavku \'{c}e biti opisana samo svojstva ovih alata relevantna za testiranje alata \textit{AutoFix}. \par
+Kompilatorska infrastruktura LLVM sadr\v{z}i alate koji se mogu koristiti u svrhu pisanja i pokretanja testova. U svrhu testiranja alata \textit{AutoHint}
+kori\v{s}\'{c}eni su alati \textit{lit} i \textit{FileCheck}. Ovi alati imaju raznoliku upotrebu i \v{s}irok spektar opcija. U nastavku \'{c}e biti opisana samo svojstva ovih alata relevantna za testiranje alata \textit{AutoHint}. \par
 \begin{description}
 \item[Alat \textit{lit}] slu\v{z}i za izvr\v{s}avanje testova i testnih paketa (eng.~\textit{test suites}) u okviru kompilatorske infrastrukture LLVM. Alat takođe sumira rezultate i generi\v{s}e informacije o gre\v{s}kama u okviru testova.
 Testovi se pokre\'{c}u komandom \\
@@ -884,10 +884,10 @@ Direktiva \texttt{CHECK-NEXT: TEKST} proverava da li je \texttt{TEKST} pronađen
 \end{description}
 
 
-\chapter{Alat AutoFix}
-\label{chp:autofix}
+\chapter{Alat AutoHint}
+\label{chp:autohint}
 
-Alat \textit{AutoFix} predstavlja alat za stati\v{c}ku analizu izvornog koda napisanog u jeziku C++14. Alat prijavljuje upozorenja
+Alat \textit{AutoHint} predstavlja alat za stati\v{c}ku analizu izvornog koda napisanog u jeziku C++14. Alat prijavljuje upozorenja
 za k\^{o}d koji nije napisan u skladu sa odabranim podskupom pravila iz standarda kodiranja \textsc{autosar} C++14 koja se odnose na deklaracije. Zajedno sa upozorenjima alat 
 ispisuje i predlog koda kojim se po\v{c}etni k\^{o}d mo\v{z}e zameniti kako bi bio u skladu sa standardom.
 Alat je implementiran u programskom jeziku C++ kori\v{s}\'{c}enjem biblioteka za razvoj alata dostupnim u okviru kompilatorske infrastrukture LLVM.
@@ -896,38 +896,38 @@ Alat je dostupan i nalazi se na linku \url{https://github.com/ognjen-plavsic/mas
 
 \section{Kori\v{s}\'{c}enje alata}
 
-Alat \textit{AutoFix} se pokre\'{c}e komandom:
+Alat \textit{AutoHint} se pokre\'{c}e komandom:
 \\ \\
- \indent \indent \texttt{auto-fix [options] <source0> [... <sourceN>]} \\
+ \indent \indent \texttt{auto-hint [options] <source0> [... <sourceN>]} \\
 
-\noindent Argument \texttt{options} ozna\v{c}ava opcije koje se mogu proslediti alatu \textit{AutoFix},
+\noindent Argument \texttt{options} ozna\v{c}ava opcije koje se mogu proslediti alatu \textit{AutoHint},
 dok \texttt{<source0> [... <sourceN>]} predstavlja listu fajlova, razdvojenih razmakom, nad kojima će se pokrenuti alat. 
 Mogu\'{c}e opcije su:
   \begin{description}
     \item \texttt{--apply-fix}: Ovom opcijom se predlo\v{z}ene izmene mogu primeniti na k\^{o}d, menjaju\'{c}i izvorni fajl nad kojim je pokrenuta analiza.
     Predlo\v{z}ene izmene bi\'{c}e primenjene na k\^{o}d ukoliko među njima ne postoji konflikt, odnosno ukoliko se razli\v{c}iti predlozi ne odnose na isti deo koda.
     \item \texttt{--exclude-headers}: Ova opcija omogu\'{c}ava da se upozorenja ne prijavljuju za k\^{o}d iz zaglavlja. Sistemska zagavlja alat
-    \textit{AutoFix} ignori\v{s}e i bez navođenja ove opcije.
-    \item \texttt{--list-rules}: Ovom opcijom se ispisuju sva podr\v{z}ana pravila u okviru alata u formatu \texttt{oznaka - tekst\_pravila} gde je \texttt{oznaka} jedinstvena oznaka pravila iz \textsc{autosar} dokumenta, a \texttt{tekst\_pravila} prestavlja kratak opis pravila iz \textsc{autosar} dokumenta koji se ujedno ispisuje prilikom prijavljivanja upozorenja vezanih za to pravilo. Na slici \ref{fig:listRules} prikazan je rezultat rada alata \textit{AutoFix} prilikom pokretanja sa opcijom \texttt{--list-rules}.
+    \textit{AutoHint} ignori\v{s}e i bez navođenja ove opcije.
+    \item \texttt{--list-rules}: Ovom opcijom se ispisuju sva podr\v{z}ana pravila u okviru alata u formatu \texttt{oznaka - tekst\_pravila} gde je \texttt{oznaka} jedinstvena oznaka pravila iz \textsc{autosar} dokumenta, a \texttt{tekst\_pravila} prestavlja kratak opis pravila iz \textsc{autosar} dokumenta koji se ujedno ispisuje prilikom prijavljivanja upozorenja vezanih za to pravilo. Na slici \ref{fig:listRules} prikazan je rezultat rada alata \textit{AutoHint} prilikom pokretanja sa opcijom \texttt{--list-rules}.
 
     \begin{figure}[!h]
     \begin{center}
     \includegraphics[scale=0.4]{listRules.png}
     \end{center}
-    \caption{Ispis alata \textit{AutoFix} prilikom kori\v{s}\'{c}enja opcije \texttt{--list-rules}.}
+    \caption{Ispis alata \textit{AutoHint} prilikom kori\v{s}\'{c}enja opcije \texttt{--list-rules}.}
     \label{fig:listRules}
     \end{figure}
 
     \item \texttt{--rules=<string>}: Ova opcija omogu\'{c}ava navođenje podskupa implementiranih pravila za koje \'{c}e alat izvr\v{s}iti analizu. Pravila u okviru ove opcije
     se navode po svojoj oznaci iz \textsc{autosar} dokumenta i treba ih razdvojiti zarezom. Ukoliko se umesto opcije pravila prosledi string \texttt{"all"} alat \'{c}e pokrenuti
-    analizu sa svim implementiranim pravilima u okviru alata. Ukoliko se ova opcija ne navede prilikom pokretanja, \textit{AutoFix} \'{c}e ovo protuma\v{c}iti kao da je navedena opcija \texttt{--rules=""}, odnosno ne\'{c}e se izvr\v{s}iti analiza ni za jedno pravilo.
+    analizu sa svim implementiranim pravilima u okviru alata. Ukoliko se ova opcija ne navede prilikom pokretanja, \textit{AutoHint} \'{c}e ovo protuma\v{c}iti kao da je navedena opcija \texttt{--rules=""}, odnosno ne\'{c}e se izvr\v{s}iti analiza ni za jedno pravilo.
     Primer kori\v{s}\'{c}enja ove opcije: \newline\newline
-    \texttt{auto-fix ./AutoFixTest.cpp --rules="A7\_2\_3, A7\_1\_6"} \\
+    \texttt{auto-hint ./AutoHintTest.cpp --rules="A7\_2\_3, A7\_1\_6"} \\
     \item \texttt{--help}: Ovom opcijom se ispisuje uputstvo za upotrebu alata.
   \end{description}
 
-Pored opcija koje su definisane u okviru alata \textit{AutoFix}, prilikom pokretanja alata mogu se dodati i opcije koje se prosleđuju kompilatoru \textit{Clang}. Na primer, mo\v{z}e da bude korisno da se navede opcija \texttt{-Wno-everything} kako bi se prijavljivala isklju\v{c}ivo upozorenja generisana alatom \textit{AutoFix} i ignorisala sva upozorenja koja generi\v{s}e kompilator \textit{Clang} tokom kompilacije. Ovo se mo\v{z}e posti\'{c}i komandom: \\ \\
-\texttt{./auto-fix --rules="all" test.cpp --extra-arg="-Wno-everything" --}
+Pored opcija koje su definisane u okviru alata \textit{AutoHint}, prilikom pokretanja alata mogu se dodati i opcije koje se prosleđuju kompilatoru \textit{Clang}. Na primer, mo\v{z}e da bude korisno da se navede opcija \texttt{-Wno-everything} kako bi se prijavljivala isklju\v{c}ivo upozorenja generisana alatom \textit{AutoHint} i ignorisala sva upozorenja koja generi\v{s}e kompilator \textit{Clang} tokom kompilacije. Ovo se mo\v{z}e posti\'{c}i komandom: \\ \\
+\texttt{./auto-hint --rules="all" test.cpp --extra-arg="-Wno-everything" --}
 
 
 \section{Opis implementiranih pravila}
@@ -940,7 +940,7 @@ Pravila razmatrana u ovom radu predstavljaju podskup pravila koja se odnose na d
 od osnovnih i najvažnijih koncepta u programskom jeziku C++ i programiranju generalno.
 \\
 \indent
-Sva implementirana pravila u okviru alata \textit{AutoFix} spadaju, prema klasifikaciji iz sekcije \ref{sec:klasifikacija}, u sledeće kategorije:
+Sva implementirana pravila u okviru alata \textit{AutoHint} spadaju, prema klasifikaciji iz sekcije \ref{sec:klasifikacija}, u sledeće kategorije:
 \begin{enumerate}
   \item{Obavezna, prema klasifikaciji po obavezi.}
   \item{Automatizovana, prema klasifikaciji po primenjivosti statičke analize.}
@@ -959,13 +959,13 @@ Promenljiva tipa \texttt{auto} ne sme biti inicijalizovana kori\v{s}\'{c}enjem v
 Po standardu C++14, kompilator \'{c}e  promenljivu deklarisanu specifikatorom \texttt{auto} koja je inicijalizovana sintaksom viti\v{c}astih zagrada (\texttt{\{\}} ili \texttt{=\{\}}) tretirati kao objekat klase
 \texttt{std::initializer\_list<type>}. Ukoliko programer nije svestan ove \v{c}injenice, mo\v{z}e pomisliti da \'{c}e zaklju\v{c}eni tip zapravo biti \texttt{type}. Da bi se izbegla konfuzija oko zaklju\v{c}ivanja
 tipova, \textsc{autosar} standard nala\v{z}e da se ne koristi nijedna od navedene dve vrste inicijalizacije.
-Na listingu \ref{lst:label13} prikazan je k\^{o}d nad kojim \'{c}e biti ilustrovana podr\v{s}ka pravilu \textbf{A8-5-3} u okviru alata \textit{AutoFix}. 
+Na listingu \ref{lst:label13} prikazan je k\^{o}d nad kojim \'{c}e biti ilustrovana podr\v{s}ka pravilu \textbf{A8-5-3} u okviru alata \textit{AutoHint}. 
 Zaklju\v{c}en tip za promenljive \texttt{x2} (linija 7) i \texttt{x4} (linija 11) bi\'c{e} \texttt{std::initializer\_list<int>}, dok \'{c}e za promenljive \texttt{x1} (linija 5) i \texttt{x3} (linija 9) biti zaklju\v{c}en tip \texttt{int}. S obzirom da deklaracije promenljivih \texttt{x2} i \texttt{x4} koriste sintaksu
 viti\v{c}astih zagrada, ove deklaracije nisu napisane u skladu sa pravilom \textbf{A8-5-3}.
-Na slici \ref{fig:A8-5-3} prikazan je ispis alata \textit{AutoFix} za k\^{o}d sa listinga \ref{lst:label13}. Alat u oba slu\v{c}aja predla\v{z}e
+Na slici \ref{fig:A8-5-3} prikazan je ispis alata \textit{AutoHint} za k\^{o}d sa listinga \ref{lst:label13}. Alat u oba slu\v{c}aja predla\v{z}e
 da promenljiva bude deklarisana koriste\'{c}i simbol \texttt{=}.
 
-\begin{lstlisting}[style=customc, caption={K\^{o}d nad kojim je demonstrirana podr\v{s}ka pravilu \textbf{A8-5-3} u okviru alata \textit{AutoFix}. Ispis alata \textit{AutoFix} nakon pokretanja nad ovim kodom prikazan je na slici \ref{fig:A8-5-3}.}, label=lst:label13]
+\begin{lstlisting}[style=customc, caption={K\^{o}d nad kojim je demonstrirana podr\v{s}ka pravilu \textbf{A8-5-3} u okviru alata \textit{AutoHint}. Ispis alata \textit{AutoHint} nakon pokretanja nad ovim kodom prikazan je na slici \ref{fig:A8-5-3}.}, label=lst:label13]
 #include <initializer_list>
 
 void fn() {
@@ -998,11 +998,11 @@ Inicijalizacija viti\v{c}astim zagradama bez simbola jednako (\texttt{=}) treba 
 
 Po standardu C++14, prilikom upotrebe inicijalizacije viti\v{c}astih zagrada bez znaka \texttt{=} ne\'{c}e do\'{c}i do konverzija tipova iz tipa ve\'{c}e bitske \v{s}irine u tip manje bitske \v{s}irine (eng.~\textit{narrowing conversions}) \v{s}to se moze dogoditi prilikom upotrebe ostalih vrsta inicijalizacija.
 Upotreba simbola \texttt{=} pri inicijalizaciji mo\v{z}e izazvati konfuziju kod programera i navesti ga na pomisao da se nad objektom poziva operator dodele iako se zapravo poziva konstruktor.
-Na listingu \ref{lst:label14} prikazan je k\^{o}d nad kojim je demonstrirana podr\v{s}ka pravilu \textbf{A8-5-2} u okviru alata \textit{AutoFix}.
+Na listingu \ref{lst:label14} prikazan je k\^{o}d nad kojim je demonstrirana podr\v{s}ka pravilu \textbf{A8-5-2} u okviru alata \textit{AutoHint}.
 Deklaracije promenljivih \texttt{x1} (linija 6), \texttt{x2} (linija 8) i \texttt{x3} (linija 10) nisu u skadu sa pravilom \textbf{A8-5-2} s obzirom da ne koriste inicijalizaciju viti\v{c}astih zagrada bez simbola \texttt{=}.
-Ispis alata \textit{AutoFix} kada se pokrene nad fajlom sa kodom iz listinga \ref{lst:label14} prikazan je na slici \ref{fig:A8-5-2}. \\
+Ispis alata \textit{AutoHint} kada se pokrene nad fajlom sa kodom iz listinga \ref{lst:label14} prikazan je na slici \ref{fig:A8-5-2}. \\
 
-\begin{lstlisting}[style=customc, caption={K\^{o}d nad kojim je demonstrirana podr\v{s}ka pravilu \textbf{A8-5-2} u okviru alata \textit{AutoFix}.}, label=lst:label14]
+\begin{lstlisting}[style=customc, caption={K\^{o}d nad kojim je demonstrirana podr\v{s}ka pravilu \textbf{A8-5-2} u okviru alata \textit{AutoHint}.}, label=lst:label14]
 #include <cstdint>
 #include <initializer_list>
 
@@ -1034,7 +1034,7 @@ Ne treba koristiti specifikator \texttt{typedef}.
 \end{center}
 
 Specifikator \texttt{typedef} nije pogodan za kreiranje pseudonima (eng.~\textit{alias}) za \v{s}ablonske tipove i \v{c}ini k\^{o}d manje \v{c}itljivim.
-Oba nedostatka mogu se zaobi\'{c}i kori\v{s}\'{c}enjem specifikatora \texttt{using}.  Ispis alata \textit{AutoFix} kada se pokrene nad fajlom sa kodom iz listinga \ref{lst:typedef} prikazan je na slici \ref{fig:A7-1-6}. Alat \textit{AutoFix} od izraza za kreiranje pseudonima za tip kori\v{s}\'{c}enjem
+Oba nedostatka mogu se zaobi\'{c}i kori\v{s}\'{c}enjem specifikatora \texttt{using}.  Ispis alata \textit{AutoHint} kada se pokrene nad fajlom sa kodom iz listinga \ref{lst:typedef} prikazan je na slici \ref{fig:A7-1-6}. Alat \textit{AutoHint} od izraza za kreiranje pseudonima za tip kori\v{s}\'{c}enjem
 specifikatora \texttt{typedef} kreira i ispisuje analogni izraz koji koristi sintaksu sa specifikatorom \texttt{using}.
 
 \begin{lstlisting}[style=customc, caption={Primer koda koji nije napisan u skladu sa pravilom \textbf{A7-1-6}, odnosno koristi specifikator \texttt{typedef}.}, label=lst:typedef]
@@ -1081,7 +1081,7 @@ static std::int32_t E10;
 Kori\v{s}\'{c}enjem nabrajanja sa opsegom, odnosno upotrebom sintakse \texttt{enum class}, identifikatori kori\v{s}\'{c}eni prilikom
 nabrajanja bi\'{c}e deklarisani u svom unutra\v{s}njem opsegu i time spre\v{c}iti mogu\'{c}nost dvostruke deklaracije identifikatora u globalnom opsegu.
 
-Ispis alata \textit{AutoFix} kada se pokrene nad fajlom sa kodom iz listinga \ref{lst:enum} prikazan je na slici \ref{fig:A7-2-3}. 
+Ispis alata \textit{AutoHint} kada se pokrene nad fajlom sa kodom iz listinga \ref{lst:enum} prikazan je na slici \ref{fig:A7-2-3}. 
 Alat pokazuje na koju lokaciju treba umetnuti specifikator \texttt{class}.
 \\
 
@@ -1104,20 +1104,20 @@ enum E1 : std::int32_t { E10, E11, E12 };
 
 \section{Opis implementacije alata}
 
-Alat \textit{AutoFix} implementiran je u okviru projekta \texttt{clang-tools-extra}, potprojekta kompilatorske infrastrukture LLVM. Projekat \texttt{clang-tools-extra} sadr\v{z}i alate implementirane interfejsima za alate kompilatora \textit{Clang} (eng.~\textit{Clang’s tooling APIs}).
-Alat \textit{AutoFix} je podeljen na \v{c}etiri jedinice prevođenja: \texttt{AutoFix.cpp}, \texttt{AutoFix\-Matchers.cpp}, \texttt{AutoFixDiagnosticConsumer.cpp} i \texttt{AutoFixHelper.cpp}.
+Alat \textit{AutoHint} implementiran je u okviru projekta \texttt{clang-tools-extra}, potprojekta kompilatorske infrastrukture LLVM. Projekat \texttt{clang-tools-extra} sadr\v{z}i alate implementirane interfejsima za alate kompilatora \textit{Clang} (eng.~\textit{Clang’s tooling APIs}).
+Alat \textit{AutoHint} je podeljen na \v{c}etiri jedinice prevođenja: \texttt{AutoHint.cpp}, \texttt{AutoHint\-Matchers.cpp}, \texttt{AutoHintDiagnosticConsumer.cpp} i \texttt{AutoHintHelper.cpp}.
 
-\subsection{AutoFixMatchers.cpp}
-Alat \textit{AutoFix} koristi biblioteku \texttt{LibAstMatchers} za analizu i obradu apstraktnog sintaksi\v{c}kog stabla kompilatora \textit{Clang}. 
-\textit{AutoFix} defini\v{s}e upariva\v{c}e za uparivanje osnovnih konstrukta na koje se pravilo odnosi i za su\v{z}avanje pretrage apstraktnog sintaksi\v{c}kog stabla. Na primer, ukoliko je pravilo vezano za enumeratore (nabrajanja), upariva\v{c} koji odgovara ovom pravilu \'{c}e upariti sve deklaracije enumeratora iz apstraktnog sintaksi\v{c}kog stabla ali \'{c}e i suziti pretragu tako \v{s}to \'{c}e uparivati samo deklaracije koje nisu implicitne. Ovo se mo\v{z}e posti\'{c}i izrazom za uparivanje \texttt{enumDecl(unless(isImplicit()))}. Svakom pravilu koje alat \textit{AutoFix} podr\v{z}ava odgovara jedan upariva\v{c}. Upariva\v{c}i su nazvani po broju pravila na koje se odnose i imaju imena
+\subsection{AutoHintMatchers.cpp}
+Alat \textit{AutoHint} koristi biblioteku \texttt{LibAstMatchers} za analizu i obradu apstraktnog sintaksi\v{c}kog stabla kompilatora \textit{Clang}. 
+\textit{AutoHint} defini\v{s}e upariva\v{c}e za uparivanje osnovnih konstrukta na koje se pravilo odnosi i za su\v{z}avanje pretrage apstraktnog sintaksi\v{c}kog stabla. Na primer, ukoliko je pravilo vezano za enumeratore (nabrajanja), upariva\v{c} koji odgovara ovom pravilu \'{c}e upariti sve deklaracije enumeratora iz apstraktnog sintaksi\v{c}kog stabla ali \'{c}e i suziti pretragu tako \v{s}to \'{c}e uparivati samo deklaracije koje nisu implicitne. Ovo se mo\v{z}e posti\'{c}i izrazom za uparivanje \texttt{enumDecl(unless(isImplicit()))}. Svakom pravilu koje alat \textit{AutoHint} podr\v{z}ava odgovara jedan upariva\v{c}. Upariva\v{c}i su nazvani po broju pravila na koje se odnose i imaju imena
 \texttt{A7\_1\_6\_Matcher}, \texttt{A7\_2\_3\_Matcher}, \texttt{A8\_5\_2\_Matcher} i \texttt{A8\_5\_3\_Matcher}.
 \par
  Za svaki od upariva\v{c}a implementirana je i klasa povratnog poziva u okviru koje se vr\v{s}i analiza uparenih konstrukta, konstrukcija predloga za ispravljanje koda i prijavljivanje upozorenja ukoliko je analizom utvrđeno da k\^{o}d nije napisan u skladu sa pravilom na koje se upariva\v{c} odnosi. Klase
  povratnih poziva su takođe nazvane po pravilima na koje se odnose i nose imena \texttt{A7\_1\_6}, \texttt{A7\_2\_3}, \texttt{A8\_5\_2} i \texttt{A8\_5\_3}.
-\subsection{AutoFix.cpp}
-Ova jedica prevođenja predstavlja ulaznu ta\v{c}ku alata \textit{AutoFix}. U okviru nje, implementirane su klase \texttt{AutoFixConsumer} i \texttt{AutoFixAction} koje nasleđuju redom klase \texttt{ASTConsumer} i \texttt{ASTFrontendAction} (opisane u sekciji \ref{sec:interfejsi}). Osnovna uloga klase \texttt{AutoFixConsumer} jeste da obezbedi da se nad jedinicom prevođenja pokrenu odgovaraju\'{c}i upariva\v{c}i. To su upariva\v{c}i koji odgovaraju pravilima koje je korisnik zadao u okviru opcije komandne linije \texttt{--rules}. Parsiranje ove opcije i  pokretanje upariva\v{c}a nad apstraktnim sintaksnim stablom implementirano je u okviru metode \texttt{HandleTranslation\-Unit} klase \texttt{AutoFixConsumer}. Ova metoda se poziva tokom parsiranja na kraju izgradnje apstraktnog sintaksi\v{c}kog stabla za svaku jedinicu prevođenja nad kojom je pokrenut alat. Klasa \texttt{AutoFixAction} instancira objekat klase \texttt{AutoFixConsumer} u okviru metode \texttt{CreateASTConsumer}.
-Na slici \ref{fig:uml1} prikazan je odnos klasa \texttt{AutoFixConsumer}, \texttt{AutoFixAction}, \texttt{ASTConsumer} i \texttt{ASTFrontendAction}. \par
-U okviru jedinice prevođenja \texttt{Autofix.cpp} takođe je implementirana funkcija \texttt{main} alata \textit{AutoFix}. U okviru nje vr\v{s}i se parsiranje opcija komandne linije, kreira se instanca alata, kreiranoj instanci se pridru\v{z}uje objekat klase \texttt{AutoFix\-DiagnosticConsumer} i alat se pokre\'{c}e nad zadatom jedinicom prevođenja. 
+\subsection{AutoHint.cpp}
+Ova jedica prevođenja predstavlja ulaznu ta\v{c}ku alata \textit{AutoHint}. U okviru nje, implementirane su klase \texttt{AutoHintConsumer} i \texttt{AutoHintAction} koje nasleđuju redom klase \texttt{ASTConsumer} i \texttt{ASTFrontendAction} (opisane u sekciji \ref{sec:interfejsi}). Osnovna uloga klase \texttt{AutoHintConsumer} jeste da obezbedi da se nad jedinicom prevođenja pokrenu odgovaraju\'{c}i upariva\v{c}i. To su upariva\v{c}i koji odgovaraju pravilima koje je korisnik zadao u okviru opcije komandne linije \texttt{--rules}. Parsiranje ove opcije i  pokretanje upariva\v{c}a nad apstraktnim sintaksnim stablom implementirano je u okviru metode \texttt{HandleTranslation\-Unit} klase \texttt{AutoHintConsumer}. Ova metoda se poziva tokom parsiranja na kraju izgradnje apstraktnog sintaksi\v{c}kog stabla za svaku jedinicu prevođenja nad kojom je pokrenut alat. Klasa \texttt{AutoHintAction} instancira objekat klase \texttt{AutoHintConsumer} u okviru metode \texttt{CreateASTConsumer}.
+Na slici \ref{fig:uml1} prikazan je odnos klasa \texttt{AutoHintConsumer}, \texttt{AutoHintAction}, \texttt{ASTConsumer} i \texttt{ASTFrontendAction}. \par
+U okviru jedinice prevođenja \texttt{Autohint.cpp} takođe je implementirana funkcija \texttt{main} alata \textit{AutoHint}. U okviru nje vr\v{s}i se parsiranje opcija komandne linije, kreira se instanca alata, kreiranoj instanci se pridru\v{z}uje objekat klase \texttt{AutoHint\-DiagnosticConsumer} i alat se pokre\'{c}e nad zadatom jedinicom prevođenja. 
 
 \begin{figure}
 \begin{tikzpicture}
@@ -1125,7 +1125,7 @@ U okviru jedinice prevođenja \texttt{Autofix.cpp} takođe je implementirana fun
     \operation{\texttt{HandleTranslationUnit()}}
     % \operation[0]{withdrawl(amount : Dollars)}
   \end{class}
-  \begin{class}[text width=5cm]{AutoFixConsumer}{-9,-5}
+  \begin{class}[text width=5cm]{AutoHintConsumer}{-9,-5}
     \inherit{ASTConsumer}
     \operation{\texttt{HandleTranslationUnit()}}
   \end{class}
@@ -1134,24 +1134,24 @@ U okviru jedinice prevođenja \texttt{Autofix.cpp} takođe je implementirana fun
     \operation{\texttt{CreateASTConsumer()}}
     % \operation[0]{withdrawl(amount : Dollars)}
   \end{class}
-  \begin{class}[text width=5cm]{AutoFixAction}{1, -5}
+  \begin{class}[text width=5cm]{AutoHintAction}{1, -5}
     \inherit{ASTFrontendAction}
     \operation{\texttt{CreateASTConsumer()}}
   \end{class}
-    \draw[umlcd style dashed line ,->] (AutoFixAction) --node[above, sloped, black]{$<$ instantiate $>$} (AutoFixConsumer) ;
+    \draw[umlcd style dashed line ,->] (AutoHintAction) --node[above, sloped, black]{$<$ instantiate $>$} (AutoHintConsumer) ;
 \end{tikzpicture}
-  \caption{Odnos klasa \texttt{ASTConsumer}, \texttt{AutoFixConsumer}, \texttt{ASTFrontendAction} i \texttt{AutoFixAction}.}
+  \caption{Odnos klasa \texttt{ASTConsumer}, \texttt{AutoHintConsumer}, \texttt{ASTFrontendAction} i \texttt{AutoHintAction}.}
   \label{fig:uml1}
 
 \end{figure}
-\subsection{AutoFixDiagnosticConsumer.cpp}
-Vid obrade dijagnostike najrelevantniji za alat \textit{AutoFix} jeste njeno ispisivanje na standardni izlaz. U ovu 
-svrhu \textit{AutoFix} koristi funkcionalnost postoje\'{c}e klase \texttt{TextDiagnosticPrinter} (opisane u sekciji \ref{sec:diagnostics}).
-Pored ispisivanja poruka upozorenja i predloga za ispravljanje koda na standardni izlaz, alat \textit{AutoFix} konzumira dijagnostiku tako \v{s}to predlo\v{z}ene izmene koda primenjuje na izvorni fajl ukoliko je prosleđena opcija komandne linije \texttt{--apply-fix}.
-Da bi se ovo postiglo u okviru alata \textit{AutoFix} implementirana je klasa \texttt{AutoFix\-DiagnosticConsumer}. Ova klasa nasleđuje
-klasu \texttt{TextDiagnosticPrinter} i time zadr\v{z}ava funkcionalnost ispisivanja dijagnostike na standardni izlaz koja je implementirana u okviru nje. \par Klasa \texttt{AutoFixDiagnosticConsumer} predefini\v{s}e metod \texttt{HandleDiag\-nostic} i u okviru njega pored ispisivanja dijagnostike kreira objekat klase \texttt{Replace\-ment} za predlo\v{z}enu izmenu koda. Objekat klase \texttt{Replacement} \v{c}uva putanju do fajla (\texttt{std::\-string FilePath}), informacije o tome koje delove izvornog koda treba zameniti sa predlogom za ispravljanje koda i sam predlog (\texttt{Range ReplacementRange}, \texttt{std::string ReplacementText}).
+\subsection{AutoHintDiagnosticConsumer.cpp}
+Vid obrade dijagnostike najrelevantniji za alat \textit{AutoHint} jeste njeno ispisivanje na standardni izlaz. U ovu 
+svrhu \textit{AutoHint} koristi funkcionalnost postoje\'{c}e klase \texttt{TextDiagnosticPrinter} (opisane u sekciji \ref{sec:diagnostics}).
+Pored ispisivanja poruka upozorenja i predloga za ispravljanje koda na standardni izlaz, alat \textit{AutoHint} konzumira dijagnostiku tako \v{s}to predlo\v{z}ene izmene koda primenjuje na izvorni fajl ukoliko je prosleđena opcija komandne linije \texttt{--apply-fix}.
+Da bi se ovo postiglo u okviru alata \textit{AutoHint} implementirana je klasa \texttt{AutoHint\-DiagnosticConsumer}. Ova klasa nasleđuje
+klasu \texttt{TextDiagnosticPrinter} i time zadr\v{z}ava funkcionalnost ispisivanja dijagnostike na standardni izlaz koja je implementirana u okviru nje. \par Klasa \texttt{AutoHintDiagnosticConsumer} predefini\v{s}e metod \texttt{HandleDiag\-nostic} i u okviru njega pored ispisivanja dijagnostike kreira objekat klase \texttt{Replace\-ment} za predlo\v{z}enu izmenu koda. Objekat klase \texttt{Replacement} \v{c}uva putanju do fajla (\texttt{std::\-string FilePath}), informacije o tome koje delove izvornog koda treba zameniti sa predlogom za ispravljanje koda i sam predlog (\texttt{Range ReplacementRange}, \texttt{std::string ReplacementText}).
 U okviru metode \texttt{finish} svi kreirani objekti klase \texttt{Replacement} se pridru\v{z}uju objektu klase \texttt{Rewriter}.
-Ova klasa omogu\'{c}ava primenjivanje predlo\v{z}enih izmena koda na izvorni fajl. Predlo\v{z}ene izmene koda primenjuju se pozivom metode \texttt{overwriteChangedFiles} klase \texttt{Rewriter}. Na slici \ref{fig:DiagnosticConsumer} prikazan je odnos klasa \texttt{DiagnosticConsumer}, \texttt{TextDiagnosticPrinter}, \texttt{AutoFixDiagnosticConsumer}, \texttt{Rewriter} i \texttt{Replacement}.
+Ova klasa omogu\'{c}ava primenjivanje predlo\v{z}enih izmena koda na izvorni fajl. Predlo\v{z}ene izmene koda primenjuju se pozivom metode \texttt{overwriteChangedFiles} klase \texttt{Rewriter}. Na slici \ref{fig:DiagnosticConsumer} prikazan je odnos klasa \texttt{DiagnosticConsumer}, \texttt{TextDiagnosticPrinter}, \texttt{AutoHintDiagnosticConsumer}, \texttt{Rewriter} i \texttt{Replacement}.
 
 \begin{center}
 \begin{figure}
@@ -1166,7 +1166,7 @@ Ova klasa omogu\'{c}ava primenjivanje predlo\v{z}enih izmena koda na izvorni faj
     \operation{\texttt{finish()}}
   \end{class}
 
-  \begin{class}[text width=7cm]{AutoFixDiagnosticConsumer}{-9, -6}
+  \begin{class}[text width=7cm]{AutoHintDiagnosticConsumer}{-9, -6}
     \inherit{TextDiagnosticPrinter}
     \operation{\texttt{HandleDiagnostic()}}
     \operation{\texttt{finish()}}
@@ -1179,19 +1179,19 @@ Ova klasa omogu\'{c}ava primenjivanje predlo\v{z}enih izmena koda na izvorni faj
   \begin{class}[text width=5cm]{Rewriter}{0, -2}
   \operation{\texttt{overwriteChangedFiles()}}
   \end{class}
-    \draw[umlcd style dashed line ,->] (AutoFixDiagnosticConsumer) --node[above, sloped, black]{$<$ instantiate $>$} (Replacement) ;
+    \draw[umlcd style dashed line ,->] (AutoHintDiagnosticConsumer) --node[above, sloped, black]{$<$ instantiate $>$} (Replacement) ;
     \draw[umlcd style dashed line ,->] (Rewriter) --node[above, sloped, black]{$<$ uses $>$} (Replacement) ;
 
 \end{tikzpicture}
-  \caption{Odnos klasa \texttt{DiagnosticConsumer}, \texttt{TextDiagnosticPrinter}, \texttt{AutoFixDiagnosticConsumer}, \texttt{Rewriter} i \texttt{Replacement}.}
+  \caption{Odnos klasa \texttt{DiagnosticConsumer}, \texttt{TextDiagnosticPrinter}, \texttt{AutoHintDiagnosticConsumer}, \texttt{Rewriter} i \texttt{Replacement}.}
   \label{fig:DiagnosticConsumer}
 
 \end{figure}
 \end{center}
 
-\subsection{AutoFixHelper.cpp}
+\subsection{AutoHintHelper.cpp}
 
-U okviru jedinice prevođenja \texttt{AutoFixHelper.cpp} implementirane su pomo\'{c}ne funkcije kori\v{s}\'{c}ene u okviru alata \textit{AutoFix}. U nastavku su ukratko opisane funkcije iz ove jedinice prevođenja.
+U okviru jedinice prevođenja \texttt{AutoHintHelper.cpp} implementirane su pomo\'{c}ne funkcije kori\v{s}\'{c}ene u okviru alata \textit{AutoHint}. U nastavku su ukratko opisane funkcije iz ove jedinice prevođenja.
 \begin{itemize}
   \item \texttt{getWordsFromString} --- kreira niz re\v{c}i od stringa prosleđenog u okviru opcija komandne linije.
   \item \texttt{getExprStr} --- kreira string od \v{c}vorova apstraktnog sintaksi\v{c}kog stabla tipa \texttt{Expr}.
@@ -1202,22 +1202,22 @@ U okviru jedinice prevođenja \texttt{AutoFixHelper.cpp} implementirane su pomo\
 
 \section{Opis testiranja alata}
 
-U okviru alata \textit{AutoFix} testirana je implementacija svakog od podr\v{z}anih pravila. Svaki test proverava implementaciju jednog pravila.
-Testovi \texttt{auto-fix-A7-1-6\-.cpp}, \texttt{auto-fix-A7-2-3.cpp}, \texttt{auto-fix-A8-5-2.cpp} i \texttt{auto-fix-A8-5-3.cpp} nalaze se u okviru direktorijuma \texttt{autofix-test} i redom testiraju implementaciju pravila
+U okviru alata \textit{AutoHint} testirana je implementacija svakog od podr\v{z}anih pravila. Svaki test proverava implementaciju jednog pravila.
+Testovi \texttt{auto-hint-A7-1-6\-.cpp}, \texttt{auto-hint-A7-2-3.cpp}, \texttt{auto-hint-A8-5-2.cpp} i \texttt{auto-hint-A8-5-3.cpp} nalaze se u okviru direktorijuma \texttt{autohint-test} i redom testiraju implementaciju pravila
 \textbf{A7-1-6}, \textbf{A7-2-3}, \textbf{A8-5-2} i \textbf{A8-5-3}. C++ k\^{o}d u okviru testova, nad kojim je testirana ispravnost rada alata, ve\'c{i}nski je preuzet iz primera u okviru dokumenta u kom je opisan standard \textsc{autosar} C++14 \cite{AutosarGuidelines}. Testovi su dopunjeni kodom za koji je autor ovog rada smatrao da ilustruje bitne  slu\v{c}ajeve upotrebe a ne nalazi se u okviru primera iz dokumenta.
 
-Na listingu \ref{lst:test} prikazan je pojednostavljeni primer testa za pravilo \textbf{A7-1-6} u okviru alata \textit{AutoFix}. Test je pojednostavljen tako \v{s}to se u okviru njega nalazi samo jedan konstrukt koji nije u skladu sa pravilom \textbf{A7-1-6}. Pojednostavljeni test je kori\v{s}\'{c}en kako bi se demonstrirali svi bitni aspekata testiranja alata \textit{AutoFix} sa \v{s}to manje koda. \par Test
-proverava da se pokretanjem alata \texttt{AutoFix} ispisuje adekvatno upozorenje zajedno sa predlogom za ispravljanje koda. U okviru \texttt{RUN} linije (linija 1) pokre\'{c}e se alat \textit{AutoFix} komandom \texttt{auto-fix --rules="A7\_1\_6" \%s 2>\&1 --}. Simbol \texttt{\%s}  \'{c}e prilikom pokretanja biti zamenjen putanjom do testa u kome se ova komanda nalazi (testa koji \textit{lit} pokre\'{c}e). \texttt{2>\&1} preusmerava standardni izlaz za gre\v{s}ke (STDERR) na standardni izlaz (STDOUT). Drugi deo komande \texttt{| FileCheck \%s} prosleđuje izlaz iz alata \textit{AutoFix} na standardni ulaz alata \textit{FileCheck} i pokre\'{c}e alat \textit{FileCheck} nad testom. Putanja do testa prosleđena je simbolom \texttt{\%s} \cite{LIT}.
+Na listingu \ref{lst:test} prikazan je pojednostavljeni primer testa za pravilo \textbf{A7-1-6} u okviru alata \textit{AutoHint}. Test je pojednostavljen tako \v{s}to se u okviru njega nalazi samo jedan konstrukt koji nije u skladu sa pravilom \textbf{A7-1-6}. Pojednostavljeni test je kori\v{s}\'{c}en kako bi se demonstrirali svi bitni aspekata testiranja alata \textit{AutoHint} sa \v{s}to manje koda. \par Test
+proverava da se pokretanjem alata \texttt{AutoHint} ispisuje adekvatno upozorenje zajedno sa predlogom za ispravljanje koda. U okviru \texttt{RUN} linije (linija 1) pokre\'{c}e se alat \textit{AutoHint} komandom \texttt{auto-hint --rules="A7\_1\_6" \%s 2>\&1 --}. Simbol \texttt{\%s}  \'{c}e prilikom pokretanja biti zamenjen putanjom do testa u kome se ova komanda nalazi (testa koji \textit{lit} pokre\'{c}e). \texttt{2>\&1} preusmerava standardni izlaz za gre\v{s}ke (STDERR) na standardni izlaz (STDOUT). Drugi deo komande \texttt{| FileCheck \%s} prosleđuje izlaz iz alata \textit{AutoHint} na standardni ulaz alata \textit{FileCheck} i pokre\'{c}e alat \textit{FileCheck} nad testom. Putanja do testa prosleđena je simbolom \texttt{\%s} \cite{LIT}.
 
- U okviru listinga \ref{lst:test} koriste se tri direktive alata \textit{FileCheck}, \texttt{CHECK: TEKST} (linija 6), \texttt{CHECK-NEXT: TEKST} (linije 8-11) i \texttt{CHECK-NOT: TEKST} (linije 5 i 12). Ove direktive slu\v{z}e da se izvr\v{s}i provera da li je alat ispisao upozorenje vezano za pravilo \textbf{A7-1-6}, predlog za ispravljanje koda i da se u okviru ispisa nije na\v{s}lo nijedno drugo upozorenje. U okviru direktive \texttt{CHECK} koriste se regularni izrazi za putanju na operativnom sistemu Linuks (eng.~\textit{Linux}), za po\v{c}etak i kraj linije. Redom, ovo su regularni izrazi \lstinline[style=custombash]{(/|/[a-zA-Z0-9_-]+)+}, \lstinline[style=custombash]{^} i \lstinline[style=custombash]{$}. Upotrebom regularnih izraza za po\v{c}etak i kraj linije test proverava da alat \textit{AutoFix} nije ispisao ni\v{s}ta nepredviđeno, odnosno da svaka linija po\v{c}inje i zavr\v{s}ava se tekstom navedenim između ta dva regularna izraza. Regualrni izraz za putanju na operativnom sistemu Linux koristi se kako test ne bi o\v{c}ekivao specifi\v{c}nu apsolutnu putanju u okviru ispisa alata \textit{AutoFix}. 
+ U okviru listinga \ref{lst:test} koriste se tri direktive alata \textit{FileCheck}, \texttt{CHECK: TEKST} (linija 6), \texttt{CHECK-NEXT: TEKST} (linije 8-11) i \texttt{CHECK-NOT: TEKST} (linije 5 i 12). Ove direktive slu\v{z}e da se izvr\v{s}i provera da li je alat ispisao upozorenje vezano za pravilo \textbf{A7-1-6}, predlog za ispravljanje koda i da se u okviru ispisa nije na\v{s}lo nijedno drugo upozorenje. U okviru direktive \texttt{CHECK} koriste se regularni izrazi za putanju na operativnom sistemu Linuks (eng.~\textit{Linux}), za po\v{c}etak i kraj linije. Redom, ovo su regularni izrazi \lstinline[style=custombash]{(/|/[a-zA-Z0-9_-]+)+}, \lstinline[style=custombash]{^} i \lstinline[style=custombash]{$}. Upotrebom regularnih izraza za po\v{c}etak i kraj linije test proverava da alat \textit{AutoHint} nije ispisao ni\v{s}ta nepredviđeno, odnosno da svaka linija po\v{c}inje i zavr\v{s}ava se tekstom navedenim između ta dva regularna izraza. Regualrni izraz za putanju na operativnom sistemu Linux koristi se kako test ne bi o\v{c}ekivao specifi\v{c}nu apsolutnu putanju u okviru ispisa alata \textit{AutoHint}. 
 
-\begin{lstlisting}[style=customc, caption={Pojednostavljeni primer testa za pravilo \textbf{A7-1-6} u okviru alata \textit{AutoFix}.},label={lst:test}]
-// RUN: auto-fix --rules="A7_1_6" %s 2>&1 -- | FileCheck %s
+\begin{lstlisting}[style=customc, caption={Pojednostavljeni primer testa za pravilo \textbf{A7-1-6} u okviru alata \textit{AutoHint}.},label={lst:test}]
+// RUN: auto-hint --rules="A7_1_6" %s 2>&1 -- | FileCheck %s
 
 typedef unsigned long ulong;
 
 // CHECK-NOT: {{.+}}
-// CHECK: {{^((/|/[a-zA-Z0-9_-]+)+)}}/auto-fix-A7-1-6.cpp:3:23: warning: The typedef specifier shall not be used.{{$}}
+// CHECK: {{^((/|/[a-zA-Z0-9_-]+)+)}}/auto-hint-A7-1-6.cpp:3:23: warning: The typedef specifier shall not be used.{{$}}
 // CHECK-NEXT: {{^}}typedef unsigned long ulong;{{$}}
 // CHECK-NEXT: {{^}}~~~~~~~~~~~~~~~~~~~~~~^~~~~{{$}}
 // CHECK-NEXT: {{^}}using ulong = unsigned long{{$}}
@@ -1227,24 +1227,24 @@ typedef unsigned long ulong;
 
 \section{Analiza rezultata rada alata}
 
-U svrhu provere robusnosti i kvaliteta alata \textit{AutoFix}, izvr\v{s}ena je analiza nad delovima projekta \textit{Automotive Grade Linux (AGL)} \cite{AGL}. Projekat \textit{AGL} je izabran na osnovu svoje relevantnosti u automobilskoj industriji. \par
+U svrhu provere robusnosti i kvaliteta alata \textit{AutoHint}, izvr\v{s}ena je analiza nad delovima projekta \textit{Automotive Grade Linux (AGL)} \cite{AGL}. Projekat \textit{AGL} je izabran na osnovu svoje relevantnosti u automobilskoj industriji. \par
 
 \textit{AGL} je zajedni\v{c}ki projekat otvorenog koda koji okuplja proizvođa\v{c}e automobila, dobavlja\v{c}e i tehnolo\v{s}ke kompanije kako bi ubrzao razvoj i usvajanje potpuno otvorenog softverskog paketa (eng.~\textit{software stack}) za povezane automobile (eng.~\textit{connected cars}). Sa operativnim sistemom Linuks u svojoj osnovi, AGL razvija platformu koja mo\v{z}e slu\v{z}iti kao \textit{de facto} standard u industriji \v{c}ime bi se omogu\'{c}io brz razvoj novih funkcija i tehnologija \cite{AGL}.
 \par
-Alat \textit{AutoFix} pokretan je nad dva podprojekta projekta \textit{AGL}. To su projekti \textit{re2c} i \textit{ninja}. Projekti su izabrani nasumi\v{c}no osim kriterijuma
-da opseg projekta bude relativno mali. Analiza rezultata rada alata, odnosno upozorenja koje je alat \textit{AutoFix} prijavio, izvr\v{s}ena je ru\v{c}no od strane autora ovog rada. Kriterijum da projekat bude manjeg obima kori\v{s}\'{c}en je kako bi se smanjila verovatno\'{c}a gre\v{s}ke prilikom pomenute analize rezultata. Alat je pokretan skriptom koji rekurzivno 
-obilazi direktorijume u okviru projekta i pokre\'{c}e alat \textit{AutoFix} nad  svim fajlovima sa ekstenzijom \texttt{.cpp} i \texttt{.cc}. Nad svakim fajlom, alat je pokrenut komandom \\
-\texttt{./auto-fix  --rules="all"  putanja\_do\_fajla }
+Alat \textit{AutoHint} pokretan je nad dva podprojekta projekta \textit{AGL}. To su projekti \textit{re2c} i \textit{ninja}. Projekti su izabrani nasumi\v{c}no osim kriterijuma
+da opseg projekta bude relativno mali. Analiza rezultata rada alata, odnosno upozorenja koje je alat \textit{AutoHint} prijavio, izvr\v{s}ena je ru\v{c}no od strane autora ovog rada. Kriterijum da projekat bude manjeg obima kori\v{s}\'{c}en je kako bi se smanjila verovatno\'{c}a gre\v{s}ke prilikom pomenute analize rezultata. Alat je pokretan skriptom koji rekurzivno 
+obilazi direktorijume u okviru projekta i pokre\'{c}e alat \textit{AutoHint} nad  svim fajlovima sa ekstenzijom \texttt{.cpp} i \texttt{.cc}. Nad svakim fajlom, alat je pokrenut komandom \\
+\texttt{./auto-hint  --rules="all"  putanja\_do\_fajla }
 
 \subsection{Projekat \textit{re2c}}
 
-Projekat \textit{re2c} nad kojim je pokretan alat \textit{AutoFix} nalazi se u okviru projekta \textit{AGL} na lokaciji \texttt{build/tmp/work/x86\_64-linux/re2c-native}. Projekat sadr\v{z}i 79 fajlova sa ekstenzom \texttt{.cc} \v{c}iji ukupan broj linija koda iznosi 21021. U okviru projekta
+Projekat \textit{re2c} nad kojim je pokretan alat \textit{AutoHint} nalazi se u okviru projekta \textit{AGL} na lokaciji \texttt{build/tmp/work/x86\_64-linux/re2c-native}. Projekat sadr\v{z}i 79 fajlova sa ekstenzom \texttt{.cc} \v{c}iji ukupan broj linija koda iznosi 21021. U okviru projekta
 nalazi se 77 zaglavlja \v{c}iji ukupan broj linija koda iznosi 3910 \footnote{Broj linija koda je prebrojan alatom \textit{cloc}. Alat je dostupan na linku \url{http://cloc.sourceforge.net/}.}. \par
-Tabela \ref{fig:re2c} prikazuje broj prijavljenih upozorenja za svako od pravila prilikom pokretanja alata \textit{AutoFix}.
+Tabela \ref{fig:re2c} prikazuje broj prijavljenih upozorenja za svako od pravila prilikom pokretanja alata \textit{AutoHint}.
 Za svako od upozorenja ispisan je i odgovaraju\'{c}i predlog za ispravljanje koda. Upozorenje za pravilo \textbf{A8-5-3} nije prijavljeno nijednom. Pretragom
-alatom \textit{grep} kroz svaki od fajlova ustanovljeno je da konstrukti na koje se odnosi pravilo \textbf{A8-5-3} zaista nisu kori\v{s}\'{c}eni u okviru koda i da se ne radi o gre\v{s}ci u alatu \textit{AutoFix}. Ovaj rezultat sla\v{z}e se sa \v{c}injenicom da je najve\'{c}i broj upozorenja prijavljen za pravilo \textbf{A8-5-2}. Pravilo \textbf{A8-5-2} predla\v{z}e upotrebu inicijalizacije viti\v{c}astim zagradama pri inicijalizaciji promenljive dok pravilo \textbf{A8-5-3} zabranjuje upotrebu inicijalizacije viti\v{c}astim zagradama prilikom deklaracije promenljivih sa tipom \texttt{auto}. S obzirom na veliki broj upozorenja za pravilo \textbf{A8-5-2} i \v{c}injenice da za pravilo \textbf{A8-5-3} nije prijavljeno nijedno upozorenje, zaklju\v{c}eno je da prilikom inicijalizacije promenljivih nije kori\v{s}\'{c}ena sintaksa viti\v{c}astih zagrada ne vezano da li je promenljiva
+alatom \textit{grep} kroz svaki od fajlova ustanovljeno je da konstrukti na koje se odnosi pravilo \textbf{A8-5-3} zaista nisu kori\v{s}\'{c}eni u okviru koda i da se ne radi o gre\v{s}ci u alatu \textit{AutoHint}. Ovaj rezultat sla\v{z}e se sa \v{c}injenicom da je najve\'{c}i broj upozorenja prijavljen za pravilo \textbf{A8-5-2}. Pravilo \textbf{A8-5-2} predla\v{z}e upotrebu inicijalizacije viti\v{c}astim zagradama pri inicijalizaciji promenljive dok pravilo \textbf{A8-5-3} zabranjuje upotrebu inicijalizacije viti\v{c}astim zagradama prilikom deklaracije promenljivih sa tipom \texttt{auto}. S obzirom na veliki broj upozorenja za pravilo \textbf{A8-5-2} i \v{c}injenice da za pravilo \textbf{A8-5-3} nije prijavljeno nijedno upozorenje, zaklju\v{c}eno je da prilikom inicijalizacije promenljivih nije kori\v{s}\'{c}ena sintaksa viti\v{c}astih zagrada ne vezano da li je promenljiva
 tipa \texttt{auto} ili ne. U kombinaciji sa \v{c}injenicom da je prijavljen veliki broj upozorenja za pravila \textbf{A7-1-6} i \textbf{A8-5-2} zaklju\v{c}eno je da k\^{o}d u okviru projekta \textit{re2c} nije pisan po standardu \textsc{autosar} C++14. \par
-Skript za pokretanje alata \textit{AutoFix} nad projektom \textit{re2c} pokrenut je deset puta kako bi se izra\v{c}unalo prose\v{c}no vreme izvr\v{s}avanja alata, koje iznosi 39.602 sekunde. Vreme je izmereno programom \texttt{time} u okviru operativnog sistema Linux. Izra\v{c}unato prose\v{c}no vreme se odnosi na komponentu \texttt{real} u okviru rezultata programa \texttt{time}.
+Skript za pokretanje alata \textit{AutoHint} nad projektom \textit{re2c} pokrenut je deset puta kako bi se izra\v{c}unalo prose\v{c}no vreme izvr\v{s}avanja alata, koje iznosi 39.602 sekunde. Vreme je izmereno programom \texttt{time} u okviru operativnog sistema Linux. Izra\v{c}unato prose\v{c}no vreme se odnosi na komponentu \texttt{real} u okviru rezultata programa \texttt{time}.
 \begin{table}[!h]
 \begin{center}
 \begin{tabular}{ |p{3cm}||p{2cm}|p{2cm}|p{2cm}|p{2cm}|  }
@@ -1263,10 +1263,10 @@ Skript za pokretanje alata \textit{AutoFix} nad projektom \textit{re2c} pokrenut
 
 \subsection{Projekat \textit{ninja}}
 
-Projekat \textit{ninja} nad kojim je pokretan alat \textit{AutoFix} nalazi se u okviru projekta \textit{AGL} na lokaciji \texttt{build/tmp/work/x86\_64-linux/ninja-native}. Projekat sadr\v{z}i 55 fajlova sa ekstenzom \texttt{.cc} \v{c}iji ukupan broj linija koda iznosi 12587. U okviru projekta
+Projekat \textit{ninja} nad kojim je pokretan alat \textit{AutoHint} nalazi se u okviru projekta \textit{AGL} na lokaciji \texttt{build/tmp/work/x86\_64-linux/ninja-native}. Projekat sadr\v{z}i 55 fajlova sa ekstenzom \texttt{.cc} \v{c}iji ukupan broj linija koda iznosi 12587. U okviru projekta
 nalazi se 43 zaglavlja \v{c}iji ukupan broj linija koda iznosi 2291. \par
-Tabela \ref{fig:ninja} prikazuje broj prijavljenih upozorenja za svako od pravila prilikom pokretanja alata \textit{AutoFix}.
-Na osnovu rezultata sa slike prime\'{c}eno je da je odnos broja prijavljenih upozorenja po pravilu sli\v{c}an rezultatima prikazanim na tabeli \ref{fig:re2c} dobijenim pri pokretanju alata \textit{AutoFix} nad projektom \textit{re2c}. Na osnovu ovoga, zaklju\v{c}ci izvedeni tokom diskusije rezultata nad projektom \textit{re2c} va\v{z}e i za rezultate projekta \textit{ninja}. Skript za pokretanje alata \textit{AutoFix} nad projektom \textit{ninja} pokrenut je deset puta kako bi se izra\v{c}unalo prose\v{c}no vreme izvr\v{s}avanja alata, koje iznosi 18.002 sekunde.\par
+Tabela \ref{fig:ninja} prikazuje broj prijavljenih upozorenja za svako od pravila prilikom pokretanja alata \textit{AutoHint}.
+Na osnovu rezultata sa slike prime\'{c}eno je da je odnos broja prijavljenih upozorenja po pravilu sli\v{c}an rezultatima prikazanim na tabeli \ref{fig:re2c} dobijenim pri pokretanju alata \textit{AutoHint} nad projektom \textit{re2c}. Na osnovu ovoga, zaklju\v{c}ci izvedeni tokom diskusije rezultata nad projektom \textit{re2c} va\v{z}e i za rezultate projekta \textit{ninja}. Skript za pokretanje alata \textit{AutoHint} nad projektom \textit{ninja} pokrenut je deset puta kako bi se izra\v{c}unalo prose\v{c}no vreme izvr\v{s}avanja alata, koje iznosi 18.002 sekunde.\par
 \begin{table}[!h]
 \begin{center}
 \begin{tabular}{ |p{3cm}||p{2cm}|p{2cm}|p{2cm}|p{2cm}|  }
@@ -1284,7 +1284,7 @@ Na osnovu rezultata sa slike prime\'{c}eno je da je odnos broja prijavljenih upo
 \end{table}
 
 \subsection{Rezime analize rezultata rada alata}
-Alat se uspe\v{s}no izvr\v{s}io prilikom pokretanja nad svakim fajlom sa ekstenzijom \texttt{.cc} u okviru projekata \textit{re2c} i \textit{ninja}. Prilikom ru\v{c}ne analize upozorenja koje je alat \textit{AutoFix} prijavio nisu uo\v{c}ene gre\v{s}ke u radu alata. Na osnovu dobijenih rezultata mo\v{z}e se zaklju\v{c}iti da je alat \textit{AutoFix} robustan i da se mo\v{z}e efikasno koristiti nad realnim industrijskim projektima.
+Alat se uspe\v{s}no izvr\v{s}io prilikom pokretanja nad svakim fajlom sa ekstenzijom \texttt{.cc} u okviru projekata \textit{re2c} i \textit{ninja}. Prilikom ru\v{c}ne analize upozorenja koje je alat \textit{AutoHint} prijavio nisu uo\v{c}ene gre\v{s}ke u radu alata. Na osnovu dobijenih rezultata mo\v{z}e se zaklju\v{c}iti da je alat \textit{AutoHint} robustan i da se mo\v{z}e efikasno koristiti nad realnim industrijskim projektima.
 
 
 
@@ -1303,12 +1303,12 @@ tokom razvoja softvera pove\'{c}ava kvalitet softvera time \v{s}to smanjuje vero
 najzastupljeniji standard za pravilno pisanje koda u jeziku C++14 je standard \textsc{autosar} C++14.
 \par
 Ru\v{c}no proveravanje da li je k\^{o}d napisan u skladu sa standardom predstavlja mukotrpan i neefikasan proces. U svrhu automatizovanja ovog procesa
-koriste se alati za stati\v{c}ku analizu koda, koji bez pokretanja programa detektuju k\^{o}d koji nije napisan u skladu sa standardom. Alat \textit{AutoFix}, koji je razvijen u ovom radu, ispisuje upozorenja vezana za k\^{o}d koji nije napisan u skladu sa podskupom pravila iz standarda \textsc{autosar} C++14 koja se odnose na deklaracije u programskom jeziku C++14 i predla\v{z}e kako izmeniti k\^{o}d da bi bio u skladu sa standardom. \textit{AutoFix} podr\v{z}ava i opciju komandne linije kojom se predlo\v{z}ene izmene mogu primeniti na izvorni k\^{o}d. Alat je razvijen kori\v{s}\'{c}enjem biblioteka koje pru\v{z}a kompilatorska infrastruktura LLVM. Pravila standarda \textsc{autosar} C++14 podr\v{z}ana u okviru alata \textit{AutoFix} su \textbf{A8-5-3}, \textbf{A8-5-2}, \textbf{A7-1-6}, \textbf{A7-2-3}. Detaljnim testiranjem upotrebom alata \textit{lit} i \textit{FileCheck} iz kompilatorske infrastrukture LLVM obezbeđen je i visok kvalitet razvijenog alata. Analizom rezultata dobijenim pokretanjem alata \textit{AutoFix} nad podprojektima projekta \textit{AGL} zaklju\v{c}eno je da u okviru podprojekta \textit{re2c} i \textit{ninja} k\^{o}d nije napisan po standardu \textsc{autosar} C++14.
+koriste se alati za stati\v{c}ku analizu koda, koji bez pokretanja programa detektuju k\^{o}d koji nije napisan u skladu sa standardom. Alat \textit{AutoHint}, koji je razvijen u ovom radu, ispisuje upozorenja vezana za k\^{o}d koji nije napisan u skladu sa podskupom pravila iz standarda \textsc{autosar} C++14 koja se odnose na deklaracije u programskom jeziku C++14 i predla\v{z}e kako izmeniti k\^{o}d da bi bio u skladu sa standardom. \textit{AutoHint} podr\v{z}ava i opciju komandne linije kojom se predlo\v{z}ene izmene mogu primeniti na izvorni k\^{o}d. Alat je razvijen kori\v{s}\'{c}enjem biblioteka koje pru\v{z}a kompilatorska infrastruktura LLVM. Pravila standarda \textsc{autosar} C++14 podr\v{z}ana u okviru alata \textit{AutoHint} su \textbf{A8-5-3}, \textbf{A8-5-2}, \textbf{A7-1-6}, \textbf{A7-2-3}. Detaljnim testiranjem upotrebom alata \textit{lit} i \textit{FileCheck} iz kompilatorske infrastrukture LLVM obezbeđen je i visok kvalitet razvijenog alata. Analizom rezultata dobijenim pokretanjem alata \textit{AutoHint} nad podprojektima projekta \textit{AGL} zaklju\v{c}eno je da u okviru podprojekta \textit{re2c} i \textit{ninja} k\^{o}d nije napisan po standardu \textsc{autosar} C++14.
 
 \par
 U daljem razvoju alat se mo\v{z}e unaprediti na nekoliko na\v{c}ina. 
 Stati\v{c}ka analiza u okviru alata mogla bi se unaprediti upotrebom naprednijih tehnika kao \v{s}to je simboli\v{c}ko izvr\v{s}avanje programa. Ovakva analiza
-omogu\'{c}ila bi i podr\v{s}ku zna\v{c}ajno \v{s}ireg skupa pravila. U ovu svrhu u okviru alata \textit{AutoFix} mogao bi se integrisati stati\v{c}ki analizator kompilatora \textit{Clang} koji omogu\'{c}ava ovakav tip analize. Alat bi se mogao unaprediti i implementiranjem dodatnih opcija komandne linije koje bi omogu\'{c}ile korisniku ve\'{c}u
+omogu\'{c}ila bi i podr\v{s}ku zna\v{c}ajno \v{s}ireg skupa pravila. U ovu svrhu u okviru alata \textit{AutoHint} mogao bi se integrisati stati\v{c}ki analizator kompilatora \textit{Clang} koji omogu\'{c}ava ovakav tip analize. Alat bi se mogao unaprediti i implementiranjem dodatnih opcija komandne linije koje bi omogu\'{c}ile korisniku ve\'{c}u
 kontrolu nad samim alatom. Na primer, mogla bi se dodati opcija koja omogu\'{c}ava korisniku da isklju\v{c}i analizu u zadatim delovima koda.
 
 % ------------------------------------------------------------------------------
