@@ -129,7 +129,7 @@
 \apstr{%
 Standardi za pravilno pisanje C++ koda sve su zastupljeniji u industrijama koje razvijaju sisteme sa ugrađenim ra\v{c}unarom (eng.~\textit{embedded systems}) i druge sisteme
 sa kriti\v{c}nom bezbedno\v{s}\'{c}u. Standard \textsc{autosar} C++14 jedan je od vode\'{c}ih standarda ovog tipa. Primarno se koristi u automobilskoj industriji, odnosno za
-razvoj softvera za automobile. \v{S}iroka upotreba ovih standarda izrodila je potrebu za alatima za stati\v{c}ku analizu koji bi automatizovali proces provere da li je k\^{o}d napisan u skladu sa standardom. Kompilatorska infrastruktura LLVM pru\v{z}a podr\v{s}ku za jednostavno razvijanje kvalitetnih alata ovog tipa. Cilj ovog rada je implementacija alata za stati\v{c}ku analizu \textit{AutoFix} koji proverava da li je k\^{o}d napisan u skladu sa podskupom pravila koja se odnose na deklaracije u okviru standarda \textsc{autosar} C++14. Alat ispisuje upozorenja za delove koda koji nisu u skladu sa nekim od pravila i predla\v{z}e izmene tog koda. 
+razvoj softvera za automobile. \v{S}iroka upotreba ovih standarda izrodila je potrebu za alatkama za stati\v{c}ku analizu koji bi automatizovali proces provere da li je k\^{o}d napisan u skladu sa standardom. Kompilatorska infrastruktura LLVM pru\v{z}a podr\v{s}ku za jednostavno razvijanje kvalitetnih alatki ovog tipa. Cilj ovog rada je implementacija alata za stati\v{c}ku analizu \textit{AutoFix} koji proverava da li je k\^{o}d napisan u skladu sa podskupom pravila koja se odnose na deklaracije u okviru standarda \textsc{autosar} C++14. Alat ispisuje upozorenja za delove koda koji nisu u skladu sa nekim od pravila i predla\v{z}e izmene tog koda. 
 }
 \usepackage{tcolorbox}
 % Ključne reči na srpskom jeziku (u odabranom pismu)
@@ -164,8 +164,8 @@ Softver je neizostavni deo modernog sveta. U zavisnosti od primene softvera i ko
 manju ili ve\'{c}u ulogu. Na primer, gre\v{s}ke u video igri ima\'{c}e za posledicu samo nezadovoljstvo korisnika, dok gre\v{s}ke u softveru
 za kontrolisanje ko\v{c}nica automobila mogu imati fatalne posledice. Iz ovog razloga određene industrije ula\v{z}u dodatni napor kako bi se uverile u kvalitet softvera
 i kako bi smanjili mogu\'{c}nost pojave gre\v{s}ke. \par
-Na\v{c}in da se smanji mogu\'{c}nost pojave gre\v{s}ke u kodu jeste definisanje strogog pravila kodiranja u izabranom programskom jeziku. Jedan takav standard za programski jezik C++14 (jezik C++ iz verzije standarda za 2014. godinu) predstavlja standard kodiranja \textsc{autosar} C++14. Ovaj standard primarno se primenjuje u automobilskoj industriji. S obzirom da industrije koje primenjuju ovaj standard \v{c}esto koriste jako kompleksne softvere, potrebno je automatizovati proces provere da li je k\^{o}d napisan u skladu sa standardom. U ovu svrhu koriste se alati za stati\v{c}ku analizu koda. \par Alati za stati\v{c}ku analizu proveravaju ispravnost programa bez njegovog izvr\v{s}avanja. Ovakvi alati se mogu implementirati na vi\v{s}e na\v{c}ina. Jednostavniji alati koriste informacije dobijene tokom kompilacije programa da utvrde da li k\^{o}d sadr\v{z}i gre\v{s}ku. Napredniji alati za stati\v{c}ku analizu vr\v{s}e i simboli\v{c}ko izvr\v{s}avanje programa, odnosno koriste razli\v{c}ite tehnike kojima simuliraju izvr\v{s}avanje programa, bez njegovog pokretanja \cite{Etran, AutoCheck}. \par
-Kompilatorska infrastruktura LLVM omogu\'{c}ava izradu alata za stati\v{c}ku analizu. Ova infrastruktura sadr\v{z}i niz biblioteka koje omogu\'{c}avaju analizu informacija dobijenih tokom kompilacije, ali sadr\v{z}i i biblioteke koje omogu\'{c}avaju izradu samostalnih alata. Cilj ovog rada je implementacija alata za stati\v{c}ku analizu
+Na\v{c}in da se smanji mogu\'{c}nost pojave gre\v{s}ke u kodu jeste definisanje strogog pravila kodiranja u izabranom programskom jeziku. Jedan takav standard za programski jezik C++14 (jezik C++ iz verzije standarda za 2014. godinu) predstavlja standard kodiranja \textsc{autosar} C++14. Ovaj standard primarno se primenjuje u automobilskoj industriji. S obzirom da industrije koje primenjuju ovaj standard \v{c}esto koriste jako kompleksne softvere, potrebno je automatizovati proces provere da li je k\^{o}d napisan u skladu sa standardom. U ovu svrhu koriste se alatke za stati\v{c}ku analizu koda. \par Alatke za stati\v{c}ku analizu proveravaju ispravnost programa bez njegovog izvr\v{s}avanja. Ovakve alatke se mogu implementirati na vi\v{s}e na\v{c}ina. Jednostavnije alatke koriste informacije dobijene tokom kompilacije programa da utvrde da li k\^{o}d sadr\v{z}i gre\v{s}ku. Naprednije alatke za stati\v{c}ku analizu vr\v{s}e i simboli\v{c}ko izvr\v{s}avanje programa, odnosno koriste razli\v{c}ite tehnike kojima simuliraju izvr\v{s}avanje programa, bez njegovog pokretanja \cite{Etran, AutoCheck}. \par
+Kompilatorska infrastruktura LLVM omogu\'{c}ava izradu alatki za stati\v{c}ku analizu. Ova infrastruktura sadr\v{z}i niz biblioteka koje omogu\'{c}avaju analizu informacija dobijenih tokom kompilacije, ali sadr\v{z}i i biblioteke koje omogu\'{c}avaju izradu samostalnih alatki. Cilj ovog rada je implementacija alata za stati\v{c}ku analizu
 \textit{AutoFix}. \textit{AutoFix} proverava da li je k\^{o}d napisan u skladu sa podskupom pravila iz standarda \textsc{autosar} C++14 koja se odnose na deklaracije u programskom jeziku C++14. Ukoliko k\^{o}d nije napisan u skladu sa nekim od tih pravila, alat prijavljuje upozorenje zajedno sa predlogom za ispravljanje koda. 
 
 U glavi \ref{chp:autosar} opisan je programski jezik C++ i standard kodiranja \textsc{autosar} C++14. Opisana je klasifikacija pravila u okviru standarda i navedeni su primeri pravila koja pripadaju svakoj od grupa u okviru klasifikacije. U glavi \ref{chp:llvm} opisani su delovi kompilatorske strukture LLVM koji su kori\v{s}\'{c}eni za izradu alata \textit{AutoFix}. U glavi 4 opisana je implementacija alata \textit{AutoFix} i na\v{c}in upotrebe alata. Takođe, opisano je i svako od pravila iz standarda \textsc{autosar} C++14 koje alat podr\v{z}ava. U zaklju\v{c}ku iznet je osvrt na ceo rad i predlo\v{z}en je dalji tok razvoja alata \textit{AutoFix}.
@@ -255,11 +255,11 @@ Kod delimično automatizovanih pravila se ispitivanje saglasnosti koda može sam
 Za neautomatizovana pravila statička analiza ne pruža razumnu podršku. Za ispitivanje saglasnosti koda sa neautomatizovanim pravilima koriste se druga sredstva, kao što je recimo pregled koda od strane programera.
 
 \indent
-Većina pravila iz standarda \textsc{autosar} C++14 spadaju u automatizovana pravila. Alati za statičku analizu koda koji tvrde da podržavaju standard \textsc{autosar} C++14 treba da u potpunosti obezbede podršku za sva automatizovana pravila i delimičnu podršku, u meri u kojoj je to moguće, za pravila koja se ne mogu u potpunosti ispitati algoritmima statičke analize \cite{AutosarGuidelines}.
+Većina pravila iz standarda \textsc{autosar} C++14 spadaju u automatizovana pravila. Alatke za statičku analizu koda koje tvrde da podržavaju standard \textsc{autosar} C++14 treba da u potpunosti obezbede podršku za sva automatizovana pravila i delimičnu podršku, u meri u kojoj je to moguće, za pravila koja se ne mogu u potpunosti ispitati algoritmima statičke analize \cite{AutosarGuidelines}.
 
 \indent
 Primenjivost statičke analize na proveru saglasnosti koda sa određenim pravilom u velikoj meri zasniva se na teorijskoj klasifikaciji problema
-na odlučive i neodlučive probleme. Ukoliko se pravilo zasniva na neodlučivom problemu možemo sa sigurnošću reći da alati za statičku analizu nisu u mogućnosti da u potpunosti ispitaju saglasnost koda sa ovim pravilom. Pravilo će biti klasifikovano kao parcijalno automatizovano ili neautomatizovano ukoliko detektovanje kršenja pravila obuhvata određivanje vrednosti koju promenljiva sadrži u fazi izvr\v{s}avanja ili da li izvr\v{s}avanje doseže određeni deo programa.
+na odlučive i neodlučive probleme. Ukoliko se pravilo zasniva na neodlučivom problemu možemo sa sigurnošću reći da alatke za statičku analizu nisu u mogućnosti da u potpunosti ispitaju saglasnost koda sa ovim pravilom. Pravilo će biti klasifikovano kao parcijalno automatizovano ili neautomatizovano ukoliko detektovanje kršenja pravila obuhvata određivanje vrednosti koju promenljiva sadrži u fazi izvr\v{s}avanja ili da li izvr\v{s}avanje doseže određeni deo programa.
 
 Primer parcijalno automatizovanog pravila je: 
 
@@ -302,11 +302,11 @@ int main(){
 }
 \end{lstlisting}
 
-  Napredniji alati za statičku analizu koji podržavaju simboličko izvršavanje programa (npr. \textit{Clang Static Analyzer} \cite{CSAWebsite}) mogu pokriti i znatno kompleksnije 
+  Naprednije alatke za statičku analizu koje podržavaju simboličko izvršavanje programa (npr. \textit{Clang Static Analyzer} \cite{CSAWebsite}) mogu pokriti i znatno kompleksnije 
   slučajeve od slučaja prikazanog na listingu 2.2.
   \\
   \indent 
-  Ukoliko su pravila koja se odnose na implementaciju C++ projekta, odnosno na C++ konstrukte i semantiku programa, dovoljno kompleksna, može se desiti da u potpunosti nije moguće koristiti alate za statičku analizu. Ovo uglavnom znači da je broj slučajeva upotrebe koji algoritmi iz statičkih alata mogu pokriti, zanemarljiv. Međutim, određeni broj pravila koja su klasifikovana kao neautomatizovana odnose se na aspekte koda koji zavise od samog projekta
+  Ukoliko su pravila koja se odnose na implementaciju C++ projekta, odnosno na C++ konstrukte i semantiku programa, dovoljno kompleksna, može se desiti da u potpunosti nije moguće koristiti alatke za statičku analizu. Ovo uglavnom znači da je broj slučajeva upotrebe koji algoritmi iz alatki za stati\v{c}ku analizu mogu pokriti, zanemarljiv. Međutim, određeni broj pravila koja su klasifikovana kao neautomatizovana odnose se na aspekte koda koji zavise od samog projekta
   u okviru kog je k\^{o}d napisan, stoga je nemoguće koristiti algoritme statičke analize.
   Primer ovakvog pravila je:
 
@@ -322,8 +322,8 @@ K\^{o}d treba da poštuje zadate granice metrika koda.
   %         Sav k\^{o}d  treba poštovati definisane granice metrika koda.} \\
 
   Kako bi se odredilo da li je k\^{o}d napisan u skladu sa ovim pravilom potrebno je poznavati koje metrike koda se koriste u okviru projekta i
-  granice definisane za te metrike. S obzirom da je ovo specifično za sam projekat, mogu se koristiti interni alati za statičku analizu koda u kombinaciji
-  sa manuelnim pregledom koda. 
+  granice definisane za te metrike. S obzirom da je ovo specifično za sam projekat, mogu se koristiti interne alatke za statičku analizu koda u kombinaciji
+  sa pregledom koda od strane programera. 
 
 \subsection{Klasifikacija pravila prema cilju primene}
 Klasifikacija pravila prema cilju primene (slučaju upotrebe) deli pravila na:
@@ -331,7 +331,7 @@ Klasifikacija pravila prema cilju primene (slučaju upotrebe) deli pravila na:
 \begin{enumerate}
   \item{implementaciona},
   \item{verifikaciona},
-  \item{pravila za alate},
+  \item{pravila za alatke},
   \item{infrastrukturna}.
 \end{enumerate}
 
@@ -360,13 +360,13 @@ Analiza treba biti izvršena kako bi se detektovalo loše rukovanje izuzecima. T
 \end{tcolorbox}
 \end{center}
 
-Pravila za alate odnose se na softverske alate kao što su pretprocesor, kompilator, linker i biblioteke kompilatora.
+Pravila za alatke odnose se na softverske alatke kao što su pretprocesor, kompilator, linker i biblioteke kompilatora.
 Infrastrukturna pravila odnose se na operativni sistem i hardver \cite{AutosarGuidelines}.
-Primer pravila za alate koje je ujedno i infrastrukturno pravilo:
+Primer pravila za alatke koje je ujedno i infrastrukturno pravilo:
 
 \begin{center}
 \begin{tcolorbox}
-Pravilo A0-4-1 (obavezno, pravilo za infrastrukturu/alate, neautomatizovano) \\
+Pravilo A0-4-1 (obavezno, pravilo za infrastrukturu/alatke, neautomatizovano) \\
 Implementacija brojeva u pokretnom zarezu treba da bude u skladu sa standardom IEEE 754.
 \end{tcolorbox}
 \end{center}
@@ -385,11 +385,11 @@ Apstraktne klase \texttt{ASTConsumer} i \texttt{FrontendAction} omogu\'{c}avaju 
 koristi u kontekstu kreiranja i izvr\v{s}avanja akcija nad apstraktnim sintaksnim
 stablom.
 \par
-Za kreiranje alata \textit{AutoFix} kori\v{s}\'{c}ena je i biblioteka \texttt{LibTooling} koja u okviru infrastrukture LLVM omogu\'{c}ava kreiranje samostalnih alata. Pored kori\v{s}\'{c}enja ove biblioteke, alati se mogu kreirati i upotrebom dodataka kompilatora \textit{Clang} (eng.~\textit{Clang Plugins}) ili upotrebom biblioteke \texttt{LibClang}. U okviru ovog poglavlja diskutovane su prednosti i mane upotrebe ovih metoda u svrhu kreiranja alata kao i razlozi zbog kojih je biblioteka \texttt{LibTooling} izabrana za implementaciju alata \textit{AutoFix}.
+Za kreiranje alata \textit{AutoFix} kori\v{s}\'{c}ena je i biblioteka \texttt{LibTooling} koja u okviru infrastrukture LLVM omogu\'{c}ava kreiranje samostalnih alatki. Pored kori\v{s}\'{c}enja ove biblioteke, alatke se mogu kreirati i upotrebom dodataka kompilatora \textit{Clang} (eng.~\textit{Clang Plugins}) ili upotrebom biblioteke \texttt{LibClang}. U okviru ovog poglavlja diskutovane su prednosti i mane upotrebe ovih metoda u svrhu kreiranja alata kao i razlozi zbog kojih je biblioteka \texttt{LibTooling} izabrana za implementaciju alata \textit{AutoFix}.
 
 \section{LLVM i Clang}
 
-Kompilatorska infrastruktura LLVM predstavlja kolekciju modularnih i ponovo iskoristivih kompilatorskih tehnologija i alata.
+Kompilatorska infrastruktura LLVM predstavlja kolekciju modularnih i ponovo iskoristivih kompilatorskih tehnologija i alatki.
 Ova kompilatorska infrastruktura zapo\v{c}eta je kao instraživački projekat Krisa Latnera (eng.~\textit{Chris Lattner}) i Vikrama Advea (eng.~\textit{Vikram Adve}) na Univerzitetu Ilinois 2000. godine.
 Dizajn LLVM-a omogu\'{c}ava jednostavno dodavanje podr\v{s}ke za kompilaciju za specifi\v{c}nu arhitekturu hardvera. Kompilatorska infrastruktura
 ugrubo je podeljena na tri dela: prednji (eng.~\textit{frontend}), srednji (eng.~\textit{middle-end}) i zadnji (eng.~\textit{backend}). 
@@ -423,7 +423,7 @@ ugrubo je podeljena na tri dela: prednji (eng.~\textit{frontend}), srednji (eng.
         biblioteke \texttt{clangSema} kako bi ispitala semanti\v{c}ku validnost sintaksnih konstrukta (niza tokena) od kojih kreira \v{c}vorove apstraktnog sintaksi\v{c}kog stabla.
         Parser kompilatora \textit{Clang} je implementiran kao parser rekurzivnog spuštanja (eng.~\textit{recursive-descent parser}), odnosno analizira izvorni k\^{o}d od vrha ka dnu nizom rekurzivnih funkcija \cite{LLVMCoreLibraries}.
   \item[Biblioteka \texttt{clangAST}]
-        implementira algoritme i strukture podataka koje parser koristi za izgradnju apstraktnog sintaksi\v{c}kog stabla. Specifična je po strukturi čvorova koji podsećaju na izvorni C++ k\^{o}d što je čini pogodnom za kreiranje alata za refaktorisanje koda i statičku analizu. S obzirom da se ova biblioteka koristi u okviru alata \textit{AutoFix}, opisana je detaljnije u poglavlju \ref{sec:clangASTSec}.
+        implementira algoritme i strukture podataka koje parser koristi za izgradnju apstraktnog sintaksi\v{c}kog stabla. Specifična je po strukturi čvorova koji podsećaju na izvorni C++ k\^{o}d što je čini pogodnom za kreiranje alatki za refaktorisanje koda i statičku analizu. S obzirom da se ova biblioteka koristi u okviru alata \textit{AutoFix}, opisana je detaljnije u poglavlju \ref{sec:clangASTSec}.
   \item[Biblioteka \texttt{clangSema}]
         vrši semantičku analizu programa tokom parsiranja. Ova biblioteka proverava da li je k\^{o}d napisan u skladu sa sistemom tipova koji standard jezika propisuje. Za razliku od uobi\v{c}ajenog na\v{c}ina implementacije provere tipova, obilaskom apstraktnog sintaksi\v{c}kog stabla nakon parsiranja, biblioteka \texttt{clangSema} implementira proveru tipova zajedno sa generisanjem \v{c}vorova apastraktong sintaksi\v{c}kog stabla \cite{LLVMCoreLibraries}. Ova biblioteka usko je povezana sa bibliotekama \texttt{clangParse} i \texttt{clangAST}.
   \item[Biblioteka \texttt{clangCodeGen}]
@@ -443,7 +443,7 @@ ugrubo je podeljena na tri dela: prednji (eng.~\textit{frontend}), srednji (eng.
 U računarstvu, \textbf{apstraktno sintaksi\v{c}ko stablo}, ili samo \textbf{sintaksi\v{c}ko stablo}, je drvoidna reprezentacija apstraktne sintaksne strukture izvornog koda napisanog u programskom jeziku. Svaki čvor stabla predstavlja konstrukt koji se pojavljuje u izvornom kodu.
 Sintaksa je apstraktna u smislu da ne sadr\v{z}i svaki detalj koji se pojavljuje u sintaksi, ali sadr\v{z}i sve detalje neophodne za nedvosmislen prikaz izvornog koda.
 
-Ekspresivnost dijagnostike kompilatora \textit{Clang} i jednostavnost kreiranja mo\'{c}nih alata za stati\v{c}ku analizu u velikoj meri oslanja se na dizajn biblioteke \texttt{clangAST}. Struktura apstraktnog sintaksi\v{c}kog stabla mo\v{z}e se jednostavno ispisati na standardni izlaz opcijom komandne linije \texttt{-ast-dump}. Slika \ref{fig:ASTSlika} predstavlja tekstualnu reprezentaciju apstraktnog sintaksi\v{c}kog stabla generisanog za k\^{o}d iz fajla \texttt{hello.cpp} prikazanog na listingu \ref{lst:label4}.
+Ekspresivnost dijagnostike kompilatora \textit{Clang} i jednostavnost kreiranja mo\'{c}nih alatki za stati\v{c}ku analizu u velikoj meri oslanja se na dizajn biblioteke \texttt{clangAST}. Struktura apstraktnog sintaksi\v{c}kog stabla mo\v{z}e se jednostavno ispisati na standardni izlaz opcijom komandne linije \texttt{-ast-dump}. Slika \ref{fig:ASTSlika} predstavlja tekstualnu reprezentaciju apstraktnog sintaksi\v{c}kog stabla generisanog za k\^{o}d iz fajla \texttt{hello.cpp} prikazanog na listingu \ref{lst:label4}.
 \\
 
 \begin{lstlisting}[style=customc, caption={K\^{o}d \v{c}ije je apstraktno sintaksi\v{c}ko stablo prikazano na slici \ref{fig:ASTSlika}.},label=lst:label4]
@@ -478,7 +478,7 @@ omogu\'{c}ava upotrebu tih \v{c}vorova tokom semanti\v{c}ke analize programa. \t
 preciznih poruka dijagnostike koda.
 
 \subsection{Klasa \texttt{Type}}
-  Klasa \texttt{Type} igra va\v{z}nu ulogu u ekspresivnosti dijagnostike kompilatora \textit{Clang}, a samim tim i u kvalitetu alata za stati\v{c}ku analizu. Ova klasa omgu\'{c}ava da poruke upozorenja sadr\v{z}e precizne informacije o tipovima. Na primer, upozorenja vezana za k\^{o}d koji koristi tip \texttt{std::string}, ispisa\'{c}e ba\v{s} taj tip u svojim porukama umesto tipa koji \texttt{std::string} predefini\v{s}e, a to je \texttt{std::basic\_string<char, ... >}. Iza ove funkcionalnosti stoji ideja kanonskih tipova.
+  Klasa \texttt{Type} igra va\v{z}nu ulogu u ekspresivnosti dijagnostike kompilatora \textit{Clang}, a samim tim i u kvalitetu alatki za stati\v{c}ku analizu. Ova klasa omgu\'{c}ava da poruke upozorenja sadr\v{z}e precizne informacije o tipovima. Na primer, upozorenja vezana za k\^{o}d koji koristi tip \texttt{std::string}, ispisa\'{c}e ba\v{s} taj tip u svojim porukama umesto tipa koji \texttt{std::string} predefini\v{s}e, a to je \texttt{std::basic\_string<char, ... >}. Iza ove funkcionalnosti stoji ideja kanonskih tipova.
   
   \par
   Svaka instanca klase \texttt{Type} sadr\v{z}i pokaziva\v{c} na svoj kanonski tip. Za jednostavne tipove koji nisu definisani kori\v{s}\'{c}enjem naredbe \texttt{typedef}, pokaziva\v{c} na kanonski tip \'{c}e zapravo pokazivati na sebe. Za tipove \v{c}ija struktura uklju\v{c}uje naredbu \texttt{typedef}, kanonski pokaziva\v{c} pokaziva\'{c}e na strukturno ekvivalentan tip bez naredbe \texttt{typedef}.
@@ -722,7 +722,7 @@ void matchASTExample(ASTContext *Context){
 \section{Interfejsi za akcije nad prednjim delom kompilatora}
 \label{sec:interfejsi}
 
-Akcije nad prednjim delom kompilatora omogu\'{c}avaju analizu i upotrebu rezultata i informacija koje pru\v{z}a prednji deo kompilatora. Ove informacije mogu biti korisne za kreiranje alata za refaktorisanje koda, stati\v{c}ku analizu, prikupljanje statistike i grafi\v{c}ko prezentovanje rezultata kompilatora. Takođe, igraju i klju\v{c}nu ulogu u samoj kompilaciji koda i deo su glavne proto\v{c}ne obrade (eng.~\textit{pipeline}) u kompilatorskoj infrastrukturi LLVM.
+Akcije nad prednjim delom kompilatora omogu\'{c}avaju analizu i upotrebu rezultata i informacija koje pru\v{z}a prednji deo kompilatora. Ove informacije mogu biti korisne za kreiranje alatki za refaktorisanje koda, stati\v{c}ku analizu, prikupljanje statistike i grafi\v{c}ko prezentovanje rezultata kompilatora. Takođe, igraju i klju\v{c}nu ulogu u samoj kompilaciji koda i deo su glavne proto\v{c}ne obrade (eng.~\textit{pipeline}) u kompilatorskoj infrastrukturi LLVM.
 Ova funkcionalnost je efikasno i sistemati\v{c}no implementirana u okviru klasa \texttt{ASTConsumer}, \texttt{ASTFrontendAction} i njihovih potklasa.
 
 \subsection{Klasa ASTConsumer}
@@ -741,7 +741,7 @@ generi\v{s}e LLVM međukod od apstraktnog sintaksi\v{c}kog stabla i predstavlja 
 \label{fig:inhDiagram}
 \end{figure}
 
-Klasa \texttt{ASTConsumer} korisna je i za kreiranje samostalnih alata za stati\v{c}ku analizu koji se zasnivaju na analizi apstraktnog sintaksi\v{c}kog stabla. U svrhu kreiranja alata mo\v{z}e se koristiti kombinacija upotrebe klase \texttt{ASTConsumer} sa mehanizmima za obilazak i obradu apstraktnog sintaksi\v{c}kog stabla kao \v{s}to su AST-posetioci i AST-upariva\v{c}i. \par
+Klasa \texttt{ASTConsumer} korisna je i za kreiranje samostalnih alatki za stati\v{c}ku analizu koji se zasnivaju na analizi apstraktnog sintaksi\v{c}kog stabla. U svrhu kreiranja alatki mo\v{z}e se koristiti kombinacija upotrebe klase \texttt{ASTConsumer} sa mehanizmima za obilazak i obradu apstraktnog sintaksi\v{c}kog stabla kao \v{s}to su AST-posetioci i AST-upariva\v{c}i. \par
 Za implementaciju specifi\v{c}ne akcije nad apstraktnim sintaksnim stablom
 potrebno je implementirati potkasu klase \texttt{ASTConsumer} i u okviru nje predefinisati metod \\ \texttt{virtual void  HandleTranslationUnit(ASTContext \&Ctx)}.\\
 Ovaj metod bi\'{c}e pozvan nakon \v{s}to je kreirano apstraktno sintaksi\v{c}ko stablo za jedinicu prevođenja, odnosno u trenutku kada je celokupno apstraktno sintaksi\v{c}ko stablo za jedinicu prevođenja dostupno.
@@ -808,17 +808,17 @@ public:
 
 
 
-\section{Interfejsi za kreiranje alata}
+\section{Interfejsi za kreiranje alatki}
 
-Kompilatorska infrastruktura LLVM pru\v{z}a podr\v{s}ku za jednostavno kreiranje kvalitetnih alata za stati\v{c}ku analizu izvornog koda. Ovi alati
-zasnivaju se na upotrebi interfejsa ka apstraktnom sintaksi\v{c}kom stablu kompilatora \textit{Clang} ili kori\v{s}\'{c}enjem stati\v{c}kog analizatora kompilatora \textit{Clang} (eng.~\textit{Clang Static Analyzer}) za potrebe simboli\v{c}kog izvr\v{s}avanja programa. \par Alati za stati\v{c}ku analizu mogu koristiti kombinaciju tehnika obrade apstraktnog sintaksi\v{c}kog stabla i simboli\v{c}kog izvr\v{s}avanja programa u zavisnosti od kompleksnosti analize koja je potrebna. Implementacija stati\v{c}ke analize obradom apstraktnog sintaksi\v{c}kog stabla je jeftinija po pitanju ra\v{c}unarskih resursa ali je ograni\v{c}ena informacijama dostupnim tokom kompilacije programa. \par 
+Kompilatorska infrastruktura LLVM pru\v{z}a podr\v{s}ku za jednostavno kreiranje kvalitetnih alatki za stati\v{c}ku analizu izvornog koda. Ove alatke
+zasnivaju se na upotrebi interfejsa ka apstraktnom sintaksi\v{c}kom stablu kompilatora \textit{Clang} ili kori\v{s}\'{c}enjem stati\v{c}kog analizatora kompilatora \textit{Clang} (eng.~\textit{Clang Static Analyzer}) za potrebe simboli\v{c}kog izvr\v{s}avanja programa. \par Alatke za stati\v{c}ku analizu mogu koristiti kombinaciju tehnika obrade apstraktnog sintaksi\v{c}kog stabla i simboli\v{c}kog izvr\v{s}avanja programa u zavisnosti od kompleksnosti analize koja je potrebna. Implementacija stati\v{c}ke analize obradom apstraktnog sintaksi\v{c}kog stabla je jeftinija po pitanju ra\v{c}unarskih resursa ali je ograni\v{c}ena informacijama dostupnim tokom kompilacije programa. \par 
 
- Kompilator \textit{Clang} pru\v{z}a vi\v{s}e infrastruktura za pisanje razli\v{c}itih vrsta softverskih alata koji koriste sintaksne i semanti\v{c}ke informacije o programu. U nastavku \'{c}e biti opisano nekoliko interfejsa koji se mogu koristiti u ovu svrhu zajedno sa njihovim prednostima i manama.
+ Kompilator \textit{Clang} pru\v{z}a vi\v{s}e infrastruktura za pisanje razli\v{c}itih vrsta softverskih alatki koji koriste sintaksne i semanti\v{c}ke informacije o programu. U nastavku \'{c}e biti opisano nekoliko interfejsa koji se mogu koristiti u ovu svrhu zajedno sa njihovim prednostima i manama.
 
 
 \begin{description}
 \item[\texttt{LibClang}] je stabilni C interfejs visokog nivoa (eng.~\textit{high level}) ka kompilatoru \textit{Clang}. Ovaj interfejs pru\v{z}a parsiranje izvornog koda
-i izagradnju apstraktnog sintaksi\v{c}kog stabla, u\v{c}itavanje i obilazak ve\'{c} kreiranog apstraktnog sintaksi\v{c}kog stabla i dohvatanje određenih informacija o izgrađenom apstraktnom sintaksi\v{c}kom stablu kao \v{s}to su lokacije iz izvornog koda elemenata iz stabla. Ovaj interfejs ne pru\v{z}a sve informacije i detalje iz izgrađenog apstraktnog sintaksi\v{c}kog stabla \cite{LibClang}. Ovo ga \v{c}ini nepogodnim za implementaciju alata za stati\v{c}ku analizu ali omogu\'{c}ava stabilnost pri promeni verzija kompilatora \textit{Clang}.
+i izagradnju apstraktnog sintaksi\v{c}kog stabla, u\v{c}itavanje i obilazak ve\'{c} kreiranog apstraktnog sintaksi\v{c}kog stabla i dohvatanje određenih informacija o izgrađenom apstraktnom sintaksi\v{c}kom stablu kao \v{s}to su lokacije iz izvornog koda elemenata iz stabla. Ovaj interfejs ne pru\v{z}a sve informacije i detalje iz izgrađenog apstraktnog sintaksi\v{c}kog stabla \cite{LibClang}. Ovo ga \v{c}ini nepogodnim za implementaciju alatki za stati\v{c}ku analizu ali omogu\'{c}ava stabilnost pri promeni verzija kompilatora \textit{Clang}.
 Treba ga koristiti u slu\v{c}ajevima kada:
 \begin{itemize}
   \item je potreban interfejs ka kompilatoru \textit{Clang} iz jezika koji nije C++.
@@ -844,7 +844,7 @@ Dodatke kompilatora \textit{Clang} ne treba koristiti kada:
 \item je potrebno koristiti alat nad podskupom fajlova u projektu koji nisu povezani sa izmenama koje bi zahtevale ponovno prevođenje programa \cite{RightInterface}.
 \end{itemize}
 
-\item[\texttt{LibTooling}] je C++ interfejs koji slu\v{z}i za pisanje samostalnih alata. Ova biblioteka omogu\'{c}ava jednostavnu
+\item[\texttt{LibTooling}] je C++ interfejs koji slu\v{z}i za pisanje samostalnih alatki. Ova biblioteka omogu\'{c}ava jednostavnu
 upotrebu opisanih akcija prednjeg dela kompilatora (eng.~\textit{frontend actions}), ali i jednostavno dodavanje opcija komandne linije i pokretanje nad fajlovima 
 nezavisnim od sistema za prevođenje. 
 Uop\v{s}teno, \texttt{LibTooling} treba koristiti kada:
@@ -862,7 +862,7 @@ Uop\v{s}teno, \texttt{LibTooling} treba koristiti kada:
 \end{itemize}
 \end{description}
 
-Da bi se implementirao kvalitetan alat za stati\v{c}ku analizu neophodna je puna kontrola nad apstraktnim sintaksnim stablom kako bi se omogu\'{c}ila \v{s}to preciznija analiza izvornog koda. Fleksibilni alati za stati\v{c}ku analizu se ne moraju nu\v{z}no pokretati u okviru sistema za prevođenje i podr\v{z}avaju mogu\'{c}nost analize fajlova nezavnisnih od sistema za prevođenje. Takođe, mogu\'{c}nost dodavanja opcija komandne linije olak\v{s}ava korisniku upotrebu alata i omogu\'{c}ava korisniku ve\'{c}u kontrolu nad radom alata. Na osnovu ovoga je zaklju\v{c}eno da je biblioteka \texttt{LibTooling} najbolji izbor za izradu kvalitetnog alata za stati\v{c}ku analizu u okviru kompilatorske infrastrukture LLVM.
+Da bi se implementirao kvalitetan alat za stati\v{c}ku analizu neophodna je puna kontrola nad apstraktnim sintaksnim stablom kako bi se omogu\'{c}ila \v{s}to preciznija analiza izvornog koda. Fleksibilne alatke za stati\v{c}ku analizu se ne moraju nu\v{z}no pokretati u okviru sistema za prevođenje i podr\v{z}avaju mogu\'{c}nost analize fajlova nezavnisnih od sistema za prevođenje. Takođe, mogu\'{c}nost dodavanja opcija komandne linije olak\v{s}ava korisniku upotrebu alata i omogu\'{c}ava korisniku ve\'{c}u kontrolu nad radom alata. Na osnovu ovoga je zaklju\v{c}eno da je biblioteka \texttt{LibTooling} najbolji izbor za izradu kvalitetnog alata za stati\v{c}ku analizu u okviru kompilatorske infrastrukture LLVM.
 
 \subsection{Primer kreiranja alata upotrebom biblioteke LibTooling}
 
@@ -882,7 +882,7 @@ int main(int argc, char **argv) {
 \end{lstlisting}
 
 \subsection{Biblioteka \texttt{LibTooling} i kompilacione baze podataka}
-Samostalni alati koji su razvijeni bibliotekom \texttt{Lib\-Tooling} zahtevaju kompilacionu bazu podataka (eng.~\textit{compilation database}) kako bi zaklju\v{c}ili koje opcije treba koristiti prilikom prevođenja fajla nad kojim se pokre\'{c}e alat. Informacije o opcijama koje se koriste prilikom proveđenja fajla mogu biti neophodne za pokretanje alata nad tim fajlom. Na primer, ukoliko fajl nad kojim je pokrenut alat uklju\v{c}uje zaglavlja koja nisu sistemska zaglavlja, neophodno je navesti putanju do tih zaglavlja ina\v{c}e kompilator \textit{Clang} ne\'{c}e mo\'{c}i da izgradi apstraktno sintaksi\v{c}ko stablo, a samim tim \'{c}e se prekinuti i izvr\v{s}avanje alata.
+Samostalne alatke koje su razvijene bibliotekom \texttt{Lib\-Tooling} zahtevaju kompilacionu bazu podataka (eng.~\textit{compilation database}) kako bi zaklju\v{c}ili koje opcije treba koristiti prilikom prevođenja fajla nad kojim se pokre\'{c}e alat. Informacije o opcijama koje se koriste prilikom proveđenja fajla mogu biti neophodne za pokretanje alata nad tim fajlom. Na primer, ukoliko fajl nad kojim je pokrenut alat uklju\v{c}uje zaglavlja koja nisu sistemska zaglavlja, neophodno je navesti putanju do tih zaglavlja ina\v{c}e kompilator \textit{Clang} ne\'{c}e mo\'{c}i da izgradi apstraktno sintaksi\v{c}ko stablo, a samim tim \'{c}e se prekinuti i izvr\v{s}avanje alata.
 \par
 Kompilaciona baza podataka kreira se na osnovu fajla \texttt{compile\_commands.json} koji se generi\v{s}e alatom \texttt{CMake} \cite{compilationDatabase}.
 Putanja do fajla \texttt{compile\_commands.json}  mo\v{z}e se proslediti alatu opcijom komandne linije \texttt{-p=<string>}. U suprotnom, alat \'{c}e sam poku\v{s}ati da nađe fajl \texttt{compile\_commands.json} u okviru repozitorijuma.
@@ -890,10 +890,10 @@ Putanja do fajla \texttt{compile\_commands.json}  mo\v{z}e se proslediti alatu o
 Ukoliko korisnik nije u mogu\'{c}nosti da kreira kompilacionu bazu podataka za fajl nad kojim \v{z}eli da pokrene alat, nakon komande za pokretanje alata mo\v{z}e navesti dvostruku crtu \texttt{--} u kom slu\v{c}aju alat ne\'{c}e poku\v{s}ati da nađe kompilacionu bazu podataka. U ovom slu\v{c}aju
 podrazumeva se da su opcije neophodne za prevođenje fajla navedene prilikom pokretanja alata. 
 
-\section{Alati za testiranje}
+\section{Alatke za testiranje}
 
-Kompilatorska infrastruktura LLVM sadr\v{z}i alate koji se mogu koristiti u svrhu pisanja i pokretanja testova. U svrhu testiranja alata \textit{AutoFix}
-kori\v{s}\'{c}eni su alati \textit{lit} i \textit{FileCheck}. Ovi alati imaju raznoliku upotrebu i \v{s}irok spektar opcija. U nastavku \'{c}e biti opisana samo svojstva ovih alata relevantna za testiranje alata \textit{AutoFix}. \par
+Kompilatorska infrastruktura LLVM sadr\v{z}i alatke koji se mogu koristiti u svrhu pisanja i pokretanja testova. U svrhu testiranja alata \textit{AutoFix}
+kori\v{s}\'{c}ene su alatke \textit{lit} i \textit{FileCheck}. Ovi alatke imaju raznoliku upotrebu i \v{s}irok spektar opcija. U nastavku \'{c}e biti opisana samo svojstva ovih alatki relevantna za testiranje alata \textit{AutoFix}. \par
 \begin{description}
 \item[Alat \textit{lit}] slu\v{z}i za izvr\v{s}avanje testova i testnih paketa (eng.~\textit{test suites}) u okviru kompilatorske infrastrukture LLVM. Alat takođe sumira rezultate i generi\v{s}e informacije o gre\v{s}kama u okviru testova.
 Testovi se pokre\'{c}u komandom \\
@@ -917,8 +917,8 @@ Direktiva \texttt{CHECK-NEXT: TEKST} proverava da li je \texttt{TEKST} pronađen
 Alat \textit{AutoFix} predstavlja alat za stati\v{c}ku analizu izvornog koda napisanog u jeziku C++14. Alat prijavljuje upozorenja
 za k\^{o}d koji nije napisan u skladu sa odabranim podskupom pravila iz standarda kodiranja \textsc{autosar} C++14 koja se odnose na deklaracije. Zajedno sa upozorenjima alat 
 ispisuje i predlog koda kojim se po\v{c}etni k\^{o}d mo\v{z}e zameniti kako bi bio u skladu sa standardom.
-Alat je implementiran u programskom jeziku C++ kori\v{s}\'{c}enjem biblioteka za razvoj alata dostupnim u okviru kompilatorske infrastrukture LLVM.
-Osnovna svrha alata je demonstracija kreiranja alata u okviru kompilatorske infrastrukture LLVM i predstavljanje tehnika obilaska i analize apstraktnog sintaksi\v{c}kog stabla kompilatora \textit{Clang}. 
+Alat je implementiran u programskom jeziku C++ kori\v{s}\'{c}enjem biblioteka za razvoj alatki dostupnim u okviru kompilatorske infrastrukture LLVM.
+Osnovna svrha alata je demonstracija kreiranja alatki u okviru kompilatorske infrastrukture LLVM i predstavljanje tehnika obilaska i analize apstraktnog sintaksi\v{c}kog stabla kompilatora \textit{Clang}. 
 Alat je dostupan i nalazi se na linku \url{https://github.com/ognjen-plavsic/master/tree/main/code}. Na pomenutom linku se nalazi k\^{o}d alata, skup testova i uputstvo za instalaciju alata.
 
 \section{Kori\v{s}\'{c}enje alata}
@@ -1145,7 +1145,7 @@ enum E1 : std::int32_t { E10, E11, E12 };
 
 \section{Opis implementacije alata}
 
-Alat \textit{AutoFix} implementiran je u okviru projekta \texttt{clang-tools-extra}, potprojekta kompilatorske infrastrukture LLVM. Projekat \texttt{clang-tools-extra} sadr\v{z}i alate implementirane interfejsima za alate kompilatora \textit{Clang} (eng.~\textit{Clang’s tooling APIs}).
+Alat \textit{AutoFix} implementiran je u okviru projekta \texttt{clang-tools-extra}, potprojekta kompilatorske infrastrukture LLVM. Projekat \texttt{clang-tools-extra} sadr\v{z}i alatke implementirane interfejsima za alatke kompilatora \textit{Clang} (eng.~\textit{Clang’s tooling APIs}).
 Alat \textit{AutoFix} je podeljen na \v{c}etiri jedinice prevođenja: \texttt{AutoFix.cpp}, \texttt{AutoFix\-Matchers.cpp}, \texttt{AutoFixDiagnosticConsumer.cpp} i \texttt{AutoFixHelper.cpp}.
 
 \subsection{AutoFixMatchers.cpp}
@@ -1344,7 +1344,7 @@ tokom razvoja softvera pove\'{c}ava kvalitet softvera time \v{s}to smanjuje vero
 najzastupljeniji standard za pravilno pisanje koda u jeziku C++14 je standard \textsc{autosar} C++14.
 \par
 Ru\v{c}no proveravanje da li je k\^{o}d napisan u skladu sa standardom predstavlja mukotrpan i neefikasan proces. U svrhu automatizovanja ovog procesa
-koriste se alati za stati\v{c}ku analizu koda, koji bez pokretanja programa detektuju k\^{o}d koji nije napisan u skladu sa standardom. Alat \textit{AutoFix}, koji je razvijen u ovom radu, ispisuje upozorenja vezana za k\^{o}d koji nije napisan u skladu sa podskupom pravila iz standarda \textsc{autosar} C++14 koja se odnose na deklaracije u programskom jeziku C++14 i predla\v{z}e kako izmeniti k\^{o}d da bi bio u skladu sa standardom. \textit{AutoFix} podr\v{z}ava i opciju komandne linije kojom se predlo\v{z}ene izmene mogu primeniti na izvorni k\^{o}d. Alat je razvijen kori\v{s}\'{c}enjem biblioteka koje pru\v{z}a kompilatorska infrastruktura LLVM. Pravila standarda \textsc{autosar} C++14 podr\v{z}ana u okviru alata \textit{AutoFix} su \textbf{A8-5-3}, \textbf{A8-5-2}, \textbf{A7-1-6}, \textbf{A7-2-3}. Detaljnim testiranjem upotrebom alata \textit{lit} i \textit{FileCheck} iz kompilatorske infrastrukture LLVM obezbeđen je i visok kvalitet razvijenog alata. Analizom rezultata dobijenim pokretanjem alata \textit{AutoFix} nad podprojektima projekta \textit{AGL} zaklju\v{c}eno je da u okviru podprojekta \textit{re2c} i \textit{ninja} k\^{o}d nije napisan po standardu \textsc{autosar} C++14.
+koriste se alatke za stati\v{c}ku analizu koda, koji bez pokretanja programa detektuju k\^{o}d koji nije napisan u skladu sa standardom. Alat \textit{AutoFix}, koji je razvijen u ovom radu, ispisuje upozorenja vezana za k\^{o}d koji nije napisan u skladu sa podskupom pravila iz standarda \textsc{autosar} C++14 koja se odnose na deklaracije u programskom jeziku C++14 i predla\v{z}e kako izmeniti k\^{o}d da bi bio u skladu sa standardom. \textit{AutoFix} podr\v{z}ava i opciju komandne linije kojom se predlo\v{z}ene izmene mogu primeniti na izvorni k\^{o}d. Alat je razvijen kori\v{s}\'{c}enjem biblioteka koje pru\v{z}a kompilatorska infrastruktura LLVM. Pravila standarda \textsc{autosar} C++14 podr\v{z}ana u okviru alata \textit{AutoFix} su \textbf{A8-5-3}, \textbf{A8-5-2}, \textbf{A7-1-6}, \textbf{A7-2-3}. Detaljnim testiranjem upotrebom alatki \textit{lit} i \textit{FileCheck} iz kompilatorske infrastrukture LLVM obezbeđen je i visok kvalitet razvijenog alata. Analizom rezultata dobijenim pokretanjem alata \textit{AutoFix} nad podprojektima projekta \textit{AGL} zaklju\v{c}eno je da u okviru podprojekta \textit{re2c} i \textit{ninja} k\^{o}d nije napisan po standardu \textsc{autosar} C++14.
 
 \par
 U daljem razvoju alat se mo\v{z}e unaprediti na nekoliko na\v{c}ina. 
