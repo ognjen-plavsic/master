@@ -210,6 +210,29 @@ Standard \textsc{autosar} C++14 definiše 342 pravila kodiranja u programskom je
   \item {131 pravila prisvojeno iz drugih C++ standarda,}
   \item {57 pravila je zasnovano na istraživanju, literaturi ili je preuzeto iz drugih resursa.}
 \end{itemize}
+
+U nastavku su prikazana tri pravila iz standarda \textsc{autosar} C++14. Pravila su izabrana nasumi\v{c}no i prikazana su kako bi \v{c}italac stekao
+inicijalnu ideju o pravilima iz standarda \textsc{autosar} C++14.
+\begin{center}
+\begin{tcolorbox}
+ A5-0-1  \\
+ Vrednost izraza treba biti ista u bilo kom redosledu evaluacije koji standard jezika C++ dozvoljava.
+\end{tcolorbox}
+\end{center}
+
+\begin{center}
+\begin{tcolorbox}
+ A5-5-1  \\
+ Desni operand celobrojnog deljenja ili operatora ostatka pri deljenju ne sme biti jednak nuli.
+\end{tcolorbox}
+\end{center}
+
+\begin{center}
+\begin{tcolorbox}
+ A23-0-1  \\
+ Iterator ne sme biti implicitno konvertovan u \texttt{const\_iterator}.
+\end{tcolorbox}
+\end{center}
 Pravila su klasifikovana po nivou obaveze, mogućnosti ispitivanja saglasnosti koda sa pravilom korišćenjem algoritama
 statičke analize i cilju korišćenja.
 
@@ -349,7 +372,7 @@ Implementacija brojeva u pokretnom zarezu treba da bude u skladu sa standardom I
 \end{center}
 
 
-\chapter{Stati\v{c}ka analiza u okviru kompilatorske infrastrukture LLVM}
+\chapter{Stati\v{c}ka analiza i LLVM}
 \label{chp:llvm}
 
 U ovom poglavlju opisane su biblioteke i klase kompilatorske infrastrukture LLVM koje su kori\v{s}\'{c}ene za implementaciju alata za stati\v{c}ku analizu \textit{AutoHint}. Biblioteke su opisivane ukoliko su u celosti
@@ -501,9 +524,9 @@ Drugim re\v{c}ima, u definisanom poretku grupa metoda \texttt{Visit} nije direkt
 
 \subsection{Primer implementacije AST-posetioca}
 Da bi se izvršila analiza izvornog koda pomoću AST-posetioca potrebno je naslediti klasu 
- \texttt{RecursiveASTVisitor<Derived>} i predefinisati željene metode \texttt{Visit} u okviru nje. Ukoliko je metodama \texttt{Visit} pronađen nepravilan konstrukt izvornog koda mo\v{z}e se prijaviti upozorenje. Na listingu \ref{lst:visitor} prikazan je primer posetioca. Metod \texttt{VisitEnumDecl} (linija 6) \'c{e} biti pozvan nad svim objektima klase \texttt{EnumDecl} u apstraktnom sintaksi\v{c}kom stablu. U okviru nje, proverava se da li deklaracija koristi \texttt{enum class} sintaksu, odnosno da li su konstante u okviru nabrajanja definisane u svom unutra\v{s}njem opsegu. Ukoliko sintaksa \texttt{enum class} nije kori\v{s}\'{c}ena pri deklaraciji, lokacija ove deklaracije, ukoliko je validna, ispisuje se na standardni izlaz (linija 13).
+ \texttt{RecursiveASTVisitor<Derived>} i predefinisati željene metode \texttt{Visit} u okviru nje. Ukoliko je metodama \texttt{Visit} pronađen nepravilan konstrukt izvornog koda mo\v{z}e se prijaviti upozorenje. Na listingu \ref{lst:visitor} prikazan je primer posetioca. Metod \texttt{VisitEnumDecl} (linija 6) \'c{e} biti pozvan nad svim objektima klase \texttt{EnumDecl} u apstraktnom sintaksi\v{c}kom stablu. U okviru nje, proverava se da li deklaracija koristi sintaksu \texttt{enum class} \footnote{Razlika izmedju deklaracija nabrojivog tipa sa sintaksom \texttt{enum} i  \texttt{enum class} obja\v{s}njena u okviru opisa pravila \textbf{A7-2-3} u sekciji \ref{sec:implementiranaPravila}.}, odnosno da li su konstante u okviru nabrojivih tipova definisane u svom unutra\v{s}njem opsegu. Ukoliko sintaksa \texttt{enum class} nije kori\v{s}\'{c}ena pri deklaraciji, lokacija ove deklaracije, ukoliko je validna, ispisuje se na standardni izlaz (linija 13).
 
-\begin{lstlisting}[style=customc,  caption={Primer posetioca koji pose\'{c}uje sve deklaracije nabrajanja i ispisuje lokaciju onih koji nisu deklarisani sintaksom \texttt{enum class}.},label=lst:visitor]
+\begin{lstlisting}[style=customc,  caption={Primer posetioca koji pose\'{c}uje sve deklaracije nabrojivih tipova i ispisuje lokaciju onih koji nisu deklarisani sintaksom \texttt{enum class}.},label=lst:visitor]
 class FindUnscopedEnumVisitor
     : public RecursiveASTVisitor<FindUnscopedEnumVisitor> {
 public:
@@ -626,15 +649,19 @@ pronala\v{z}enje \v{c}vorova apstraktnog sintaksi\v{c}kog stabla koji imaju odre
 Ovo su izrazi jezika specijalne namene implementiranog u okviru biblioteke AST-upariva\v{c}a (eng.~\textit{LibASTMatchers}). Ovaj jezik pru\v{z}a mogu\'{c}nost kreiranja predikata nad apstraktnim sintaksnim stablom.
 
 \par
-Na primer, za kreiranje upariva\v{c}a koji izdvaja sve deklaracije enumeratora iz apstraktnog sintaksi\v{c}kog stabla mo\v{z}e se koristiti izraz za uparivanje \texttt{enumDecl()}. Ukoliko prilikom uparivanja treba ignorisati deklaracije iz zaglavlja, izraz za uparivanje mo\v{z}e se pro\v{s}iriti izrazom \texttt{isExpansionIn\-MainFile()}. Izraz \\ \texttt{enumDecl(isExpansionInMainFile())} \\ kreira\'{c}e upariva\v{c} koji slu\v{z}i za izdvajanje deklaracija enumeratora iz glavnog (\texttt{.cpp}) fajla \cite{ASTMatcherReference, MatchingClangAST}.
+Na primer, za kreiranje upariva\v{c}a koji izdvaja sve deklaracije nabrojivog tipa (klju\v{c}na re\v{c} \texttt{enum}) iz apstraktnog sintaksi\v{c}kog stabla mo\v{z}e se koristiti izraz za uparivanje \texttt{enumDecl()}. Ukoliko prilikom uparivanja treba ignorisati deklaracije iz zaglavlja, izraz za uparivanje mo\v{z}e se pro\v{s}iriti izrazom \texttt{isExpansionIn\-MainFile()}. Izraz \\ \texttt{enumDecl(isExpansionInMainFile())} \\ kreira\'{c}e upariva\v{c} koji slu\v{z}i za izdvajanje deklaracija nabrojivog tipa iz glavnog (\texttt{.cpp}) fajla \cite{ASTMatcherReference, MatchingClangAST}.
 
 Nakon uparivanja, nad izdvojenim konstruktom mo\v{z}e se vr\v{s}iti dodatna analiza, na primer ispitivanje saglasnosti konstrukta sa pravilom standarda za pravilno pisanje C++ koda.
-S obzirom da upariva\v{c}i \v{c}esto predstavljaju kompoziciju vi\v{s}e upariva\v{c}a, zgodno je imati mogu\'{c}nost adresiranja svakog podrezultata (rezultata svakog od upariva\v{c}a u kompoziciji) zasebno. Na primer, upariva\v{c} mo\v{z}e izdvajati deklaracije enumeratora, ali samo one koje defini\v{s}u i neku konstantu u okviru nabrajanja, odnosno deklaracije koje imaju potomka u stablu tipa \texttt{EnumConstantDecl}. U ovom slu\v{c}aju
-zgodno je da se u okviru analize izdvojenog \v{c}vora, odnosno deklaracije enumeratora, mo\v{z}e direktno analizirati njegov potomak, konstanta u okviru nabrajanja, bez potrebe da se ovaj potomak ponovo tra\v{z}i u apstraktnom sintaksi\v{c}kom stablu.
+S obzirom da upariva\v{c}i \v{c}esto predstavljaju kompoziciju vi\v{s}e upariva\v{c}a, zgodno je imati mogu\'{c}nost adresiranja svakog podrezultata (rezultata svakog od upariva\v{c}a u kompoziciji) zasebno. Na primer, upariva\v{c} mo\v{z}e izdvajati deklaracije nabrojivog tipa, ali samo one koje defini\v{s}u i neku konstantu u okviru nabrajanja, odnosno deklaracije koje imaju potomka u stablu tipa \texttt{EnumConstantDecl}. Na listingu \ref{lst:enumWithConstant} prikazan je primer deklaracije nabrojivog tipa \texttt{E1} koja defini\v{s}e konstante \texttt{E10} i \texttt{E11}. 
+\begin{lstlisting}[style=customc,  caption={Primer deklaracije nabrojivog tipa (\texttt{E1}) koja defini\v{s}e konstante u okviru nabrajanja (\texttt{E10} i \texttt{E11}).}, label=lst:enumWithConstant]
+enum E1 : int {E10, E11};
+\end{lstlisting}
+U ovom slu\v{c}aju
+zgodno je da se u okviru analize izdvojenog \v{c}vora, odnosno deklaracije nabrojivog tipa, mo\v{z}e direktno analizirati njegov potomak, konstanta u okviru nabrajanja, bez potrebe da se ovaj potomak ponovo tra\v{z}i u apstraktnom sintaksi\v{c}kom stablu.
 
 U svrhu adresiranja rezultata pretrage, upariva\v{c}i se mogu "vezati" (eng.~\textit{binding}) za određeni string. Na primer, izraz \\
 \texttt{enumDecl(hasDescendant(enumConstantDecl().bind("EnumConstNode")))} \\
-\hspace*{9cm}\texttt{.bind("EnumNode")} \\ će vezati izdvojene deklaracije enumeratora za string \texttt{"EnumNode"}, dok \'{c}e konstante vezati za string \texttt{EnumConstNode}. Rezultati uparivanja predstavljeni su kao objekti klase \texttt{MatchResult}. Iz promenljive \texttt{Result} koja predstavlja objekat klase \texttt{MatchResult}, \v{c}vor koji predstavlja deklaraciju enumeratora
+\hspace*{9cm}\texttt{.bind("EnumNode")} \\ će vezati izdvojene deklaracije nabrojivog tipa za string \texttt{"EnumNode"}, dok \'{c}e konstante vezati za string \texttt{EnumConstNode}. Rezultati uparivanja predstavljeni su kao objekti klase \texttt{MatchResult}. Iz promenljive \texttt{Result} koja predstavlja objekat klase \texttt{MatchResult}, \v{c}vor koji predstavlja deklaraciju nabrojivog tipa
 mo\v{z}e se dobiti izrazom \\ \texttt{auto ED = Result.Nodes.getNodeAs<EnumDecl>("EnumNode")} \\
 dok se \v{c}vor koji predstavlja deklaraciju konstante u okviru nabrajanja mo\v{z}e dobiti izrazom \\ \texttt{auto ECD = Result.Nodes.getNodeAs<EnumConstantDecl>("EnumConstNode")}.\\ Dobijeni \v{c}vorovi se onda mogu koristiti u svrhu analiziranja
 koda koji predstavljaju.
@@ -646,9 +673,9 @@ Ovo su objekti klase \texttt{MatchCallback} \v{c}iji metod \texttt{run(const Mat
 upariva\v{c}a sa kojim je ovaj povratni poziv registrovan. Za implementaciju specifi\v{c}nog povratnog poziva treba implementirati klasu koja nasleđuje klasu \texttt{MatchCallback} i predefinisati metod \texttt{run}. U okviru metode \texttt{run} mo\v{z}e se vr\v{s}iti dodatna analiza izdvojenih \v{c}vorova i po potrebi
 prijavljivati dijagnostika vezana za k\^{o}d koji taj rezultat predstavlja. 
 \subsection{Primer implementacije AST-upariva\v{c}a}
-Na listingu \ref{lst:MatcherList} prikazan je primer upariva\v{c}a koji pronalazi sve deklaracije enumeratora koje ne koriste sintaksu \texttt{enum class}. Za ove enumeratore prijavljuje se upozorenje zajedno sa predlogom za ispravljanje koda u okviru funkcije \texttt{emitWarningWithHintInsertion} (linija 22). U funkciji \texttt{matchASTExample} kreiraju se upariva\v{c} (linija 33) i objekat klase povratnog poziva (linija 35). Nakon toga, upariva\v{c} se registruje za obilazak (linija 37) i pokre\'{c}e nad apstraktnim sintaksnim stablom pomo\'{c}u objekta klase \texttt{MatchFinder} (linija 39).
+Na listingu \ref{lst:MatcherList} prikazan je primer upariva\v{c}a koji pronalazi sve deklaracije nabrojivog tipa koje ne koriste sintaksu \texttt{enum class}. Za ove deklaracije nabrojivog tipa prijavljuje se upozorenje zajedno sa predlogom za ispravljanje koda u okviru funkcije \texttt{emitWarningWithHintInsertion} (linija 22). U funkciji \texttt{matchASTExample} kreiraju se upariva\v{c} (linija 33) i objekat klase povratnog poziva (linija 35). Nakon toga, upariva\v{c} se registruje za obilazak (linija 37) i pokre\'{c}e nad apstraktnim sintaksnim stablom pomo\'{c}u objekta klase \texttt{MatchFinder} (linija 39).
 
-\begin{lstlisting}[style=customc,  caption={Primer upariva\v{c}a koji pronalazi sve deklaracije enumeratora koje ne koriste sintaksu \texttt{enum class}. Ovaj primer demonstrira i upotrebu klasa \texttt{MatchFinder}, \texttt{MatchCallback} i \texttt{MatchResult}. Funkcija \texttt{emitWarningWithHintInsertion} implementirana je na listingu \ref{lst:dijagnostika} i dostupna je kroz zaglavlje \texttt{EmitWarning.h}}, label=lst:MatcherList]
+\begin{lstlisting}[style=customc,  caption={Primer upariva\v{c}a koji pronalazi sve deklaracije nabrojivog tipa koje ne koriste sintaksu \texttt{enum class}. Ovaj primer demonstrira i upotrebu klasa \texttt{MatchFinder}, \texttt{MatchCallback} i \texttt{MatchResult}. Funkcija \texttt{emitWarningWithHintInsertion} implementirana je na listingu \ref{lst:dijagnostika} i dostupna je kroz zaglavlje \texttt{EmitWarning.h}}, label=lst:MatcherList]
 #include "EmitWarning.h"
 
 // Callback class.
@@ -839,7 +866,7 @@ Da bi se implementirao kvalitetan alat za stati\v{c}ku analizu neophodna je puna
 
 \subsection{Primer kreiranja alata upotrebom biblioteke LibTooling}
 
-Na listingu \ref{lst:label9} prikazana je implementacija jednostavnog alata kori\v{s}\'{c}enjem biblioteke \texttt{LibTooling}. Ovaj alat pokre\'{c}e definisanu akciju \texttt{AutoHintAction} nad izvornim kodom koji je prosleđen kao argument komandne linije. U ovu svrhu koristi se funkcija \texttt{runToolOnCode} (linija 6) biblioteke \texttt{LibTooling}. Alat pronalazi sve enumeratore koji nisu deklarisani sintaksom \texttt{enum class} i za ove deklaracije se prijavljuje upozorenje zajedno sa predlogom za ispravljanje koda. 
+Na listingu \ref{lst:label9} prikazana je implementacija jednostavnog alata kori\v{s}\'{c}enjem biblioteke \texttt{LibTooling}. Ovaj alat pokre\'{c}e definisanu akciju \texttt{AutoHintAction} nad izvornim kodom koji je prosleđen kao argument komandne linije. U ovu svrhu koristi se funkcija \texttt{runToolOnCode} (linija 6) biblioteke \texttt{LibTooling}. Alat pronalazi sve deklaracije nabrojivog tipa koje ne koriste sintaksu \texttt{enum class} i za ove deklaracije se prijavljuje upozorenje zajedno sa predlogom za ispravljanje koda. 
 
 \begin{lstlisting}[style=customc,  caption={Primer implementacije jednostavnog alata upotrebom biblioteke \texttt{LibTooling}. Alat koristi klasu \texttt{AutoHintAction} sa listinga \ref{lst:ASTAction} dostupnom kroz zaglavlje \texttt{ASTFrontendAction.h}.}, label=lst:label9]
 #include "clang/Tooling/Tooling.h"
@@ -931,6 +958,7 @@ Pored opcija koje su definisane u okviru alata \textit{AutoHint}, prilikom pokre
 
 
 \section{Opis implementiranih pravila}
+\label{sec:implementiranaPravila}
 
 Pored formalne klasifikacije opisane u sekciji \ref{sec:klasifikacija}, pravila u okviru dokumenta koji opisuje standard kodiranja \textsc{autosar} C++14 \cite{AutosarGuidelines} strukturirana su po poglavljima.
 Struktura poglavlja ovog dokumenta slična je strukturi iz samog C++ standarda ISO/IEC 14882:2014. Svako poglavlje odgovara jednoj komponenti (svojstvu) jezika C++14, to jest sadrži pravila koja se odnose na tu komponentu.
@@ -1061,14 +1089,14 @@ typedef int int_t, *intp_t;
 \subsection{Pravilo A7-2-3}
 \begin{center}
 \begin{tcolorbox}
-Nabrajanja (eng.~\textit{enumerators}) treba deklarisati kao nabrajanja sa opsegom odnosno treba koristiti sintaksu \texttt{enum class}.
+Nabrojive tipove (eng.~\textit{enumerators}) treba deklarisati kao nabrojive tipove sa opsegom odnosno treba koristiti sintaksu \texttt{enum class}.
 \end{tcolorbox}
 \end{center}
 
-Ukoliko se prilikom deklaracije nabrajanja ne koristi sintaksa \texttt{enum class} mo\v{z}e do\'{c}i do ponovnog deklarisanja konstanti iz
-globalnog opsega. Na listingu \ref{lst:redeclaration} deklarisano je nabrajanje \texttt{E1} (linija 3) koje defini\v{s}e promenljive \texttt{E10}, \texttt{E11}
+Ukoliko se prilikom deklaracije nabrojivog tipva ne koristi sintaksa \texttt{enum class} mo\v{z}e do\'{c}i do ponovnog deklarisanja konstanti iz
+globalnog opsega. Na listingu \ref{lst:redeclaration} deklarisan je nabrojiv tip \texttt{E1} (linija 3) koje defini\v{s}e promenljive \texttt{E10}, \texttt{E11}
 i \texttt{E12} u globalnom opsegu. Ukoliko programer nije svestan \v{c}injenice da su promenljive \texttt{E10}, \texttt{E11}
-i \texttt{E12} definisane u globalnom opsegu mo\v{z}e poku\v{s}ati da deklari\v{s}e globalnu promenljivu sa identifikatorom koji je kori\v{s}\'{c}en u okviru nabrajanja (linija 6). Ovo \'{c}e rezultovati gre\v{s}kom prilikom kompilacije zbog dvostruke deklaracije promenljive sa istim identifikatorom.
+i \texttt{E12} definisane u globalnom opsegu mo\v{z}e poku\v{s}ati da deklari\v{s}e globalnu promenljivu sa identifikatorom koji je kori\v{s}\'{c}en u okviru nabrojivog tipa (linija 6). Ovo \'{c}e rezultovati gre\v{s}kom prilikom kompilacije zbog dvostruke deklaracije promenljive sa istim identifikatorom.
 
 \begin{lstlisting}[style=customc, caption={Primer koda u okviru kog dolazi do dvostruke deklaracije promenljive sa istim identifikatorom.}, label=lst:redeclaration]
 #include <cstdint>
@@ -1078,8 +1106,21 @@ enum E1 : std::int32_t { E10, E11, E12 };
 // Compilation error. Redeclaration of E10.
 static std::int32_t E10; 
 \end{lstlisting}
-Kori\v{s}\'{c}enjem nabrajanja sa opsegom, odnosno upotrebom sintakse \texttt{enum class}, identifikatori kori\v{s}\'{c}eni prilikom
-nabrajanja bi\'{c}e deklarisani u svom unutra\v{s}njem opsegu i time spre\v{c}iti mogu\'{c}nost dvostruke deklaracije identifikatora u globalnom opsegu.
+Kori\v{s}\'{c}enjem nabrojivog tipa sa opsegom, odnosno upotrebom sintakse \texttt{enum class}, identifikatori kori\v{s}\'{c}eni prilikom
+nabrajanja bi\'{c}e deklarisani u svom unutra\v{s}njem opsegu i time spre\v{c}iti mogu\'{c}nost dvostruke deklaracije identifikatora u globalnom opsegu. Primer deklaracije nabrojivog tipa koja koristi sintaksu \texttt{enum class} prikazana je na listingu \ref{lst:enumClassListing}. Identifikator \texttt{E10} (linija 3)
+u okviru deklaracije nabrojivog tipa \texttt{E1} je definisan u unutra\v{s}njem opsegu. Iz ovog razloga ne\'{c}e do\'{c}i do ponovne deklaracije identifikatora
+\texttt{E10} prilikom deklaracije ovog identifikatora u globolnom opsegu (linija 7) i k\^{o}d \'{c}e se uspe\v{s}no prevesti.
+
+\begin{lstlisting}[style=customc, caption={Primer upotrebe sintakse \texttt{enum class}.}, label=lst:enumClassListing]
+#include <cstdint>
+
+enum class E1 : std::int32_t { E10, E11, E12 };
+
+// No compilation error. 
+// Identifier E10 inside enum E1 is defined in inner scope.
+static std::int32_t E10; 
+\end{lstlisting}
+
 
 Ispis alata \textit{AutoHint} kada se pokrene nad fajlom sa kodom iz listinga \ref{lst:enum} prikazan je na slici \ref{fig:A7-2-3}. 
 Alat pokazuje na koju lokaciju treba umetnuti specifikator \texttt{class}.
@@ -1109,7 +1150,7 @@ Alat \textit{AutoHint} je podeljen na \v{c}etiri jedinice prevođenja: \texttt{A
 
 \subsection{AutoHintMatchers.cpp}
 Alat \textit{AutoHint} koristi biblioteku \texttt{LibAstMatchers} za analizu i obradu apstraktnog sintaksi\v{c}kog stabla kompilatora \textit{Clang}. 
-\textit{AutoHint} defini\v{s}e upariva\v{c}e za uparivanje osnovnih konstrukta na koje se pravilo odnosi i za su\v{z}avanje pretrage apstraktnog sintaksi\v{c}kog stabla. Na primer, ukoliko je pravilo vezano za enumeratore (nabrajanja), upariva\v{c} koji odgovara ovom pravilu \'{c}e upariti sve deklaracije enumeratora iz apstraktnog sintaksi\v{c}kog stabla ali \'{c}e i suziti pretragu tako \v{s}to \'{c}e uparivati samo deklaracije koje nisu implicitne. Ovo se mo\v{z}e posti\'{c}i izrazom za uparivanje \texttt{enumDecl(unless(isImplicit()))}. Svakom pravilu koje alat \textit{AutoHint} podr\v{z}ava odgovara jedan upariva\v{c}. Upariva\v{c}i su nazvani po broju pravila na koje se odnose i imaju imena
+\textit{AutoHint} defini\v{s}e upariva\v{c}e za uparivanje osnovnih konstrukta na koje se pravilo odnosi i za su\v{z}avanje pretrage apstraktnog sintaksi\v{c}kog stabla. Na primer, ukoliko je pravilo vezano za nabrojive tipove, upariva\v{c} koji odgovara ovom pravilu \'{c}e upariti sve deklaracije nabrojivih tipova iz apstraktnog sintaksi\v{c}kog stabla ali \'{c}e i suziti pretragu tako \v{s}to \'{c}e uparivati samo deklaracije koje nisu implicitne. Ovo se mo\v{z}e posti\'{c}i izrazom za uparivanje \texttt{enumDecl(unless(isImplicit()))}. Svakom pravilu koje alat \textit{AutoHint} podr\v{z}ava odgovara jedan upariva\v{c}. Upariva\v{c}i su nazvani po broju pravila na koje se odnose i imaju imena
 \texttt{A7\_1\_6\_Matcher}, \texttt{A7\_2\_3\_Matcher}, \texttt{A8\_5\_2\_Matcher} i \texttt{A8\_5\_3\_Matcher}.
 \par
  Za svaki od upariva\v{c}a implementirana je i klasa povratnog poziva u okviru koje se vr\v{s}i analiza uparenih konstrukta, konstrukcija predloga za ispravljanje koda i prijavljivanje upozorenja ukoliko je analizom utvrđeno da k\^{o}d nije napisan u skladu sa pravilom na koje se upariva\v{c} odnosi. Klase
