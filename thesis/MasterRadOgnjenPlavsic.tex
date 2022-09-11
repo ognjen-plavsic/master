@@ -925,7 +925,7 @@ Alat je dostupan i nalazi se na linku \url{https://github.com/ognjen-plavsic/mas
 
 Alat \textit{AutoFix} se pokre\'{c}e komandom:
 \\ \\
- \indent \indent \texttt{auto-hint [options] <source0> [... <sourceN>]} \\
+ \indent \indent \texttt{auto-fix [options] <source0> [... <sourceN>]} \\
 
 \noindent Argument \texttt{options} ozna\v{c}ava opcije koje se mogu proslediti alatu \textit{AutoFix},
 dok \texttt{<source0> [... <sourceN>]} predstavlja listu fajlova, razdvojenih razmakom, nad kojima će se pokrenuti alat. 
@@ -949,12 +949,12 @@ Mogu\'{c}e opcije su:
     se navode po svojoj oznaci iz \textsc{autosar} dokumenta i treba ih razdvojiti zarezom. Ukoliko se umesto opcije pravila prosledi string \texttt{"all"} alat \'{c}e pokrenuti
     analizu sa svim implementiranim pravilima u okviru alata. Ukoliko se ova opcija ne navede prilikom pokretanja, \textit{AutoFix} \'{c}e ovo protuma\v{c}iti kao da je navedena opcija \texttt{--rules=""}, odnosno ne\'{c}e se izvr\v{s}iti analiza ni za jedno pravilo.
     Primer kori\v{s}\'{c}enja ove opcije: \newline\newline
-    \texttt{auto-hint ./AutoFixTest.cpp --rules="A7\_2\_3, A7\_1\_6"} \\
+    \texttt{auto-fix ./AutoFixTest.cpp --rules="A7\_2\_3, A7\_1\_6"} \\
     \item \texttt{--help}: Ovom opcijom se ispisuje uputstvo za upotrebu alata.
   \end{description}
 
 Pored opcija koje su definisane u okviru alata \textit{AutoFix}, prilikom pokretanja alata mogu se dodati i opcije koje se prosleđuju kompilatoru \textit{Clang}. Na primer, mo\v{z}e da bude korisno da se navede opcija \texttt{-Wno-everything} kako bi se prijavljivala isklju\v{c}ivo upozorenja generisana alatom \textit{AutoFix} i ignorisala sva upozorenja koja generi\v{s}e kompilator \textit{Clang} tokom kompilacije. Ovo se mo\v{z}e posti\'{c}i komandom: \\ \\
-\texttt{./auto-hint --rules="all" test.cpp --extra-arg="-Wno-everything" --}
+\texttt{./auto-fix --rules="all" test.cpp --extra-arg="-Wno-everything" --}
 
 
 \section{Opis implementiranih pravila}
@@ -1244,21 +1244,21 @@ U okviru jedinice prevođenja \texttt{AutoFixHelper.cpp} implementirane su pomo\
 \section{Opis testiranja alata}
 
 U okviru alata \textit{AutoFix} testirana je implementacija svakog od podr\v{z}anih pravila. Svaki test proverava implementaciju jednog pravila.
-Testovi \texttt{auto-hint-A7-1-6\-.cpp}, \texttt{auto-hint-A7-2-3.cpp}, \texttt{auto-hint-A8-5-2.cpp} i \texttt{auto-hint-A8-5-3.cpp} nalaze se u okviru direktorijuma \texttt{autofix-test} i redom testiraju implementaciju pravila
+Testovi \texttt{auto-fix-A7-1-6\-.cpp}, \texttt{auto-fix-A7-2-3.cpp}, \texttt{auto-fix-A8-5-2.cpp} i \texttt{auto-fix-A8-5-3.cpp} nalaze se u okviru direktorijuma \texttt{autofix-test} i redom testiraju implementaciju pravila
 \textbf{A7-1-6}, \textbf{A7-2-3}, \textbf{A8-5-2} i \textbf{A8-5-3}. C++ k\^{o}d u okviru testova, nad kojim je testirana ispravnost rada alata, ve\'c{i}nski je preuzet iz primera u okviru dokumenta u kom je opisan standard \textsc{autosar} C++14 \cite{AutosarGuidelines}. Testovi su dopunjeni kodom za koji je autor ovog rada smatrao da ilustruje bitne  slu\v{c}ajeve upotrebe a ne nalazi se u okviru primera iz dokumenta.
 
 Na listingu \ref{lst:test} prikazan je pojednostavljeni primer testa za pravilo \textbf{A7-1-6} u okviru alata \textit{AutoFix}. Test je pojednostavljen tako \v{s}to se u okviru njega nalazi samo jedan konstrukt koji nije u skladu sa pravilom \textbf{A7-1-6}. Pojednostavljeni test je kori\v{s}\'{c}en kako bi se demonstrirali svi bitni aspekata testiranja alata \textit{AutoFix} sa \v{s}to manje koda. \par Test
-proverava da se pokretanjem alata \texttt{AutoFix} ispisuje adekvatno upozorenje zajedno sa predlogom za ispravljanje koda. U okviru \texttt{RUN} linije (linija 1) pokre\'{c}e se alat \textit{AutoFix} komandom \texttt{auto-hint --rules="A7\_1\_6" \%s 2>\&1 --}. Simbol \texttt{\%s}  \'{c}e prilikom pokretanja biti zamenjen putanjom do testa u kome se ova komanda nalazi (testa koji \textit{lit} pokre\'{c}e). \texttt{2>\&1} preusmerava standardni izlaz za gre\v{s}ke (STDERR) na standardni izlaz (STDOUT). Drugi deo komande \texttt{| FileCheck \%s} prosleđuje izlaz iz alata \textit{AutoFix} na standardni ulaz alata \textit{FileCheck} i pokre\'{c}e alat \textit{FileCheck} nad testom. Putanja do testa prosleđena je simbolom \texttt{\%s} \cite{LIT}.
+proverava da se pokretanjem alata \texttt{AutoFix} ispisuje adekvatno upozorenje zajedno sa predlogom za ispravljanje koda. U okviru \texttt{RUN} linije (linija 1) pokre\'{c}e se alat \textit{AutoFix} komandom \texttt{auto-fix --rules="A7\_1\_6" \%s 2>\&1 --}. Simbol \texttt{\%s}  \'{c}e prilikom pokretanja biti zamenjen putanjom do testa u kome se ova komanda nalazi (testa koji \textit{lit} pokre\'{c}e). \texttt{2>\&1} preusmerava standardni izlaz za gre\v{s}ke (STDERR) na standardni izlaz (STDOUT). Drugi deo komande \texttt{| FileCheck \%s} prosleđuje izlaz iz alata \textit{AutoFix} na standardni ulaz alata \textit{FileCheck} i pokre\'{c}e alat \textit{FileCheck} nad testom. Putanja do testa prosleđena je simbolom \texttt{\%s} \cite{LIT}.
 
  U okviru listinga \ref{lst:test} koriste se tri direktive alata \textit{FileCheck}, \texttt{CHECK: TEKST} (linija 6), \texttt{CHECK-NEXT: TEKST} (linije 8-11) i \texttt{CHECK-NOT: TEKST} (linije 5 i 12). Ove direktive slu\v{z}e da se izvr\v{s}i provera da li je alat ispisao upozorenje vezano za pravilo \textbf{A7-1-6}, predlog za ispravljanje koda i da se u okviru ispisa nije na\v{s}lo nijedno drugo upozorenje. U okviru direktive \texttt{CHECK} koriste se regularni izrazi za putanju na operativnom sistemu Linuks (eng.~\textit{Linux}), za po\v{c}etak i kraj linije. Redom, ovo su regularni izrazi \lstinline[style=custombash]{(/|/[a-zA-Z0-9_-]+)+}, \lstinline[style=custombash]{^} i \lstinline[style=custombash]{$}. Upotrebom regularnih izraza za po\v{c}etak i kraj linije test proverava da alat \textit{AutoFix} nije ispisao ni\v{s}ta nepredviđeno, odnosno da svaka linija po\v{c}inje i zavr\v{s}ava se tekstom navedenim između ta dva regularna izraza. Regualrni izraz za putanju na operativnom sistemu Linux koristi se kako test ne bi o\v{c}ekivao specifi\v{c}nu apsolutnu putanju u okviru ispisa alata \textit{AutoFix}. 
 
 \begin{lstlisting}[style=customc, caption={Pojednostavljeni primer testa za pravilo \textbf{A7-1-6} u okviru alata \textit{AutoFix}.},label={lst:test}]
-// RUN: auto-hint --rules="A7_1_6" %s 2>&1 -- | FileCheck %s
+// RUN: auto-fix --rules="A7_1_6" %s 2>&1 -- | FileCheck %s
 
 typedef unsigned long ulong;
 
 // CHECK-NOT: {{.+}}
-// CHECK: {{^((/|/[a-zA-Z0-9_-]+)+)}}/auto-hint-A7-1-6.cpp:3:23: warning: The typedef specifier shall not be used.{{$}}
+// CHECK: {{^((/|/[a-zA-Z0-9_-]+)+)}}/auto-fix-A7-1-6.cpp:3:23: warning: The typedef specifier shall not be used.{{$}}
 // CHECK-NEXT: {{^}}typedef unsigned long ulong;{{$}}
 // CHECK-NEXT: {{^}}~~~~~~~~~~~~~~~~~~~~~~^~~~~{{$}}
 // CHECK-NEXT: {{^}}using ulong = unsigned long{{$}}
@@ -1275,7 +1275,7 @@ U svrhu provere robusnosti i kvaliteta alata \textit{AutoFix}, izvr\v{s}ena je a
 Alat \textit{AutoFix} pokretan je nad dva podprojekta projekta \textit{AGL}. To su projekti \textit{re2c} i \textit{ninja}. Projekti su izabrani nasumi\v{c}no osim kriterijuma
 da opseg projekta bude relativno mali. Analiza rezultata rada alata, odnosno upozorenja koje je alat \textit{AutoFix} prijavio, izvr\v{s}ena je ru\v{c}no od strane autora ovog rada. Kriterijum da projekat bude manjeg obima kori\v{s}\'{c}en je kako bi se smanjila verovatno\'{c}a gre\v{s}ke prilikom pomenute analize rezultata. Alat je pokretan skriptom koji rekurzivno 
 obilazi direktorijume u okviru projekta i pokre\'{c}e alat \textit{AutoFix} nad  svim fajlovima sa ekstenzijom \texttt{.cpp} i \texttt{.cc}. Nad svakim fajlom, alat je pokrenut komandom \\
-\texttt{./auto-hint  --rules="all"  putanja\_do\_fajla }
+\texttt{./auto-fix  --rules="all"  putanja\_do\_fajla }
 
 \subsection{Projekat \textit{re2c}}
 
