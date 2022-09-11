@@ -823,7 +823,7 @@ Treba ga koristiti u slu\v{c}ajevima kada:
 \begin{itemize}
   \item je potreban interfejs ka kompilatoru \textit{Clang} iz jezika koji nije C++.
   \item je potreban stabilni inferfejs koji je kompatibilan sa starijim verzijama kompilatora \textit{Clang}.
-  \item su potrebne apstrakcije visokog nivoa kao \v{s}to je iteriranje kroz apstraktno sintaksi\v{c}ko stablo sa kursorima ili drugi detalji vezani za AST.
+  \item su potrebne apstrakcije visokog nivoa kao \v{s}to je iteriranje kroz apstraktno sintaksi\v{c}ko stablo sa kursorima \footnote{Kursori su instance strukture \texttt{CXCursor} i slu\v{z}e da ujedine razli\v{c}ite entitete u programu, na primer deklaracije i izraze, u apstakcije sa istim skupom operacija \cite{cursors}.} ili drugi detalji vezani za AST.
 \end{itemize}
 \texttt{LibClang} ne treba koristiti kada je potrebna puna kontrola nad apstraktnim sintaksnim stablom \cite{RightInterface}.
 
