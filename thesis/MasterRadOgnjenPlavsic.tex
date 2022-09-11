@@ -939,7 +939,7 @@ Mogu\'{c}e opcije su:
 
     \begin{figure}[!h]
     \begin{center}
-    \includegraphics[scale=0.4]{listRules.png}
+    \includegraphics[scale=0.22]{listRules.png}
     \end{center}
     \caption{Ispis alata \textit{AutoFix} prilikom kori\v{s}\'{c}enja opcije \texttt{--list-rules}.}
     \label{fig:listRules}
@@ -954,7 +954,7 @@ Mogu\'{c}e opcije su:
   \end{description}
 
 Pored opcija koje su definisane u okviru alata \textit{AutoFix}, prilikom pokretanja alata mogu se dodati i opcije koje se prosleđuju kompilatoru \textit{Clang}. Na primer, mo\v{z}e da bude korisno da se navede opcija \texttt{-Wno-everything} kako bi se prijavljivala isklju\v{c}ivo upozorenja generisana alatom \textit{AutoFix} i ignorisala sva upozorenja koja generi\v{s}e kompilator \textit{Clang} tokom kompilacije. Ovo se mo\v{z}e posti\'{c}i komandom: \\ \\
-\texttt{./auto-fix --rules="all" test.cpp --extra-arg="-Wno-everything" --}
+\texttt{auto-fix --rules="all" test.cpp --extra-arg="-Wno-everything" --}
 
 
 \section{Opis implementiranih pravila}
@@ -1011,7 +1011,7 @@ void fn() {
 
 \begin{figure}[!h]
 \begin{center}
-\includegraphics[scale=0.3]{A8_5_3.png}
+\includegraphics[scale=0.22]{A8_5_3.png}
 \end{center}
 \caption{Ispis alata za pravilo \textbf{A8-5-3} za k\^{o}d sa listinga \ref{lst:label13}.}
 \label{fig:A8-5-3}
@@ -1048,7 +1048,7 @@ void f1() {
 
 \begin{figure}[!h]
 \begin{center}
-\includegraphics[scale=0.3]{A8_5_2.png}
+\includegraphics[scale=0.22]{A8_5_2.png}
 \end{center}
 \caption{Ispis alata za pravilo \textbf{A8-5-2} za k\^{o}d sa listinga \ref{lst:label14}.}
 \label{fig:A8-5-2}
@@ -1079,7 +1079,7 @@ typedef int int_t, *intp_t;
 
 \begin{figure}[!h]
 \begin{center}
-\includegraphics[scale=0.3]{A7_1_6.png}
+\includegraphics[scale=0.22]{A7_1_6.png}
 \end{center}
 \caption{Ispis alata za pravilo A7-1-6 za k\^{o}d sa listinga \ref{lst:typedef}.}
 \label{fig:A7-1-6}
@@ -1137,7 +1137,7 @@ enum E1 : std::int32_t { E10, E11, E12 };
 
 \begin{figure}[!h]
 \begin{center}
-\includegraphics[scale=0.3]{A7_2_3.png}
+\includegraphics[scale=0.22]{A7_2_3.png}
 \end{center}
 \caption{Ispis alata za pravilo \textbf{A7-2-3} za k\^{o}d sa listinga \ref{lst:enum}.}
 \label{fig:A7-2-3}
@@ -1275,7 +1275,7 @@ U svrhu provere robusnosti i kvaliteta alata \textit{AutoFix}, izvr\v{s}ena je a
 Alat \textit{AutoFix} pokretan je nad dva podprojekta projekta \textit{AGL}. To su projekti \textit{re2c} i \textit{ninja}. Projekti su izabrani nasumi\v{c}no osim kriterijuma
 da opseg projekta bude relativno mali. Analiza rezultata rada alata, odnosno upozorenja koje je alat \textit{AutoFix} prijavio, izvr\v{s}ena je ru\v{c}no od strane autora ovog rada. Kriterijum da projekat bude manjeg obima kori\v{s}\'{c}en je kako bi se smanjila verovatno\'{c}a gre\v{s}ke prilikom pomenute analize rezultata. Alat je pokretan skriptom koji rekurzivno 
 obilazi direktorijume u okviru projekta i pokre\'{c}e alat \textit{AutoFix} nad  svim fajlovima sa ekstenzijom \texttt{.cpp} i \texttt{.cc}. Nad svakim fajlom, alat je pokrenut komandom \\
-\texttt{./auto-fix  --rules="all"  putanja\_do\_fajla }
+\texttt{auto-fix  --rules="all"  putanja\_do\_fajla }
 
 \subsection{Projekat \textit{re2c}}
 
