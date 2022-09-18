@@ -1,5 +1,7 @@
 #include "AutoFixMatchers.hpp"
 #include "AutoFixHelper.hpp"
+#include "clang/Lex/HeaderSearch.h"
+#include "clang/Lex/Preprocessor.h"
 #include <iostream>
 #include <set>
 
@@ -109,7 +111,7 @@ void A8_5_3::warnAutoTypeBracedInit(const VarDecl *VD) {
         auto DeclarationTypeLoc =
             VD->getCanonicalDecl()->getTypeSourceInfo()->getTypeLoc();
 
-        if(VD->getInitStyle() == VarDecl::ListInit){
+        if (VD->getInitStyle() == VarDecl::ListInit) {
           exprStr = " = " + exprStr;
         }
 
@@ -146,7 +148,7 @@ void A8_5_2::warnNonAutoTypeBracedInit(const VarDecl *VD) {
 
   trimBraces(exprStr);
   exprStr = "{" + exprStr + "}";
-  
+
   std::string replacementStr;
   std::string msg = "Braced-initialization {}, without equals sign, shall be "
                     "used for variable initialization";
@@ -166,7 +168,18 @@ void A8_5_2::warnNonAutoTypeBracedInit(const VarDecl *VD) {
     replacementStr = exprStr;
     unsigned offset = VD->getIdentifier()->getLength();
     SourceLocation beginLoc(VD->getLocation().getLocWithOffset(offset));
-    SourceRange SR(beginLoc, VD->getInit()->getSourceRange().getEnd());
+    auto declEndLoc = VD->getInit()->getSourceRange().getEnd();
+
+    if (VD->getInitStyle() == VarDecl::CallInit &&
+        VD->getInit()->getBeginLoc() == VD->getInit()->getEndLoc()) {
+      unsigned offsetToken =
+          Lexer::MeasureTokenLength(declEndLoc.getLocWithOffset(1), SM,
+                                    ASTCtx.getLangOpts()) +
+          1;
+      declEndLoc = declEndLoc.getLocWithOffset(offsetToken);
+    }
+
+    SourceRange SR(beginLoc, declEndLoc);
 
     if (VD->getType()->isArrayType()) {
       replacementStr = "[]" + replacementStr;

@@ -7,11 +7,11 @@ void AutoFixDiagnosticConsumer::HandleDiagnostic(
     DiagnosticsEngine::Level DiagLevel, const Diagnostic &Info) {
   TextDiagnosticPrinter::HandleDiagnostic(DiagLevel, Info);
 
-    for (const auto &FixItHint : Info.getFixItHints()) {
-      CharSourceRange Range = FixItHint.RemoveRange;
-      tooling::Replacement replacement(Info.getSourceManager(), Range,
-                                       FixItHint.CodeToInsert);
-      llvm::Error Err = Replacements.add(replacement);
+  for (const auto &FixItHint : Info.getFixItHints()) {
+    CharSourceRange Range = FixItHint.RemoveRange;
+    tooling::Replacement replacement(Info.getSourceManager(), Range,
+                                     FixItHint.CodeToInsert);
+    llvm::Error Err = Replacements.add(replacement);
   }
 }
 

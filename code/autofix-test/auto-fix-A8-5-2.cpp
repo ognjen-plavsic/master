@@ -91,7 +91,7 @@ void f3() noexcept {
 
 // CHECK: {{^((/|/[a-zA-Z0-9_-]+)+)}}auto-fix-A8-5-2.cpp:16:17: warning: Braced-initialization {}, without equals sign, shall be used for variable initialization
 // CHECK-NEXT: {{^}} std::int8_t x6(x5);
-// CHECK-NEXT: {{^}}               ^~~{{$}}
+// CHECK-NEXT: {{^}}               ^~~~{{$}}
 // CHECK-NEXT: {{^}}               {x5}
 
 // CHECK: {{^((/|/[a-zA-Z0-9_-]+)+)}}auto-fix-A8-5-2.cpp:42:7: warning: Braced-initialization {}, without equals sign, shall be used for variable initialization

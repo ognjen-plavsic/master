@@ -13,18 +13,22 @@
 
 using namespace clang::tooling;
 
+// clang-format off
 static std::string SupportedRules = 
   "A7-1-6 - The typedef specifier shall not be used.\n"
   "A7-2-3 - Enumerations shall be declared as scoped enum classes.\n"
   "A8-5-2 - Braced-initialization {}, without equals sign, shall be used for variable initialization.\n"
   "A8-5-3 - A variable of type auto shall not be initialized using {} or ={} braced initialization.\n";
+// clang-format on
 
-static std::vector<std::string> SupportedRulesVec = {"A7_1_6", "A7_2_3", "A8_5_2", "A8_5_3"};
+static std::vector<std::string> SupportedRulesVec = {"A7_1_6", "A7_2_3",
+                                                     "A8_5_2", "A8_5_3"};
 
 static llvm::cl::OptionCategory AutoFixCategory("auto-fix options");
 
-static cl::opt<bool> ApplyFix("apply-fix", cl::desc(R"(Apply suggested fixes. )"),
-                       cl::init(false), cl::cat(AutoFixCategory));
+static cl::opt<bool> ApplyFix("apply-fix",
+                              cl::desc(R"(Apply suggested fixes. )"),
+                              cl::init(false), cl::cat(AutoFixCategory));
 
 static cl::opt<std::string> Rules(
     "rules",
@@ -39,14 +43,15 @@ static cl::opt<bool>
 
 static cl::opt<bool>
     ExcludeHeaders("exclude-headers",
-              cl::desc(R"(Exclude header files from analysis)"),
-              cl::init(false), cl::cat(AutoFixCategory));
+                   cl::desc(R"(Exclude header files from analysis)"),
+                   cl::init(false), cl::cat(AutoFixCategory));
 
 static cl::extrahelp CommonHelp(CommonOptionsParser::HelpMessage);
 
 MatchFinder::MatchCallback *printerFactory(const std::string &MatcherName,
                                            ASTContext &Context,
-                                           SourceManager &SM, PrintingPolicy &PP) {
+                                           SourceManager &SM,
+                                           PrintingPolicy &PP) {
   if (MatcherName == "A7_1_6") {
     return new A7_1_6(Context, SM, PP);
   } else if (MatcherName == "A7_2_3") {
@@ -69,18 +74,18 @@ internal::Matcher<Decl> *matcherFactory(const std::string &MatcherName) {
   }
 }
 
-void setPrintingPolicy(PrintingPolicy &PP){
-    PP.adjustForCPlusPlus();
-    PP.SuppressTagKeyword = true;
-    PP.SuppressUnwrittenScope = true;
-    PP.SuppressInitializers = true;
-    PP.ConstantArraySizeAsWritten = true;
-    PP.AnonymousTagLocations = false;
-    PP.Nullptr = true;
-    PP.Restrict = true;
-    PP.Alignof = true;
-    PP.ConstantsAsWritten = true;
-    PP.PrintCanonicalTypes = false;
+void setPrintingPolicy(PrintingPolicy &PP) {
+  PP.adjustForCPlusPlus();
+  PP.SuppressTagKeyword = true;
+  PP.SuppressUnwrittenScope = true;
+  PP.SuppressInitializers = true;
+  PP.ConstantArraySizeAsWritten = true;
+  PP.AnonymousTagLocations = false;
+  PP.Nullptr = true;
+  PP.Restrict = true;
+  PP.Alignof = true;
+  PP.ConstantsAsWritten = true;
+  PP.PrintCanonicalTypes = false;
 }
 class AutoFixConsumer : public clang::ASTConsumer {
 public:
@@ -158,7 +163,6 @@ int main(int argc, const char **argv) {
   auto ExpectedParser =
       CommonOptionsParser::create(argc, argv, AutoFixCategory, cl::ZeroOrMore);
 
-
   if (!ExpectedParser) {
     // Fail gracefully for unsupported options.
     llvm::errs() << ExpectedParser.takeError();
@@ -169,7 +173,7 @@ int main(int argc, const char **argv) {
 
   ClangTool Tool(OptionsParser.getCompilations(), pathList);
 
-  if(ListRules){
+  if (ListRules) {
     llvm::outs() << SupportedRules;
     std::exit(0);
   }
@@ -181,7 +185,7 @@ int main(int argc, const char **argv) {
   }
 
   AutoFixActionFactory actionFactory;
-  if(ApplyFix){
+  if (ApplyFix) {
     auto *DO = new DiagnosticOptions();
     DO->ShowColors = true;
     Rewriter Rewrite;
