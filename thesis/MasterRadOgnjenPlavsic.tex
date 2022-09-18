@@ -20,6 +20,7 @@
 
 \newtheorem{primer}{Primer}[section]
 
+\interfootnotelinepenalty=10000
 
 \lstdefinestyle{customc}{
   belowcaptionskip=1\baselineskip,
@@ -123,7 +124,7 @@
 % Ime i afilijacija četvrtog člana komisije (opciono)
 % \komisijaD{}
 % Datum odbrane (odkomentarisati narednu liniju i upisati datum odbrane ako je poznat)
-% \datumodbrane{}
+\datumodbrane{23. 9. 2022.}
 
 % Apstrakt na srpskom jeziku (u odabranom pismu)
 \apstr{%
@@ -458,7 +459,7 @@ int main(){
 \begin{figure}[!ht]
   \centering
   \includegraphics[width=1.0\textwidth]{ASTImage.png}
-  \caption{Apstraktno sintaksi\v{c}ko stablo za k\^{o}d iz listinga \ref{lst:label4} koje je generisano komandom: \texttt{clang -Xclang -ast-dump hello.c}.}
+  \caption{Apstraktno sintaksi\v{c}ko stablo za k\^{o}d iz listinga \ref{lst:label4} koje je generisano komandom: \texttt{clang -Xclang -ast-dump hello.cpp}.}
   \label{fig:ASTSlika}
 \end{figure}
 
@@ -610,7 +611,7 @@ Klasa \texttt{DiagnosticConsumer} defini\v{s}e nekoliko metoda u svrhu obrade di
 
 \subsection{Klasa \texttt{DiagnosticsEngine}}
 
-U okviru kompilatora \textit{Clang} dijagnostika se prijavljuje upotrebom klase \texttt{Diagno\-sticsEngine}. Ova klasa slu\v{z}i 
+U okviru kompilatora \textit{Clang} dijagnostika se prijavljuje upotrebom klase \texttt{Diagn\-osticsEngine}. Ova klasa slu\v{z}i 
 za kreiranje dijagnostike i prosleđivanje dijagnostike objektu klase \texttt{DiagnosticConsumer}. Dijagnostika se kreira pozivanjem metode \texttt{Report}. Ovaj metod kao argumente dobija informacije potrebne za kreiranje dijagnostike, kao \v{s}to su lokacija i poruka i koristi ih da kreira objekat klase \texttt{DiagnosticBuilder}. Kreirani objekat predstavlja povratnu vrednost metode \texttt{Report}. \par
 \texttt{DiagnosticBuilder} predstavlja malu, pomo\'{c}nu klasu za prijavljivanje dijagnostike. Ova klasa olak\v{s}ava prosleđivanje
 dodatnih informacija prilikom kreiranja dijagnostike, kao \v{s}to su opsezi ili predlozi izmene koda. Prosleđivanje dodatnih informacija se vr\v{s}i upotrebom operatora \texttt{<<} koji klasa \texttt{DiagnosticBuilder} defini\v{s}e. Operator \texttt{<<} kao argument prima dodatne informacije, kao \v{s}to su objekti klase \texttt{SourceRange} ili \texttt{FixItHint}. Dijagnostika kreirana metodom
@@ -735,13 +736,13 @@ generi\v{s}e LLVM međukod od apstraktnog sintaksi\v{c}kog stabla i predstavlja 
 % \usepackage{float}
 \begin{figure}[!h]
 \begin{center}
-\includegraphics[scale=0.3]{ASTConsumer2.png}
+\includegraphics[scale=0.29]{ASTConsumer2.png}
 \end{center}
 \caption{Klase koje nasleđuju klasu \texttt{ASTConsumer} \cite{ASTConsumer}.}
 \label{fig:inhDiagram}
 \end{figure}
 
-Klasa \texttt{ASTConsumer} korisna je i za kreiranje samostalnih alatki za stati\v{c}ku analizu koji se zasnivaju na analizi apstraktnog sintaksi\v{c}kog stabla. U svrhu kreiranja alatki mo\v{z}e se koristiti kombinacija upotrebe klase \texttt{ASTConsumer} sa mehanizmima za obilazak i obradu apstraktnog sintaksi\v{c}kog stabla kao \v{s}to su AST-posetioci i AST-upariva\v{c}i. \par
+Klasa \texttt{ASTConsumer} korisna je i za kreiranje samostalnih alatki za stati\v{c}ku analizu koje se zasnivaju na analizi apstraktnog sintaksi\v{c}kog stabla. U svrhu kreiranja alatki mo\v{z}e se koristiti kombinacija upotrebe klase \texttt{ASTConsumer} sa mehanizmima za obilazak i obradu apstraktnog sintaksi\v{c}kog stabla kao \v{s}to su AST-posetioci i AST-upariva\v{c}i. \par
 Za implementaciju specifi\v{c}ne akcije nad apstraktnim sintaksi\v{c}kim stablom
 potrebno je implementirati potkasu klase \texttt{ASTConsumer} i u okviru nje predefinisati metod \\ \texttt{virtual void  HandleTranslationUnit(ASTContext \&Ctx)}.\\
 Ovaj metod bi\'{c}e pozvan nakon \v{s}to je kreirano apstraktno sintaksi\v{c}ko stablo za jedinicu prevođenja, odnosno u trenutku kada je celokupno apstraktno sintaksi\v{c}ko stablo za jedinicu prevođenja dostupno.
@@ -782,7 +783,7 @@ Ova metoda kao argumente dobiija instancu kompilatora \textit{Clang} i ime fajla
 Na listingu \ref{lst:ASTAction} prikazana je implementacija klase \texttt{AutoFixAction} koja izvr\v{s}ava akcije nad apstraktnim sintaksi\v{c}kim stablom.
 Klasa \texttt{AutoFixAction} u okviru metode \texttt{CreateASTConsumer} (linija 6) kreira pokaziva\v{c} na objekat klase \texttt{AutoFixConsumer}.
 
-\begin{lstlisting}[style=customc,  caption={Implementacija klase \texttt{AutoFixAction}. Klasa \texttt{AutoFixConstumer} prikazana je na listingu \ref{lst:labelConsumer} i dostupna je kroz zaglavlje \texttt{AutoFixConsumer.h}.}, label=lst:ASTAction]
+\begin{lstlisting}[style=customc,  caption={Implementacija klase \texttt{AutoFixAction}. Klasa \texttt{AutoFixConsumer} prikazana je na listingu \ref{lst:labelConsumer} i dostupna je kroz zaglavlje \texttt{AutoFixConsumer.h}.}, label=lst:ASTAction]
 #include "AutoFixConsumer.h"
 
 class AutoFixAction : public clang::ASTFrontendAction {
@@ -800,7 +801,7 @@ public:
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[scale=0.4]{ASTFrontendAction.png}
+\includegraphics[scale=0.51]{ASTFrontendAction.png}
 \end{center}
 \caption{Klase koje nasleđuju klasu \texttt{ASTFrontendAction} \cite{ASTFrontendAction}.}
 \label{fig:ASTAction}
@@ -813,7 +814,7 @@ public:
 Kompilatorska infrastruktura LLVM pru\v{z}a podr\v{s}ku za jednostavno kreiranje kvalitetnih alatki za stati\v{c}ku analizu izvornog koda. Ove alatke
 zasnivaju se na upotrebi interfejsa ka apstraktnom sintaksi\v{c}kom stablu kompilatora \textit{Clang} ili kori\v{s}\'{c}enjem stati\v{c}kog analizatora kompilatora \textit{Clang} (eng.~\textit{Clang Static Analyzer}) za potrebe simboli\v{c}kog izvr\v{s}avanja programa. \par Alatke za stati\v{c}ku analizu mogu koristiti kombinaciju tehnika obrade apstraktnog sintaksi\v{c}kog stabla i simboli\v{c}kog izvr\v{s}avanja programa u zavisnosti od kompleksnosti analize koja je potrebna. Implementacija stati\v{c}ke analize obradom apstraktnog sintaksi\v{c}kog stabla je jeftinija po pitanju ra\v{c}unarskih resursa ali je ograni\v{c}ena informacijama dostupnim tokom kompilacije programa. \par 
 
- Kompilator \textit{Clang} pru\v{z}a vi\v{s}e infrastruktura za pisanje razli\v{c}itih vrsta softverskih alatki koji koriste sintaksi\v{c}ke i semanti\v{c}ke informacije o programu. U nastavku \'{c}e biti opisano nekoliko interfejsa koji se mogu koristiti u ovu svrhu zajedno sa njihovim prednostima i manama.
+ Kompilator \textit{Clang} pru\v{z}a vi\v{s}e infrastruktura za pisanje razli\v{c}itih vrsta softverskih alatki koje koriste sintaksi\v{c}ke i semanti\v{c}ke informacije o programu. U nastavku \'{c}e biti opisano nekoliko interfejsa koji se mogu koristiti u ovu svrhu zajedno sa njihovim prednostima i manama.
 
 
 \begin{description}
@@ -892,7 +893,7 @@ podrazumeva se da su opcije neophodne za prevođenje fajla navedene prilikom pok
 
 \section{Alatke za testiranje}
 
-Kompilatorska infrastruktura LLVM sadr\v{z}i alatke koji se mogu koristiti u svrhu pisanja i pokretanja testova. U svrhu testiranja alata \textit{AutoFix}
+Kompilatorska infrastruktura LLVM sadr\v{z}i alatke koje se mogu koristiti u svrhu pisanja i pokretanja testova. U svrhu testiranja alata \textit{AutoFix}
 kori\v{s}\'{c}ene su alatke \textit{lit} i \textit{FileCheck}. Ovi alatke imaju raznoliku upotrebu i \v{s}irok spektar opcija. U nastavku \'{c}e biti opisana samo svojstva ovih alatki relevantna za testiranje alata \textit{AutoFix}. \par
 \begin{description}
 \item[Alat \textit{lit}] slu\v{z}i za izvr\v{s}avanje testova i testnih paketa (eng.~\textit{test suites}) u okviru kompilatorske infrastrukture LLVM. Alat takođe sumira rezultate i generi\v{s}e informacije o gre\v{s}kama u okviru testova.
@@ -1158,7 +1159,7 @@ Alat \textit{AutoFix} koristi biblioteku \texttt{LibAstMatchers} za analizu i ob
 \subsection{AutoFix.cpp}
 Ova jedica prevođenja predstavlja ulaznu ta\v{c}ku alata \textit{AutoFix}. U okviru nje, implementirane su klase \texttt{AutoFixConsumer} i \texttt{AutoFixAction} koje nasleđuju redom klase \texttt{ASTConsumer} i \texttt{ASTFrontendAction} (opisane u sekciji \ref{sec:interfejsi}). Osnovna uloga klase \texttt{AutoFixConsumer} jeste da obezbedi da se nad jedinicom prevođenja pokrenu odgovaraju\'{c}i upariva\v{c}i. To su upariva\v{c}i koji odgovaraju pravilima koje je korisnik zadao u okviru opcije komandne linije \texttt{--rules}. Parsiranje ove opcije i  pokretanje upariva\v{c}a nad apstraktnim sintaksi\v{c}kim stablom implementirano je u okviru metode \texttt{HandleTranslation\-Unit} klase \texttt{AutoFixConsumer}. Ova metoda se poziva tokom parsiranja na kraju izgradnje apstraktnog sintaksi\v{c}kog stabla za svaku jedinicu prevođenja nad kojom je pokrenut alat. Klasa \texttt{AutoFixAction} instancira objekat klase \texttt{AutoFixConsumer} u okviru metode \texttt{CreateASTConsumer}.
 Na slici \ref{fig:uml1} prikazan je odnos klasa \texttt{AutoFixConsumer}, \texttt{AutoFixAction}, \texttt{ASTConsumer} i \texttt{ASTFrontendAction}. \par
-U okviru jedinice prevođenja \texttt{Autofix.cpp} takođe je implementirana funkcija \texttt{main} alata \textit{AutoFix}. U okviru nje vr\v{s}i se parsiranje opcija komandne linije, kreira se instanca alata, kreiranoj instanci se pridru\v{z}uje objekat klase \texttt{AutoFix\-DiagnosticConsumer} i alat se pokre\'{c}e nad zadatom jedinicom prevođenja. 
+U okviru jedinice prevođenja \texttt{AutoFix.cpp} takođe je implementirana funkcija \texttt{main} alata \textit{AutoFix}. U okviru nje vr\v{s}i se parsiranje opcija komandne linije, kreira se instanca alata, kreiranoj instanci se pridru\v{z}uje objekat klase \texttt{AutoFix\-DiagnosticConsumer} i alat se pokre\'{c}e nad zadatom jedinicom prevođenja. 
 
 \begin{figure}
 \begin{tikzpicture}
@@ -1250,7 +1251,7 @@ Testovi \texttt{auto-fix-A7-1-6\-.cpp}, \texttt{auto-fix-A7-2-3.cpp}, \texttt{au
 Na listingu \ref{lst:test} prikazan je pojednostavljeni primer testa za pravilo \textbf{A7-1-6} u okviru alata \textit{AutoFix}. Test je pojednostavljen tako \v{s}to se u okviru njega nalazi samo jedan konstrukt koji nije u skladu sa pravilom \textbf{A7-1-6}. Pojednostavljeni test je kori\v{s}\'{c}en kako bi se demonstrirali svi bitni aspekata testiranja alata \textit{AutoFix} sa \v{s}to manje koda. \par Test
 proverava da se pokretanjem alata \texttt{AutoFix} ispisuje adekvatno upozorenje zajedno sa predlogom za ispravljanje koda. U okviru \texttt{RUN} linije (linija 1) pokre\'{c}e se alat \textit{AutoFix} komandom \texttt{auto-fix --rules="A7\_1\_6" \%s 2>\&1 --}. Simbol \texttt{\%s}  \'{c}e prilikom pokretanja biti zamenjen putanjom do testa u kome se ova komanda nalazi (testa koji \textit{lit} pokre\'{c}e). \texttt{2>\&1} preusmerava standardni izlaz za gre\v{s}ke (STDERR) na standardni izlaz (STDOUT). Drugi deo komande \texttt{| FileCheck \%s} prosleđuje izlaz iz alata \textit{AutoFix} na standardni ulaz alata \textit{FileCheck} i pokre\'{c}e alat \textit{FileCheck} nad testom. Putanja do testa prosleđena je simbolom \texttt{\%s} \cite{LIT}.
 
- U okviru listinga \ref{lst:test} koriste se tri direktive alata \textit{FileCheck}, \texttt{CHECK: TEKST} (linija 6), \texttt{CHECK-NEXT: TEKST} (linije 8-11) i \texttt{CHECK-NOT: TEKST} (linije 5 i 12). Ove direktive slu\v{z}e da se izvr\v{s}i provera da li je alat ispisao upozorenje vezano za pravilo \textbf{A7-1-6}, predlog za ispravljanje koda i da se u okviru ispisa nije na\v{s}lo nijedno drugo upozorenje. U okviru direktive \texttt{CHECK} koriste se regularni izrazi za putanju na operativnom sistemu Linuks (eng.~\textit{Linux}), za po\v{c}etak i kraj linije. Redom, ovo su regularni izrazi \lstinline[style=custombash]{(/|/[a-zA-Z0-9_-]+)+}, \lstinline[style=custombash]{^} i \lstinline[style=custombash]{$}. Upotrebom regularnih izraza za po\v{c}etak i kraj linije test proverava da alat \textit{AutoFix} nije ispisao ni\v{s}ta nepredviđeno, odnosno da svaka linija po\v{c}inje i zavr\v{s}ava se tekstom navedenim između ta dva regularna izraza. Regualrni izraz za putanju na operativnom sistemu Linux koristi se kako test ne bi o\v{c}ekivao specifi\v{c}nu apsolutnu putanju u okviru ispisa alata \textit{AutoFix}. 
+ U okviru listinga \ref{lst:test} koriste se tri direktive alata \textit{FileCheck}, \texttt{CHECK: TEKST} (linija 6), \texttt{CHECK-NEXT: TEKST} (linije 7-10) i \texttt{CHECK-NOT: TEKST} (linije 5 i 11). Ove direktive slu\v{z}e da se izvr\v{s}i provera da li je alat ispisao upozorenje vezano za pravilo \textbf{A7-1-6}, predlog za ispravljanje koda i da se u okviru ispisa nije na\v{s}lo nijedno drugo upozorenje. U okviru direktive \texttt{CHECK} koriste se regularni izrazi za putanju na operativnom sistemu Linuks (eng.~\textit{Linux}), za po\v{c}etak i kraj linije. Redom, ovo su regularni izrazi \lstinline[style=custombash]{(/|/[a-zA-Z0-9_-]+)+}, \lstinline[style=custombash]{^} i \lstinline[style=custombash]{$}. Upotrebom regularnih izraza za po\v{c}etak i kraj linije test proverava da alat \textit{AutoFix} nije ispisao ni\v{s}ta nepredviđeno, odnosno da svaka linija po\v{c}inje i zavr\v{s}ava se tekstom navedenim između ta dva regularna izraza. Regualrni izraz za putanju na operativnom sistemu Linuks koristi se kako test ne bi o\v{c}ekivao specifi\v{c}nu apsolutnu putanju u okviru ispisa alata \textit{AutoFix}. 
 
 \begin{lstlisting}[style=customc, caption={Pojednostavljeni primer testa za pravilo \textbf{A7-1-6} u okviru alata \textit{AutoFix}.},label={lst:test}]
 // RUN: auto-fix --rules="A7_1_6" %s 2>&1 -- | FileCheck %s
@@ -1285,7 +1286,7 @@ Tabela \ref{fig:re2c} prikazuje broj prijavljenih upozorenja za svako od pravila
 Za svako od upozorenja ispisan je i odgovaraju\'{c}i predlog za ispravljanje koda. Upozorenje za pravilo \textbf{A8-5-3} nije prijavljeno nijednom. Pretragom
 alatom \textit{grep} kroz svaki od fajlova ustanovljeno je da konstrukti na koje se odnosi pravilo \textbf{A8-5-3} zaista nisu kori\v{s}\'{c}eni u okviru koda i da se ne radi o gre\v{s}ci u alatu \textit{AutoFix}. Ovaj rezultat sla\v{z}e se sa \v{c}injenicom da je najve\'{c}i broj upozorenja prijavljen za pravilo \textbf{A8-5-2}. Pravilo \textbf{A8-5-2} predla\v{z}e upotrebu inicijalizacije viti\v{c}astim zagradama pri inicijalizaciji promenljive dok pravilo \textbf{A8-5-3} zabranjuje upotrebu inicijalizacije viti\v{c}astim zagradama prilikom deklaracije promenljivih sa tipom \texttt{auto}. S obzirom na veliki broj upozorenja za pravilo \textbf{A8-5-2} i \v{c}injenice da za pravilo \textbf{A8-5-3} nije prijavljeno nijedno upozorenje, zaklju\v{c}eno je da prilikom inicijalizacije promenljivih nije kori\v{s}\'{c}ena sintaksa viti\v{c}astih zagrada ne vezano da li je promenljiva
 tipa \texttt{auto} ili ne. U kombinaciji sa \v{c}injenicom da je prijavljen veliki broj upozorenja za pravila \textbf{A7-1-6} i \textbf{A8-5-2} zaklju\v{c}eno je da k\^{o}d u okviru projekta \textit{re2c} nije pisan po standardu \textsc{autosar} C++14. \par
-Skript za pokretanje alata \textit{AutoFix} nad projektom \textit{re2c} pokrenut je deset puta kako bi se izra\v{c}unalo prose\v{c}no vreme izvr\v{s}avanja alata, koje iznosi 39.602 sekunde. Vreme je izmereno programom \texttt{time} u okviru operativnog sistema Linux. Izra\v{c}unato prose\v{c}no vreme se odnosi na komponentu \texttt{real} u okviru rezultata programa \texttt{time}.
+Skript za pokretanje alata \textit{AutoFix} nad projektom \textit{re2c} pokrenut je deset puta kako bi se izra\v{c}unalo prose\v{c}no vreme izvr\v{s}avanja alata, koje iznosi 39.602 sekunde. Vreme je izmereno programom \texttt{time} u okviru operativnog sistema Linuks. Izra\v{c}unato prose\v{c}no vreme se odnosi na komponentu \texttt{real} u okviru rezultata programa \texttt{time}.
 \begin{table}[!h]
 \begin{center}
 \begin{tabular}{ |p{3cm}||p{2cm}|p{2cm}|p{2cm}|p{2cm}|  }
